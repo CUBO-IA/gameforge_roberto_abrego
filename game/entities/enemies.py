@@ -12,16 +12,11 @@ import random
 from dataclasses import dataclass, field
 
 from game.core.config import EnemyStats
-from game.core.math2d import Vec2, clamp
+from game.core.math2d import Vec2
+from game.entities.enemy_catalog import EnemyDefinition, definition_for
 from game.entities.projectiles import ProjectileSpec
 from game.world.collision import has_line_of_sight, move_circle
 from game.world.tilemap import TileMap
-
-ENEMY_NAMES = {
-    "slime": "Cieno",
-    "wisp": "Fuego fatuo",
-    "brute": "Bruto de escoria",
-}
 
 
 @dataclass(slots=True)
@@ -64,7 +59,7 @@ class Enemy:
 
     @property
     def name(self) -> str:
-        return ENEMY_NAMES.get(self.kind, self.kind)
+        return definition_for(self.kind).name
 
     def update(
         self,
@@ -88,14 +83,15 @@ class Enemy:
         direction = to_player.normalized() if distance > 1e-6 else Vec2()
 
         intent = EnemyIntent()
-        if self.kind == "wisp":
-            intent = self._update_wisp(
-                dt, direction, distance, tilemap, rng, player_position
+        definition = definition_for(self.kind)
+        if definition.behavior == "ranged":
+            intent = self._update_ranged(
+                definition, dt, direction, distance, tilemap, player_position
             )
-        elif self.kind == "brute":
-            self._update_brute(dt, direction, distance, tilemap)
+        elif definition.behavior == "charger":
+            self._update_charger(definition, dt, direction, distance, tilemap)
         else:
-            self._update_slime(dt, direction, distance, player_radius, tilemap)
+            self._update_melee(definition, dt, direction, distance, player_radius, tilemap)
 
         self.knockback = self.knockback * math.exp(-10.0 * dt)
         return intent
@@ -108,8 +104,9 @@ class Enemy:
         )
         self.position = result.position
 
-    def _update_slime(
+    def _update_melee(
         self,
+        definition: EnemyDefinition,
         dt: float,
         direction: Vec2,
         distance: float,
@@ -118,27 +115,31 @@ class Enemy:
     ) -> None:
         desired = self.radius + player_radius - 2.0
         if distance > desired:
-            wobble = 1.0 + 0.16 * math.sin(self.anim_time * 6.0)
+            wobble = 1.0 + definition.param("wobble_amplitude") * math.sin(
+                self.anim_time * definition.param("wobble_frequency")
+            )
             step = direction * (self.stats.speed * wobble * dt)
             step = step + self.knockback * dt
             self._move(tilemap, step)
         else:
             self._move(tilemap, self.knockback * dt)
 
-    def _update_wisp(
+    def _update_ranged(
         self,
+        definition: EnemyDefinition,
         dt: float,
         direction: Vec2,
         distance: float,
         tilemap: TileMap,
-        rng: random.Random,
         player_position: Vec2,
     ) -> EnemyIntent:
         intent = EnemyIntent()
         has_sight = has_line_of_sight(tilemap, self.position, player_position)
-        if distance > 250.0:
+        far = definition.param("far_distance")
+        near = definition.param("near_distance")
+        if distance > far:
             move_direction = direction
-        elif distance < 140.0:
+        elif distance < near:
             move_direction = -direction
         else:
             perpendicular = Vec2(-direction.y, direction.x)
@@ -148,27 +149,34 @@ class Enemy:
                 self.shoot_cooldown = self.stats.shoot_cooldown
                 if distance > 1e-6:
                     intent.projectile = ProjectileSpec(
-                        origin=self.position + direction * (self.radius + 4.0),
+                        origin=self.position
+                        + direction * (self.radius + definition.param("origin_offset")),
                         direction=direction,
                         speed=self.stats.projectile_speed,
-                        damage=self.stats.touch_damage + 4.0,
+                        damage=self.stats.touch_damage + definition.param("projectile_bonus"),
                     )
-        step = move_direction * (self.stats.speed * 0.55 * dt) + self.knockback * dt
+        step = move_direction * (self.stats.speed * definition.param("move_scale") * dt)
+        step = step + self.knockback * dt
         self._move(tilemap, step)
         return intent
 
-    def _update_brute(
-        self, dt: float, direction: Vec2, distance: float, tilemap: TileMap
+    def _update_charger(
+        self,
+        definition: EnemyDefinition,
+        dt: float,
+        direction: Vec2,
+        distance: float,
+        tilemap: TileMap,
     ) -> None:
         speed = self.stats.speed
         if self.state == "chase":
             if (
                 distance <= self.stats.attack_range
                 and self.charge_cooldown <= 0.0
-                and distance > 30.0
+                and distance > definition.param("min_charge_distance")
             ):
                 self.state = "windup"
-                self.state_timer = 0.55
+                self.state_timer = definition.param("windup_time")
                 self._charge_direction = direction
             else:
                 step = direction * (speed * dt) + self.knockback * dt
@@ -176,17 +184,20 @@ class Enemy:
         elif self.state == "windup":
             if self.state_timer <= 0.0:
                 self.state = "charge"
-                self.state_timer = 0.42
+                self.state_timer = definition.param("charge_time")
         elif self.state == "charge":
-            step = self._charge_direction * (speed * 4.0 * dt) + self.knockback * dt
+            step = self._charge_direction * (
+                speed * definition.param("charge_speed_scale") * dt
+            )
+            step = step + self.knockback * dt
             self._move(tilemap, step)
             if self.state_timer <= 0.0:
                 self.state = "recover"
-                self.state_timer = 0.7
+                self.state_timer = definition.param("recover_time")
         elif self.state == "recover":
             if self.state_timer <= 0.0:
                 self.state = "chase"
-                self.charge_cooldown = 2.4
+                self.charge_cooldown = definition.param("charge_cooldown")
             self._move(tilemap, self.knockback * dt)
 
     def take_damage(
@@ -220,23 +231,3 @@ def separate_enemies(enemies: list[Enemy], tilemap: TileMap) -> None:
             push = delta.normalized() * ((minimum - distance) * 0.5)
             first._move(tilemap, -push)
             second._move(tilemap, push)
-
-
-def attack_hits_enemy(
-    origin: Vec2,
-    direction: Vec2,
-    attack_range: float,
-    arc_degrees: float,
-    enemy: Enemy,
-) -> bool:
-    if not enemy.alive:
-        return False
-    delta = enemy.position - origin
-    distance = delta.length()
-    if distance > attack_range + enemy.radius:
-        return False
-    if distance <= 1e-6:
-        return True
-    angle = abs(math.atan2(delta.y, delta.x) - math.atan2(direction.y, direction.x))
-    angle = abs((angle + math.pi) % (2 * math.pi) - math.pi)
-    return angle <= math.radians(clamp(arc_degrees, 0.0, 360.0) / 2.0)

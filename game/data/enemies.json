@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "kinds": {
+    "slime": {
+      "name": "Cieno",
+      "behavior": "melee",
+      "params": {
+        "wobble_amplitude": 0.16,
+        "wobble_frequency": 6.0
+      }
+    },
+    "wisp": {
+      "name": "Fuego fatuo",
+      "behavior": "ranged",
+      "params": {
+        "far_distance": 250.0,
+        "near_distance": 140.0,
+        "move_scale": 0.55,
+        "projectile_bonus": 4.0,
+        "origin_offset": 4.0
+      }
+    },
+    "brute": {
+      "name": "Bruto de escoria",
+      "behavior": "charger",
+      "params": {
+        "windup_time": 0.55,
+        "charge_time": 0.42,
+        "charge_speed_scale": 4.0,
+        "recover_time": 0.7,
+        "charge_cooldown": 2.4,
+        "min_charge_distance": 30.0
+      }
+    }
+  }
+}

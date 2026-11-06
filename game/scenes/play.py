@@ -1,14 +1,18 @@
-"""Escena principal: partida, interacción, combate y guardado."""
+"""Escena principal: orquesta input, sistemas de simulación y presentación.
+
+Las reglas de dominio viven en ``game.sim`` (combate, interacción, botín,
+engagement, progresión) y el dibujo del mundo en ``game.render.world_view``;
+esta escena traduce entrada a intenciones y resultados a presentación.
+"""
 
 from __future__ import annotations
 
-import math
 import random
 
 import pygame
 
-from game.core.math2d import Vec2, circles_overlap
-from game.entities.enemies import Enemy, separate_enemies
+from game.core.math2d import Vec2
+from game.entities.enemies import Enemy
 from game.entities.interactables import Campfire, Chest, ForgeAltar
 from game.entities.items import ITEMS
 from game.entities.player import Player
@@ -16,14 +20,27 @@ from game.entities.projectiles import Projectile
 from game.input.actions import Action
 from game.persistence.savegame import RunSnapshot, SaveGameError, save_run
 from game.persistence.scores import RunResult
-from game.render import entity_renderer, palette
+from game.render import palette
 from game.render.effects import Effects
-from game.render.entity_renderer import draw_attack_arc
 from game.render.hud import Hud
 from game.render.lighting import Lighting
 from game.render.tile_renderer import TileRenderer
+from game.render.world_view import draw_lighting, draw_play_overlay, draw_play_world
 from game.scenes.base import Scene
-from game.systems.combat import resolve_player_attack
+from game.sim.combat import resolve_player_attack
+from game.sim.engagement import (
+    move_projectiles,
+    projectile_hits_player,
+    spawn_projectile,
+    update_enemies,
+)
+from game.sim.floor import finish_score
+from game.sim.interaction import (
+    find_nearest_interaction,
+    loot_message,
+    open_chest,
+    use_potion,
+)
 from game.systems.inventory import Inventory, InventoryError
 from game.systems.quest import QuestState
 from game.world.camera import Camera
@@ -200,44 +217,16 @@ class PlayScene(Scene):
                         self._kill(enemy)
                 self.enemies = [enemy for enemy in self.enemies if enemy.alive]
 
-        for enemy in list(self.enemies):
-            if not enemy.alive:
-                continue
-            intent = enemy.update(
-                dt, self.player.position, self.player.radius, self.tilemap, self.rng
-            )
-            if intent.projectile is not None:
-                spec = intent.projectile
-                self.projectiles.append(
-                    Projectile(
-                        position=spec.origin,
-                        velocity=spec.direction * spec.speed,
-                        radius=spec.radius,
-                        damage=spec.damage,
-                        color=palette.VIOLET,
-                    )
-                )
-                self.app.audio.play("shoot")
-            if circles_overlap(
-                enemy.position, enemy.radius, self.player.position, self.player.radius
-            ) and enemy.touch_cooldown <= 0.0:
-                enemy.touch_cooldown = 0.8
-                if self.player.take_damage(enemy.stats.touch_damage, enemy.position):
-                    self._hurt(enemy.stats.touch_damage)
+        events = update_enemies(self.enemies, dt, self.player, self.tilemap, self.rng)
+        for spec in events.projectiles:
+            self.projectiles.append(spawn_projectile(spec))
+            self.app.audio.play("shoot")
+        for damage in events.touch_damage:
+            self._hurt(damage)
 
-        separate_enemies(self.enemies, self.tilemap)
-
+        self.projectiles = move_projectiles(self.projectiles, dt, self.tilemap)
         for projectile in list(self.projectiles):
-            projectile.update(dt, self.tilemap)
-            if not projectile.alive:
-                self.projectiles.remove(projectile)
-                continue
-            if circles_overlap(
-                projectile.position,
-                projectile.radius,
-                self.player.position,
-                self.player.radius,
-            ):
+            if projectile_hits_player(projectile, self.player):
                 projectile.alive = False
                 self.projectiles.remove(projectile)
                 self.effects.burst(projectile.position, palette.VIOLET, 10, 120, add=True)
@@ -251,7 +240,14 @@ class PlayScene(Scene):
             self.tilemap.pixel_width,
             self.tilemap.pixel_height,
         )
-        self.nearby = self._nearest_interaction()
+        self.nearby = find_nearest_interaction(
+            self.chests,
+            self.campfire,
+            self.altar,
+            self.player.position,
+            self.inventory.count("shard"),
+            self.quest.shards_required,
+        )
         if input_map.was_pressed(Action.INTERACT):
             self._interact()
         elif input_map.was_pressed(Action.POTION):
@@ -280,30 +276,7 @@ class PlayScene(Scene):
         )
         self.effects.shake.add(3.0)
 
-    def _nearest_interaction(self) -> tuple[object, str] | None:
-        candidates: list[tuple[float, object, str]] = []
-        for chest in self.chests:
-            if chest.opened:
-                continue
-            distance = chest.position.distance_to(self.player.position)
-            if distance <= 54.0:
-                candidates.append((distance, chest, "Abrir cofre"))
-        distance = self.campfire.position.distance_to(self.player.position)
-        if distance <= 62.0:
-            candidates.append((distance, self.campfire, "Descansar y guardar"))
-        distance = self.altar.position.distance_to(self.player.position)
-        if distance <= 74.0 and not self.altar.activated:
-            remaining = self.quest.shards_required - self.inventory.count("shard")
-            label = (
-                "Activar la Fragua"
-                if remaining <= 0
-                else f"Fragua: faltan {remaining} fragmentos"
-            )
-            candidates.append((distance, self.altar, label))
-        if not candidates:
-            return None
-        candidates.sort(key=lambda entry: entry[0])
-        return candidates[0][1], candidates[0][2]
+    # ------------------------------------------------------------------ interact
 
     def _interact(self) -> None:
         if self.nearby is None:
@@ -315,29 +288,39 @@ class PlayScene(Scene):
             self._rest()
         elif isinstance(obj, ForgeAltar):
             self._activate_altar()
-        self.nearby = self._nearest_interaction()
+        self.nearby = find_nearest_interaction(
+            self.chests,
+            self.campfire,
+            self.altar,
+            self.player.position,
+            self.inventory.count("shard"),
+            self.quest.shards_required,
+        )
 
     def _open_chest(self, chest: Chest) -> None:
-        if chest.opened:
+        result = open_chest(chest, self.inventory)
+        if result is None:
             return
-        accepted = self.inventory.add(chest.item_id, chest.quantity)
-        if accepted <= 0:
-            self._toast("Inventario lleno. Usa o descarta algo primero.")
+        item = ITEMS[result.item_id]
+        if result.full:
+            self._toast(loot_message(result, self.quest.shards_required, 0))
             self.app.audio.play("denied")
             return
         chest.opened = True
         self.chests_opened.add(chest.id)
-        item = ITEMS[chest.item_id]
         self.app.audio.play("pickup")
         self.effects.burst(chest.position, item.color, 16, 120, add=True)
-        self.effects.add_text(f"+{accepted} {item.name}", chest.position + Vec2(0, -20), item.color, 20)
-        if chest.item_id == "coin":
-            self.score += accepted
-        elif chest.item_id == "shard":
-            collected = self.inventory.count("shard")
-            self._toast(f"Fragmento de ascua {collected}/{self.quest.shards_required}")
+        self.effects.add_text(
+            f"+{result.quantity} {item.name}", chest.position + Vec2(0, -20), item.color, 20
+        )
+        if result.item_id == "coin":
+            self.score += result.quantity
         else:
-            self._toast(f"Encontraste {item.name} x{accepted}")
+            self._toast(
+                loot_message(
+                    result, self.quest.shards_required, self.inventory.count("shard")
+                )
+            )
 
     def _rest(self) -> None:
         healed = self.player.heal(self.player.max_health)
@@ -366,16 +349,16 @@ class PlayScene(Scene):
             self.app.audio.play("denied")
 
     def _use_potion(self) -> None:
-        if self.inventory.count("potion") <= 0:
+        result = use_potion(self.player, self.inventory, self.app.config.player.potion_heal)
+        if result.status == "empty":
             self._toast("No tienes frascos de brasa.")
             self.app.audio.play("denied")
             return
-        if self.player.health >= self.player.max_health:
+        if result.status == "full_health":
             self._toast("Tu salud ya está completa.")
             self.app.audio.play("denied")
             return
-        self.inventory.remove("potion", 1)
-        healed = self.player.heal(self.app.config.player.potion_heal)
+        healed = result.healed
         self.app.audio.play("heal")
         self.effects.add_text(f"+{int(healed)}", self.player.position, palette.GREEN, 24)
         self.effects.burst(self.player.position, palette.GREEN, 18, 110, add=True)
@@ -424,7 +407,7 @@ class PlayScene(Scene):
             return
         self.finished = True
         shards = self.inventory.count("shard")
-        self.score += shards * 100 + self.floor * 50 + (500 if victory else 0)
+        self.score += finish_score(shards, self.floor, victory)
         result = RunResult(
             seed=self.dungeon.seed,
             floor=self.floor,
@@ -456,109 +439,58 @@ class PlayScene(Scene):
     # ------------------------------------------------------------------ draw
 
     def draw(self, surface: pygame.Surface) -> None:
-        surface.fill(palette.BACKGROUND_DEEP)
-        shake = self.effects.current_shake()
-        top_left = self.camera.top_left + shake
-        surface.blit(self.tile_renderer.surface, (-int(top_left.x), -int(top_left.y)))
-        self.tile_renderer.draw_animated(surface, self.camera, self.time, shake)
-
-        drawables: list[tuple[float, str, object]] = []
-        for chest in self.chests:
-            drawables.append((chest.position.y, "chest", chest))
-        drawables.append((self.campfire.position.y, "campfire", self.campfire))
-        drawables.append((self.altar.position.y, "altar", self.altar))
-        for enemy in self.enemies:
-            drawables.append((enemy.position.y, "enemy", enemy))
-        for projectile in self.projectiles:
-            drawables.append((projectile.position.y, "projectile", projectile))
-        drawables.append((self.player.position.y, "player", self.player))
-        drawables.sort(key=lambda item: item[0])
-
-        for _, kind, obj in drawables:
-            if kind == "chest":
-                entity_renderer.draw_chest(
-                    surface,
-                    obj,
-                    self.camera,
-                    shake,
-                    self.time,
-                    self.nearby is not None and self.nearby[0] is obj,
-                )
-            elif kind == "campfire":
-                entity_renderer.draw_campfire(
-                    surface,
-                    obj,
-                    self.camera,
-                    shake,
-                    self.time,
-                    self.nearby is not None and self.nearby[0] is obj,
-                )
-            elif kind == "altar":
-                entity_renderer.draw_altar(
-                    surface,
-                    obj,
-                    self.camera,
-                    shake,
-                    self.time,
-                    self.inventory.count("shard"),
-                    self.quest.shards_required,
-                    self.nearby is not None and self.nearby[0] is obj,
-                )
-            elif kind == "enemy":
-                entity_renderer.draw_enemy(
-                    surface, obj, self.player.position, self.camera, shake, self.time
-                )
-            elif kind == "projectile":
-                entity_renderer.draw_projectile(surface, obj, self.camera, shake)
-            else:
-                entity_renderer.draw_player(surface, obj, self.camera, shake, self.time)
-
-        draw_attack_arc(
+        draw_play_world(
             surface,
-            self.player,
+            tile_renderer=self.tile_renderer,
+            camera=self.camera,
+            effects=self.effects,
+            lighting=self.lighting,
+            time=self.time,
+            player=self.player,
+            enemies=self.enemies,
+            projectiles=self.projectiles,
+            chests=self.chests,
+            campfire=self.campfire,
+            altar=self.altar,
+            nearby=self.nearby,
+            shard_count=self.inventory.count("shard"),
+            shards_required=self.quest.shards_required,
+        )
+        shake = self.effects.current_shake()
+        draw_lighting(
+            surface,
+            self.lighting,
             self.camera,
             shake,
-            (surface.get_width(), surface.get_height()),
-        )
-        self.effects.draw(surface, self.camera, self.app.fonts, shake=shake)
-
-        flicker = 1.0 + 0.08 * math.sin(self.time * 9.0)
-        lights = [
-            (self.player.position, 270, 1.0),
-            (self.campfire.position, int(175 * flicker), 1.0),
-            (self.altar.position, 190, 1.0),
-        ]
-        for projectile in self.projectiles:
-            lights.append((projectile.position, 70, 0.8))
-        self.lighting.render(surface, lights, self.camera, shake)
-
-        if self.player.damage_flash > 0:
-            alpha = int(110 * min(1.0, self.player.damage_flash * 5))
-            self._hurt_overlay.fill((160, 20, 30, alpha))
-            surface.blit(self._hurt_overlay, (0, 0))
-
-        self.hud.draw(
-            surface,
+            self.time,
             self.player,
-            self.inventory,
-            self.altar.position,
-            self.campfire.position,
-            self.floor,
-            self.elapsed,
-            self.score,
-            self.nearby[1] if self.nearby else None,
-            self.toast,
-            self.toast_timer,
-            self.app.input.mouse_position,
-            self.app.fps,
+            self.campfire,
+            self.altar,
+            self.projectiles,
         )
-
-        if self.show_inventory:
-            self.hud.draw_inventory(surface, self.inventory)
-        elif self.paused:
-            self.hud.draw_pause(surface, self.save_hint)
-
-        if self.victory_timer >= 0:
-            progress = 1.0 - max(0.0, self.victory_timer) / 2.2
-            self._fade.fill((255, 200, 130, int(200 * min(1.0, progress))))
-            surface.blit(self._fade, (0, 0))
+        draw_play_overlay(
+            surface,
+            effects=self.effects,
+            hud=self.hud,
+            fonts=self.app.fonts,
+            camera=self.camera,
+            shake=shake,
+            player=self.player,
+            inventory=self.inventory,
+            altar=self.altar,
+            campfire=self.campfire,
+            floor=self.floor,
+            elapsed=self.elapsed,
+            score=self.score,
+            nearby=self.nearby,
+            toast=self.toast,
+            toast_timer=self.toast_timer,
+            mouse_position=self.app.input.mouse_position,
+            fps=self.app.fps,
+            show_inventory=self.show_inventory,
+            paused=self.paused,
+            save_hint=self.save_hint,
+            victory_timer=self.victory_timer,
+            hurt_overlay=self._hurt_overlay,
+            fade=self._fade,
+        )
