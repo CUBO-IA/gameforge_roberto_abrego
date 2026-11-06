@@ -1,0 +1,32 @@
+C:\Users\DellUser\AppData\Local\Microsoft\WindowsApps\python.exe
+  
+ El volumen de la unidad C es OS
+ El n£mero de serie del volumen es: 1E65-C5E7
+
+ Directorio de C:\ProgramData
+
+No se encuentra el archivo
+  
+El nombre de archivo, el nombre de directorio o la sintaxis de la etiqueta del volumen no son correctos.  
+ El volumen de la unidad C es OS
+ El n£mero de serie del volumen es: 1E65-C5E7
+
+ Directorio de C:\
+
+10/08/2020  07:20 PM    <DIR>          $MfeDeepRem
+01/04/2013  07:19 PM    <DIR>          Apps
+01/04/2013  09:32 PM    <DIR>          DELL
+01/04/2013  08:10 PM    <DIR>          Drivers
+11/06/2026  10:55 AM    <DIR>          git
+01/04/2013  08:42 PM    <DIR>          Intel
+04/27/2016  12:34 AM    <DIR>          Logs
+12/07/2019  03:14 AM    <DIR>          PerfLogs
+11/06/2026  11:54 AM    <DIR>          Program Files
+05/15/2022  07:49 PM    <DIR>          Program Files (x86)
+10/08/2020  07:19 PM    <DIR>          Quarantine
+12/03/2013  12:32 PM    <DIR>          sources
+09/04/2012  11:02 PM    <DIR>          United States Service Contracts
+10/08/2020  10:25 AM    <DIR>          Users
+12/04/2023  04:23 PM    <DIR>          Windows
+               0 archivos              0 bytes
+              15 dirs  425,827,000,320 bytes libres

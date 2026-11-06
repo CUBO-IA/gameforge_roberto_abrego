@@ -1,0 +1,37 @@
+== tasklist python == 
+
+Nombre de imagen               PID Nombre de sesi¢n N£m. de ses Uso de memor
+========================= ======== ================ =========== ============
+python.exe                    5588 Console                    1    65,064 KB
+== curl pypi == 
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 48221078
+access-control-allow-origin: *
+cache-control: max-age=600, public
+content-security-policy: default-src 'none'; sandbox allow-top-navigation
+access-control-allow-headers: Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since
+access-control-expose-headers: X-PyPI-Last-Serial
+access-control-max-age: 86400
+access-control-allow-methods: GET
+referrer-policy: origin-when-cross-origin
+x-pypi-last-serial: 43282297
+server: gunicorn
+etag: "kem+fI+eU6TShkSuyaHocQ"
+Accept-Ranges: bytes
+Date: Fri, 06 Nov 2026 18:05:40 GMT
+X-Served-By: cache-iad-kcgs7200155-IAD, cache-iad-kcgs7270022-IAD, cache-mia-kmia1760050-MIA
+X-Cache: MISS, HIT, HIT
+X-Cache-Hits: 0, 7925, 0
+X-Timer: S1793988341.696666,VS0,VE2
+Content-Type: text/html
+Vary: Accept-Encoding, Accept
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Frame-Options: deny
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+X-Permitted-Cross-Domain-Policies: none
+Permissions-Policy: publickey-credentials-create=(self),publickey-credentials-get=(self),accelerometer=(),ambient-light-sensor=(),autoplay=(),battery=(),camera=(),display-capture=(),document-domain=(),encrypted-media=(),execution-while-not-rendered=(),execution-while-out-of-viewport=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),hid=(),identity-credentials-get=(),idle-detection=(),local-fonts=(),magnetometer=(),microphone=(),midi=(),otp-credentials=(),payment=(),picture-in-picture=(),screen-wake-lock=(),serial=(),speaker-selection=(),storage-access=(),usb=(),web-share=(),xr-spatial-tracking=()
+
+CURL_EXIT=0 
+== DONE == 

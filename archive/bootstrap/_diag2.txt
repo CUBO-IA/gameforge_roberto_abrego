@@ -1,0 +1,69 @@
+== LOCALAPPDATA Programs == 
+ai.opencode.desktop
+Common
+Python
+== WinGet Packages == 
+El sistema no puede encontrar el archivo especificado.
+== Program Files python == 
+Git
+== Program Files x86 == 
+Dell Digital Delivery
+== where python == 
+C:\Users\DellUser\AppData\Local\Microsoft\WindowsApps\python.exe
+== where py == 
+INFORMACION: no se pudo encontrar ning£n archivo para los patrones dados.
+== where git == 
+INFORMACION: no se pudo encontrar ning£n archivo para los patrones dados.
+== registry HKCU == 
+
+HKEY_CURRENT_USER\Software\Python\PyLauncher
+    InstallDir    REG_SZ    C:\Users\DellUser\AppData\Local\Programs\Python\Launcher\
+    AssociateFiles    REG_DWORD    0x1
+    (Predeterminado)    REG_SZ    C:\Users\DellUser\AppData\Local\Programs\Python\Launcher\py.exe
+
+HKEY_CURRENT_USER\Software\Python\PythonCore
+    DisplayName    REG_SZ    Python Software Foundation
+    SupportUrl    REG_SZ    https://www.python.org/
+
+HKEY_CURRENT_USER\Software\Python\PythonCore\3.12
+    DisplayName    REG_SZ    Python 3.12 (64-bit)
+    SupportUrl    REG_SZ    https://www.python.org/
+    Version    REG_SZ    3.12.10
+    SysVersion    REG_SZ    3.12
+    SysArchitecture    REG_SZ    64bit
+
+HKEY_CURRENT_USER\Software\Python\PythonCore\3.12\Help
+
+HKEY_CURRENT_USER\Software\Python\PythonCore\3.12\Help\Main Python Documentation
+    (Predeterminado)    REG_SZ    C:\Users\DellUser\AppData\Local\Programs\Python\Python312\Doc\html\index.html
+
+HKEY_CURRENT_USER\Software\Python\PythonCore\3.12\Idle
+    (Predeterminado)    REG_SZ    C:\Users\DellUser\AppData\Local\Programs\Python\Python312\Lib\idlelib\idle.pyw
+
+HKEY_CURRENT_USER\Software\Python\PythonCore\3.12\IdleShortcuts
+    (Predeterminado)    REG_DWORD    0x1
+
+HKEY_CURRENT_USER\Software\Python\PythonCore\3.12\InstalledFeatures
+    Shortcuts    REG_SZ    3.12.10150.0
+    exe    REG_SZ    3.12.10150.0
+    dev    REG_SZ    3.12.10150.0
+    lib    REG_SZ    3.12.10150.0
+    test    REG_SZ    3.12.10150.0
+    doc_shortcut    REG_SZ    3.12.10150.0
+    doc    REG_SZ    3.12.10150.0
+    tcltk    REG_SZ    3.12.10150.0
+    pip    REG_SZ    3.12.10150.0
+    path    REG_SZ    3.12.10150.0
+
+HKEY_CURRENT_USER\Software\Python\PythonCore\3.12\InstallPath
+    (Predeterminado)    REG_SZ    C:\Users\DellUser\AppData\Local\Programs\Python\Python312\
+    ExecutablePath    REG_SZ    C:\Users\DellUser\AppData\Local\Programs\Python\Python312\python.exe
+    WindowedExecutablePath    REG_SZ    C:\Users\DellUser\AppData\Local\Programs\Python\Python312\pythonw.exe
+
+HKEY_CURRENT_USER\Software\Python\PythonCore\3.12\PythonPath
+    (Predeterminado)    REG_SZ    C:\Users\DellUser\AppData\Local\Programs\Python\Python312\Lib\;C:\Users\DellUser\AppData\Local\Programs\Python\Python312\DLLs\
+
+== registry HKLM == 
+ERROR: El sistema no ha podido encontrar la clave o el valor del Registro
+especificados.
+== DONE == 

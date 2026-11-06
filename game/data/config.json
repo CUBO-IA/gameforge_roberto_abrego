@@ -1,0 +1,64 @@
+{
+  "window": {
+    "width": 1280,
+    "height": 720,
+    "fps": 60,
+    "title": "GAMEFORGE: La Fragua Olvidada"
+  },
+  "player": {
+    "speed": 205.0,
+    "max_health": 100.0,
+    "radius": 12.0,
+    "attack_damage": 26.0,
+    "attack_range": 62.0,
+    "attack_arc": 100.0,
+    "attack_cooldown": 0.38,
+    "dash_speed": 560.0,
+    "dash_duration": 0.16,
+    "dash_cooldown": 1.1,
+    "invulnerability": 0.75,
+    "potion_heal": 45.0
+  },
+  "dungeon": {
+    "width": 64,
+    "height": 48,
+    "tile_size": 32,
+    "rooms": 11,
+    "min_room": 6,
+    "max_room": 10,
+    "chests": 5,
+    "shards_required": 3,
+    "enemies_per_room": 3,
+    "placement_attempts": 80
+  },
+  "enemies": {
+    "slime": {
+      "health": 42,
+      "speed": 74,
+      "radius": 15,
+      "touch_damage": 8,
+      "score": 15
+    },
+    "wisp": {
+      "health": 30,
+      "speed": 88,
+      "radius": 13,
+      "touch_damage": 6,
+      "score": 25,
+      "attack_range": 340,
+      "shoot_cooldown": 2.1,
+      "projectile_speed": 215
+    },
+    "brute": {
+      "health": 110,
+      "speed": 66,
+      "radius": 21,
+      "touch_damage": 16,
+      "score": 55,
+      "attack_range": 300
+    }
+  },
+  "audio": {
+    "master_volume": 0.55
+  }
+}

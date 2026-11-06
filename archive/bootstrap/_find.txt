@@ -1,0 +1,14 @@
+== Python dir == 
+Launcher
+Python312
+== Python312 tree == 
+python.exe
+== Git cmd == 
+git.exe
+== Git bin == 
+git.exe
+== versions == 
+Python 3.12.10
+git version 2.56.0.windows.4
+== gh search == 
+== DONE == 

@@ -1,0 +1,56 @@
+ERROR: no se encontr¢ el proceso "3052".
+== PYTEST VERBOSE == 
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\DellUser\AppData\Local\Programs\Python\Python312\python.exe
+rootdir: C:\git\GAMEFORGE
+configfile: pyproject.toml
+testpaths: tests
+collecting ... collected 112 items
+
+tests/test_camera.py::test_camera_clamps_to_map_edges PASSED             [  0%]
+tests/test_camera.py::test_camera_centers_small_map PASSED               [  1%]
+tests/test_camera.py::test_camera_follow_smoothing PASSED                [  2%]
+tests/test_camera.py::test_world_screen_roundtrip PASSED                 [  3%]
+tests/test_camera.py::test_invalid_viewport PASSED                       [  4%]
+tests/test_collision.py::test_circle_collision_against_wall PASSED       [  5%]
+tests/test_collision.py::test_move_stops_at_wall_without_tunneling PASSED [  6%]
+tests/test_collision.py::test_move_slides_along_wall PASSED              [  7%]
+tests/test_collision.py::test_zero_and_negative_step PASSED              [  8%]
+tests/test_collision.py::test_line_of_sight PASSED                       [  8%]
+tests/test_combat.py::test_attack_hits_front_target PASSED               [  9%]
+tests/test_combat.py::test_attack_ignores_behind_and_side PASSED         [ 10%]
+tests/test_combat.py::test_attack_range_includes_radius PASSED           [ 11%]
+tests/test_combat.py::test_attack_can_hit_multiple_and_kill PASSED       [ 12%]
+tests/test_combat.py::test_zero_direction_still_hits_adjacent_target PASSED [ 13%]
+tests/test_config.py::test_defaults_are_complete FAILED                  [ 14%]
+
+================================== FAILURES ===================================
+_________________________ test_defaults_are_complete __________________________
+
+    def test_defaults_are_complete() -> None:
+>       config = GameConfig.from_dict({})
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_config.py:10: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+game\core\config.py:124: in from_dict
+    title=_text(window_raw, "title", WindowConfig.title, max_length=80),
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+section = {}, key = 'title'
+default = <member 'title' of 'WindowConfig' objects>, max_length = 80
+
+    def _text(section: dict[str, Any], key: str, default: str, max_length: int) -> str:
+        value = section.get(key, default)
+        if not isinstance(value, str) or not value.strip() or len(value) > max_length:
+>           raise ConfigError(f"'{key}' debe ser texto no vacío de hasta {max_length} caracteres.")
+E           game.core.config.ConfigError: 'title' debe ser texto no vacío de hasta 80 caracteres.
+
+game\core\config.py:197: ConfigError
+=========================== short test summary info ===========================
+FAILED tests/test_config.py::test_defaults_are_complete - game.core.config.ConfigError: 'title' debe ser texto no vacío de hasta 80 caracteres.
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+======================== 1 failed, 15 passed in 3.47s =========================
+PYTEST_EXIT=1 
+== DONE == 
