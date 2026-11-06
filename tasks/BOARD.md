@@ -5,7 +5,7 @@ aceptación, informe (`tasks/reports/T-XXX.md`).
 
 Columnas: PROPUESTA → APROBADA → EN CURSO → ENTREGADA → VERIFICADA.
 
-## EN CURSO
+## ENTREGADA
 
 ### T-000 — Fase 0: cimientos
 - Responsable: DIRECTOR/ARQUITECTO
@@ -15,7 +15,7 @@ Columnas: PROPUESTA → APROBADA → EN CURSO → ENTREGADA → VERIFICADA.
   - [x] Repositorio git inicializado con commit base limpio (residuos archivados, no borrados).
   - [x] `tools/verify.py` verde (lint omitido: ruff no instalado; pytest 112 passed; bench p95 16.67 ms OK).
   - [x] `OWNERSHIP.md` y `tasks/BOARD.md` creados.
-- Estado: EN CURSO.
+- Evidencia: commit `0830a27`. Pendiente: cierre VERIFICADA por el director; instalar ruff para cubrir lint.
 
 ## PROPUESTA (pendientes de aprobación del director)
 
