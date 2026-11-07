@@ -6,8 +6,8 @@ teclas físicas. El mapeo por defecto vive aquí y puede sustituirse en tests.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from enum import StrEnum
-from typing import Iterable
 
 import pygame
 

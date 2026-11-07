@@ -35,7 +35,7 @@ class TileMap:
         ]
 
     @classmethod
-    def filled(cls, width: int, height: int, tile_size: int, tile: TileType) -> "TileMap":
+    def filled(cls, width: int, height: int, tile_size: int, tile: TileType) -> TileMap:
         return cls(width, height, tile_size, [[tile for _ in range(width)] for _ in range(height)])
 
     @property

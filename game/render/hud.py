@@ -6,6 +6,7 @@ import math
 
 import pygame
 
+from game.core.math2d import Vec2
 from game.entities.items import ITEMS
 from game.entities.player import Player
 from game.render import palette
@@ -13,7 +14,6 @@ from game.render.fonts import FontCache
 from game.render.ui import draw_bar, draw_key_hint, draw_panel, draw_text
 from game.systems.inventory import Inventory
 from game.systems.quest import QuestState
-from game.core.math2d import Vec2
 from game.world.tilemap import TileMap
 from game.world.tiles import TileType
 

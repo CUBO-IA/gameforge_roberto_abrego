@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import math
+from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import Iterator
 
 
 @dataclass(slots=True)
@@ -12,31 +12,31 @@ class Vec2:
     x: float = 0.0
     y: float = 0.0
 
-    def __add__(self, other: "Vec2") -> "Vec2":
+    def __add__(self, other: Vec2) -> Vec2:
         return Vec2(self.x + other.x, self.y + other.y)
 
-    def __sub__(self, other: "Vec2") -> "Vec2":
+    def __sub__(self, other: Vec2) -> Vec2:
         return Vec2(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, scalar: float) -> "Vec2":
+    def __mul__(self, scalar: float) -> Vec2:
         return Vec2(self.x * scalar, self.y * scalar)
 
-    def __rmul__(self, scalar: float) -> "Vec2":
+    def __rmul__(self, scalar: float) -> Vec2:
         return self * scalar
 
-    def __truediv__(self, scalar: float) -> "Vec2":
+    def __truediv__(self, scalar: float) -> Vec2:
         if scalar == 0:
             raise ZeroDivisionError("No se puede dividir un Vec2 por cero.")
         return Vec2(self.x / scalar, self.y / scalar)
 
-    def __neg__(self) -> "Vec2":
+    def __neg__(self) -> Vec2:
         return Vec2(-self.x, -self.y)
 
     def __iter__(self) -> Iterator[float]:
         yield self.x
         yield self.y
 
-    def copy(self) -> "Vec2":
+    def copy(self) -> Vec2:
         return Vec2(self.x, self.y)
 
     def length_squared(self) -> float:
@@ -45,13 +45,13 @@ class Vec2:
     def length(self) -> float:
         return math.hypot(self.x, self.y)
 
-    def normalized(self) -> "Vec2":
+    def normalized(self) -> Vec2:
         length = self.length()
         if length <= 1e-12:
             return Vec2()
         return Vec2(self.x / length, self.y / length)
 
-    def clamped(self, max_length: float) -> "Vec2":
+    def clamped(self, max_length: float) -> Vec2:
         if max_length <= 0:
             return Vec2()
         length = self.length()
@@ -59,16 +59,16 @@ class Vec2:
             return self.copy()
         return self * (max_length / length)
 
-    def dot(self, other: "Vec2") -> float:
+    def dot(self, other: Vec2) -> float:
         return self.x * other.x + self.y * other.y
 
     def angle(self) -> float:
         return math.atan2(self.y, self.x)
 
-    def distance_to(self, other: "Vec2") -> float:
+    def distance_to(self, other: Vec2) -> float:
         return math.hypot(self.x - other.x, self.y - other.y)
 
-    def distance_squared_to(self, other: "Vec2") -> float:
+    def distance_squared_to(self, other: Vec2) -> float:
         dx = self.x - other.x
         dy = self.y - other.y
         return dx * dx + dy * dy
@@ -77,7 +77,7 @@ class Vec2:
         return self.x, self.y
 
     @classmethod
-    def from_angle(cls, angle: float, length: float = 1.0) -> "Vec2":
+    def from_angle(cls, angle: float, length: float = 1.0) -> Vec2:
         return cls(math.cos(angle) * length, math.sin(angle) * length)
 
 

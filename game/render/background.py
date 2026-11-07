@@ -50,7 +50,6 @@ def draw_anvil(surface: pygame.Surface, x: int, y: int, scale: float = 1.0) -> N
     color = (42, 36, 48)
     highlight = (72, 60, 78)
     width = int(150 * scale)
-    height = int(60 * scale)
     top = pygame.Rect(0, 0, width, int(20 * scale))
     top.midtop = (x, y)
     pygame.draw.rect(surface, color, top)

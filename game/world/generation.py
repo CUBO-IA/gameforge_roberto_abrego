@@ -11,8 +11,8 @@ from __future__ import annotations
 
 import math
 import random
-from dataclasses import dataclass
 from collections import deque
+from dataclasses import dataclass
 
 from game.core.config import DungeonConfig
 from game.core.math2d import Vec2
@@ -38,7 +38,7 @@ class Room:
     def contains(self, col: int, row: int) -> bool:
         return self.x <= col < self.x + self.width and self.y <= row < self.y + self.height
 
-    def overlaps_padded(self, other: "Room", padding: int) -> bool:
+    def overlaps_padded(self, other: Room, padding: int) -> bool:
         return not (
             self.x + self.width + padding <= other.x
             or other.x + other.width + padding <= self.x

@@ -9,7 +9,7 @@ from __future__ import annotations
 import math
 import sqlite3
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 
@@ -64,7 +64,7 @@ class ScoreRepository:
 
     def record(self, result: RunResult) -> int:
         _validate_result(result)
-        created_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        created_at = datetime.now(UTC).isoformat(timespec="seconds")
         with self._connection:
             cursor = self._connection.execute(
                 """
@@ -112,7 +112,7 @@ class ScoreRepository:
     def close(self) -> None:
         self._connection.close()
 
-    def __enter__(self) -> "ScoreRepository":
+    def __enter__(self) -> ScoreRepository:
         return self
 
     def __exit__(self, *args: object) -> None:

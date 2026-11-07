@@ -2,7 +2,6 @@ import pygame
 import pytest
 
 from game.input.actions import Action, InputMapper
-from game.core.math2d import Vec2
 
 
 def key_event(key: int, down: bool = True, repeat: bool = False) -> pygame.event.Event:

@@ -107,7 +107,7 @@ class GameConfig:
     audio: AudioConfig = field(default_factory=AudioConfig)
 
     @classmethod
-    def from_dict(cls, raw: Any) -> "GameConfig":
+    def from_dict(cls, raw: Any) -> GameConfig:
         if not isinstance(raw, dict):
             raise ConfigError("La raíz de config.json debe ser un objeto JSON.")
 

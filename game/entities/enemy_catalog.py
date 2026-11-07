@@ -11,9 +11,9 @@ una entrada aquí y sus estadísticas en config.json; no hay que escribir códig
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Mapping
 
 CATALOG_PATH = Path(__file__).resolve().parent.parent / "data" / "enemies.json"
 

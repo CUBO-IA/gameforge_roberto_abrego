@@ -134,3 +134,34 @@ pública requiere análisis de impacto y actualización de tests.
 - Si la posición guardada está dentro de un tile sólido, se usa el spawn.
 - Al terminar (muerte o victoria) se borra el guardado para no reanudar un
   estado terminal.
+
+
+---
+
+# Contratos propuestos para expansión (v0.2.0)
+
+## `game.ai.astar`
+- `find_path(tilemap: TileMap, start: Vec2, goal: Vec2, budget_ms: float = 1.5) -> list[Vec2] | None`
+- Garantía de tiempo: Nunca excede `budget_ms`. Si se agota el tiempo, devuelve la mejor ruta parcial calculada hasta el momento o `None`.
+- Determinismo: Ante idéntica terna `(tilemap, start, goal)`, devuelve la misma secuencia de nodos.
+- Sin estado global mutable: Las estructuras auxiliares son locales o reutilizadas desde un contexto inyectado.
+- Caché LRU de rutas parametrizada por `(floor, goal_tile)`.
+
+## `game.ai.behavior`
+- Comportamientos completamente dirigidos por datos cargados desde `game/data/enemies.json`.
+- `tick(entity: Enemy, ctx: SimulationContext, dt: float) -> EnemyIntent`.
+- Generación pura: Retorna intenciones de movimiento y ataque sin mutar el mundo ni invocar APIs de render.
+
+## `game.sim.floor`
+- `advance_floor(current_floor: int, seed: int, result: DungeonResult) -> FloorTransition`
+- Determinista por `(seed, floor)`: Regenera el siguiente piso con dificultad y número de enemigos escalados.
+- Preservación de estado: Traspasa salud del jugador, inventario acumulado y misiones activas.
+
+## `game.data.catalog`
+- Todo cargador de catálogo expone `load_xxx(path: Path) -> dict[str, ItemDefinition]` con validación estricta de tipos (`CatalogError`).
+- Inmutabilidad: Devuelve objetos inmutables (`frozen dataclasses`).
+- Validación al arrancar: Cero errores diferidos al momento de combate.
+
+## `game.render.canvas`
+- Desacoplamiento de resolución lógica (diseño fijo 1280x720) y física de ventana.
+- `map_mouse_to_logical(pos: tuple[int, int]) -> tuple[int, int] | None`: Mapeo transparente con corrección de letterbox/pillarbox para las escenas.

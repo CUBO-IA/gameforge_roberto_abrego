@@ -13,7 +13,9 @@ def make_enemy(position: Vec2, enemy_id: str = "e") -> Enemy:
     return Enemy(enemy_id, "slime", position, STATS)
 
 
-def spec(direction: Vec2 = Vec2(1, 0)) -> AttackSpec:
+def spec(direction: Vec2 | None = None) -> AttackSpec:
+    if direction is None:
+        direction = Vec2(1, 0)
     return AttackSpec(
         origin=Vec2(0, 0),
         direction=direction,

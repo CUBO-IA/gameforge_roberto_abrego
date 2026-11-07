@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 class Scene:
-    def __init__(self, app: "Application") -> None:
+    def __init__(self, app: Application) -> None:
         self.app = app
 
     def on_enter(self) -> None:

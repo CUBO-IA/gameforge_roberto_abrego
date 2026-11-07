@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from game.core.math2d import Vec2
 from game.entities.interactables import Chest, ForgeAltar
 from game.sim.floor import finish_score, floor_bonus

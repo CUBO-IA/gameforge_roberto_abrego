@@ -90,7 +90,7 @@ class Inventory:
         return dict(sorted(self._slots.items()))
 
     @classmethod
-    def from_dict(cls, raw: object, capacity: int = 20) -> "Inventory":
+    def from_dict(cls, raw: object, capacity: int = 20) -> Inventory:
         if not isinstance(raw, dict):
             raise InventoryError("El inventario guardado debe ser un objeto.")
         if len(raw) > capacity:
