@@ -26,8 +26,10 @@ def resolve_data_dir(override: str | Path | None = None) -> Path:
     return (root / APP_DIR_NAME).resolve()
 
 
-def save_file(data_dir: str | Path) -> Path:
-    return Path(data_dir) / "slot1.json"
+def save_file(data_dir: str | Path, slot: int = 1) -> Path:
+    if slot < 1 or slot > 9:
+        raise ValueError("El slot debe estar comprendido entre 1 y 9.")
+    return Path(data_dir) / f"slot{slot}.json"
 
 
 def scores_file(data_dir: str | Path) -> Path:

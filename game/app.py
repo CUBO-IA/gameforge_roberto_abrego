@@ -15,6 +15,7 @@ from game.persistence.paths import resolve_data_dir, save_file, scores_file
 from game.persistence.savegame import SaveGameError, delete_save
 from game.persistence.scores import RunResult, ScoreEntry, ScoreError, ScoreRepository
 from game.render.audio import Audio
+from game.render.canvas import VirtualCanvas
 from game.render.fonts import FontCache
 
 logger = logging.getLogger(__name__)
@@ -53,6 +54,11 @@ class Application:
         self.clock = pygame.time.Clock()
         self.input = InputMapper()
         self.fonts = FontCache()
+        self.canvas = VirtualCanvas(
+            logical_width=self.config.window.width,
+            logical_height=self.config.window.height,
+            initial_window_size=(self.config.window.width, self.config.window.height),
+        )
         self.audio = Audio(self.config.audio.master_volume)
         self.save_path = save_file(self.data_dir)
 
@@ -107,6 +113,9 @@ class Application:
                 if event.type == pygame.QUIT:
                     self.running = False
                     break
+                if event.type == pygame.VIDEORESIZE:
+                    self.canvas.resize_window(event.w, event.h)
+                    self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
                 self.input.handle_event(event)
                 current = self.scene
                 if current is not None:
@@ -120,7 +129,8 @@ class Application:
             current = self.scene
             if current is None:
                 break
-            current.draw(self.screen)  # type: ignore[attr-defined]
+            current.draw(self.canvas.surface)  # type: ignore[attr-defined]
+            self.canvas.render_to_display(self.screen)
             pygame.display.flip()
             frames += 1
             if max_frames is not None and frames >= max_frames:

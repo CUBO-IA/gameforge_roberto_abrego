@@ -7,19 +7,22 @@ Columnas: PROPUESTA → APROBADA → EN CURSO → ENTREGADA → VERIFICADA.
 
 ## ENTREGADA
 
-### T-301 — Fase 3: Mundo grande y escala — ENTREGADA 2026-11-06
-- Responsable: GAMEPLAY + PROCEDURAL + IA/NPC + PRESENTACIÓN
+### T-401 — Fase 4: Presentación, Lienzo Virtual y Multi-ranura — ENTREGADA 2026-11-06
+- Responsable: PRESENTACIÓN + DIRECTOR
 - Resultado:
-  - Partición espacial `SpatialHash` en `game/world/spatial.py`.
-  - Separación de enemigos y ataques optimizados con SpatialHash.
-  - Frustum culling de renderizado en `game/render/world_view.py`.
-  - Staggering de actualización para entidades lejanas en `game/sim/engagement.py`.
-  - Cargador de mapas autorales de Tiled en `game/world/tiled_loader.py`.
-- Verificación: 10 tests nuevos (165 tests totales pasando), `tools/verify.py` OK (0 ruff, bench p95 1.17 ms).
-- Benchmark a gran escala: 100 entidades simultáneas con p95 = 6.58 ms (presupuesto 16.67 ms).
-- Informe completo: `tasks/reports/T-301.md`.
+  - `VirtualCanvas` con letterbox/pillarbox y escalado dinámico en `game/render/canvas.py`.
+  - Mapeo inverso de ratón `screen_to_logical` inmune a cambios de resolución.
+  - Sistema de guardado multi-ranura (`slot1.json`, `slot2.json`, `slot3.json`) con aislamiento total.
+  - Controlador de música de fondo en `game/render/audio.py`.
+- Verificación: 10 tests nuevos (175 tests totales pasando), `tools/verify.py` OK (0 ruff, bench p95 1.17 ms).
+- Informe completo: `tasks/reports/T-401.md`.
 
 ## VERIFICADA (por el DIRECTOR 2026-11-06)
+
+### T-301 — Fase 3: Mundo grande y escala
+- Responsable: GAMEPLAY + PROCEDURAL + IA/NPC + PRESENTACIÓN
+- Resultado: SpatialHash en `game/world/spatial.py`, culling de render, staggering de IA y cargador Tiled.
+- Verificación: Commit `e03d4c1`, 165 tests verdes, benchmark de 100 enemigos p95 = 6.58 ms. Criterios cumplidos al 100%.
 
 ### T-201 — Fase 2: multiplanta, misiones, A*, crafting
 - Responsable: GAMEPLAY + IA/NPC + PROCEDURAL

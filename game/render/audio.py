@@ -11,6 +11,7 @@ import logging
 import math
 import random
 from array import array
+from pathlib import Path
 
 import pygame
 
@@ -107,5 +108,39 @@ class Audio:
         except pygame.error as exc:
             logger.warning("No se pudo reproducir '%s': %s", name, exc)
 
+    def play_music(self, path: str | Path, loops: int = -1, volume: float = 0.5) -> None:
+        """Reproduce una pista de música de fondo (ej. OGG) con degradación segura."""
+        if not self.enabled:
+            return
+        p = Path(path)
+        if not p.is_file():
+            logger.debug("Música no encontrada en %s, omitiendo.", p)
+            return
+        try:
+            pygame.mixer.music.load(str(p))
+            pygame.mixer.music.set_volume(max(0.0, min(1.0, volume * self.master_volume)))
+            pygame.mixer.music.play(loops=loops)
+        except pygame.error as exc:
+            logger.warning("No se pudo cargar o reproducir música '%s': %s", path, exc)
+
+    def stop_music(self) -> None:
+        """Detiene la música de fondo si se está reproduciendo."""
+        if not self.enabled:
+            return
+        try:
+            pygame.mixer.music.stop()
+        except pygame.error:
+            pass
+
+    def set_music_volume(self, volume: float) -> None:
+        """Ajusta el volumen de la música."""
+        if not self.enabled:
+            return
+        try:
+            pygame.mixer.music.set_volume(max(0.0, min(1.0, volume * self.master_volume)))
+        except pygame.error:
+            pass
+
     def shutdown(self) -> None:
+        self.stop_music()
         self._sounds.clear()

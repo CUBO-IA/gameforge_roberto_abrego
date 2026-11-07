@@ -127,6 +127,48 @@ def delete_save(path: str | Path) -> bool:
         raise SaveGameError(f"No se pudo borrar el guardado: {target}") from exc
 
 
+def save_slot(data_dir: str | Path, slot: int, snapshot: RunSnapshot) -> Path:
+    """Guarda una partida en una ranura específica (1..3 por defecto)."""
+    from game.persistence.paths import save_file
+
+    path = save_file(data_dir, slot)
+    save_run(path, snapshot)
+    return path
+
+
+def load_slot(data_dir: str | Path, slot: int) -> SaveData:
+    """Carga la partida de una ranura específica."""
+    from game.persistence.paths import save_file
+
+    path = save_file(data_dir, slot)
+    return load_run(path)
+
+
+def delete_slot(data_dir: str | Path, slot: int) -> bool:
+    """Elimina la partida de una ranura específica."""
+    from game.persistence.paths import save_file
+
+    path = save_file(data_dir, slot)
+    return delete_save(path)
+
+
+def list_save_slots(data_dir: str | Path, max_slots: int = 3) -> dict[int, SaveData | None]:
+    """Lista las ranuras disponibles con sus metadatos de partida o None si están vacías."""
+    from game.persistence.paths import save_file
+
+    slots: dict[int, SaveData | None] = {}
+    for slot in range(1, max_slots + 1):
+        path = save_file(data_dir, slot)
+        if path.is_file():
+            try:
+                slots[slot] = load_run(path)
+            except SaveGameError:
+                slots[slot] = None
+        else:
+            slots[slot] = None
+    return slots
+
+
 def _validate_payload(raw: Any) -> SaveData:
     if not isinstance(raw, dict):
         raise SaveGameError("La raíz del guardado debe ser un objeto.")
