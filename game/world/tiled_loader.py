@@ -31,12 +31,24 @@ DEFAULT_GID_MAP: dict[int, TileType] = {
 
 
 @dataclass(frozen=True, slots=True)
+class NpcSpec:
+    """Descripción de un NPC extraído de una capa de objetos de Tiled."""
+
+    name: str
+    position: Vec2
+    role: str = ""
+    dialog: str = ""
+    properties: dict[str, str] = field(default_factory=dict)
+
+
+@dataclass(frozen=True, slots=True)
 class TiledMapData:
     tilemap: TileMap
     spawn: Vec2
     altar: Vec2 | None = None
     campfire: Vec2 | None = None
     chests: list[Vec2] = field(default_factory=list)
+    npcs: list[NpcSpec] = field(default_factory=list)
 
 
 def load_tiled_json(
@@ -83,6 +95,7 @@ def load_tiled_json(
     altar_pos: Vec2 | None = None
     campfire_pos: Vec2 | None = None
     chests_pos: list[Vec2] = []
+    npcs_list: list[NpcSpec] = []
 
     for layer in data.get("layers", []):
         layer_type = layer.get("type")
@@ -112,6 +125,20 @@ def load_tiled_json(
                     campfire_pos = pos
                 elif "chest" in obj_name or "chest" in obj_type:
                     chests_pos.append(pos)
+                elif "npc" in obj_name or "npc" in obj_type:
+                    # Extraer propiedades personalizadas del NPC
+                    props: dict[str, str] = {}
+                    for prop in obj.get("properties", []):
+                        props[str(prop.get("name", ""))] = str(prop.get("value", ""))
+                    npcs_list.append(
+                        NpcSpec(
+                            name=str(obj.get("name", "")),
+                            position=pos,
+                            role=props.get("role", ""),
+                            dialog=props.get("dialog", ""),
+                            properties=props,
+                        )
+                    )
 
     if not tile_layer_found:
         raise TiledError(f"El mapa {p} no contiene ninguna capa de tiles ('tilelayer').")
@@ -127,4 +154,5 @@ def load_tiled_json(
         altar=altar_pos,
         campfire=campfire_pos,
         chests=chests_pos,
+        npcs=npcs_list,
     )

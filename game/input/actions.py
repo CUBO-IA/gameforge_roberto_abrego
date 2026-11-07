@@ -20,6 +20,7 @@ class Action(StrEnum):
     MOVE_LEFT = "move_left"
     MOVE_RIGHT = "move_right"
     ATTACK = "attack"
+    JUMP = "jump"
     DASH = "dash"
     INTERACT = "interact"
     INVENTORY = "inventory"
@@ -38,7 +39,8 @@ DEFAULT_BINDINGS: dict[Action, tuple[int, ...]] = {
     Action.MOVE_DOWN: (pygame.K_s, pygame.K_DOWN),
     Action.MOVE_LEFT: (pygame.K_a, pygame.K_LEFT),
     Action.MOVE_RIGHT: (pygame.K_d, pygame.K_RIGHT),
-    Action.ATTACK: (pygame.K_SPACE, pygame.K_j),
+    Action.ATTACK: (pygame.K_f, pygame.K_j),
+    Action.JUMP: (pygame.K_SPACE,),
     Action.DASH: (pygame.K_LSHIFT, pygame.K_RSHIFT, pygame.K_k),
     Action.INTERACT: (pygame.K_e,),
     Action.INVENTORY: (pygame.K_i,),

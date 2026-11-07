@@ -208,8 +208,11 @@ class PlayScene(Scene):
         aim = mouse_world - self.player.position
         attack = input_map.mouse_was_pressed(1) or input_map.was_pressed(Action.ATTACK)
         dash = input_map.was_pressed(Action.DASH)
+        jump = input_map.was_pressed(Action.JUMP)
 
-        self.player.update(dt, move, aim, dash, attack, self.tilemap)
+        self.player.update(dt, move, aim, dash, attack, self.tilemap, jump=jump)
+        if self.player.jump_started:
+            self.effects.burst(self.player.position, palette.TEXT_MUTED, 6, 40)
         if self.player.dash_started:
             self.app.audio.play("dash")
             self.effects.burst(self.player.position, palette.ACCENT, 10, 90)

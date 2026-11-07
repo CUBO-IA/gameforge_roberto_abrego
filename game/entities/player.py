@@ -38,6 +38,11 @@ class Player:
         self.dash_started = False
         self.damage_flash = 0.0
         self._dash_direction = Vec2(0, 1)
+        self.z = 0.0
+        self.vz = 0.0
+        self.gravity = 520.0
+        self.jump_speed = 190.0
+        self.jump_started = False
 
     @property
     def max_health(self) -> float:
@@ -51,6 +56,10 @@ class Player:
     def is_dashing(self) -> bool:
         return self.dash_time > 0.0
 
+    @property
+    def is_jumping(self) -> bool:
+        return self.z > 0.0
+
     def update(
         self,
         dt: float,
@@ -59,17 +68,31 @@ class Player:
         dash: bool,
         attack: bool,
         tilemap: TileMap,
+        jump: bool = False,
     ) -> None:
         if dt <= 0 or not self.alive:
             return
         self.pending_attack = None
         self.dash_started = False
+        self.jump_started = False
 
         self.attack_cooldown = max(0.0, self.attack_cooldown - dt)
         self.attack_anim = max(0.0, self.attack_anim - dt)
         self.dash_cooldown = max(0.0, self.dash_cooldown - dt)
         self.invulnerability = max(0.0, self.invulnerability - dt)
         self.damage_flash = max(0.0, self.damage_flash - dt)
+
+        # Mecánica 2.5D: elevación y salto vertical sobre peligros
+        if jump and self.z <= 0.0 and not self.is_dashing:
+            self.vz = self.jump_speed
+            self.jump_started = True
+
+        if self.z > 0.0 or self.vz > 0.0:
+            self.z += self.vz * dt
+            self.vz -= self.gravity * dt
+            if self.z <= 0.0:
+                self.z = 0.0
+                self.vz = 0.0
 
         move = move.clamped(1.0)
         if aim.length_squared() > 1e-6:
@@ -106,7 +129,7 @@ class Player:
         self.position = result.position
 
         hazard = tilemap.hazard_damage_at(self.position.x, self.position.y)
-        if hazard > 0.0 and not self.is_dashing:
+        if hazard > 0.0 and not self.is_dashing and self.z <= 0.0:
             self.health = max(0.0, self.health - hazard * dt)
             self.damage_flash = 0.15
 

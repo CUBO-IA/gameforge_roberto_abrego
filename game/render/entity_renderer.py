@@ -38,8 +38,14 @@ def draw_player(
     shake: Vec2,
     time: float,
 ) -> None:
-    x, y = _screen(player.position, camera, shake)
-    draw_shadow(surface, player.position, camera, shake, 30, 18)
+    z = getattr(player, "z", 0.0)
+    scale = max(0.35, 1.0 - z / 90.0)
+    shadow_w = max(10, int(30 * scale))
+    shadow_h = max(6, int(18 * scale))
+    draw_shadow(surface, player.position, camera, shake, shadow_w, shadow_h)
+
+    x, y_ground = _screen(player.position, camera, shake)
+    y = y_ground - int(z)
 
     if player.invulnerability > 0.1 and not player.is_dashing:
         if int(time * 24) % 2 == 0:
