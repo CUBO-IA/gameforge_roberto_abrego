@@ -29,8 +29,6 @@ Diseñado y construido mediante una arquitectura limpia por capas puras y coordi
 
 ### Con el gestor de entornos `uv` (Recomendado)
 ```bash
-uv run python -m game
-```
 
 ### Con venv tradicional de Python
 ```bash
