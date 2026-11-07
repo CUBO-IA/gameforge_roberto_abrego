@@ -91,6 +91,7 @@ game/
 ```
 
 Documentación técnica detallada:
+- Integración de Personajes Nemotron El Salvador: [`README_NEMOTRON.md`](README_NEMOTRON.md).
 - Auditoría maestra y arquitectura: [`GAMEFORGE_2D_ARCHITECTURE_REVIEW.md`](GAMEFORGE_2D_ARCHITECTURE_REVIEW.md).
 - Investigación de 12 repositorios: [`REPOSITORY_RESEARCH.md`](REPOSITORY_RESEARCH.md).
 - Recomendación de stack tecnológico: [`TECH_STACK_RECOMMENDATION.md`](TECH_STACK_RECOMMENDATION.md).
