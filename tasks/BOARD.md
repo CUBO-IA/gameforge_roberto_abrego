@@ -10,6 +10,11 @@ Columnas: PROPUESTA → APROBADA → EN CURSO → ENTREGADA → VERIFICADA.
 
 ## VERIFICADA (por el DIRECTOR 2026-11-07)
 
+### T-602 — Expansión Mecánicas: Salto 2.5D, Cavernas, Swarm AI y Hub Narrativo
+- Responsable: DIRECTOR/ARQUITECTO
+- Resultado: Salto 2.5D con gravedad e inmunidad aérea en `player.py`, generador de cavernas orgánicas en `cavern_generation.py` (celular + radial + BFS), mapa Dijkstra O(W×H)/O(1) en `ai/dijkstra.py` para hordas, hub narrativo 20×15 en `hub_town.json` con 3 NPCs y soporte `NpcSpec` en `tiled_loader.py`.
+- Verificación: Commit `762a88b`, 213 tests verdes, ruff clean, benchmark p95 = 1.29 ms. Criterios cumplidos al 100%.
+
 ### T-601 — Investigación de Repositorios, Auditoría Legal y Propuesta Arquitectónica
 - Responsable: DIRECTOR/ARQUITECTO
 - Resultado: 12 repositorios analizados en `REPOSITORY_RESEARCH.md`, justificación en `TECH_STACK_RECOMMENDATION.md`, capas puras y presupuestos en `ARCHITECTURE_PROPOSAL.md`, análisis de licencias y riesgos en `DEPENDENCY_AUDIT.md`, 9 algoritmos clave en `REUSABLE_ALGORITHMS.md`, tabla de referencias `OPEN_SOURCE_REFERENCES.md` y suite de pruebas `tests/test_research_deliverables.py`.
