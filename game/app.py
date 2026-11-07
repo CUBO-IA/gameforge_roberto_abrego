@@ -14,6 +14,7 @@ from game.input.actions import InputMapper
 from game.persistence.paths import resolve_data_dir, save_file, scores_file
 from game.persistence.savegame import SaveGameError, delete_save
 from game.persistence.scores import RunResult, ScoreEntry, ScoreError, ScoreRepository
+from game.render.assets import ArtLibrary
 from game.render.audio import Audio
 from game.render.canvas import VirtualCanvas
 from game.render.fonts import FontCache
@@ -54,6 +55,7 @@ class Application:
         self.clock = pygame.time.Clock()
         self.input = InputMapper()
         self.fonts = FontCache()
+        self.art = ArtLibrary()
         self.canvas = VirtualCanvas(
             logical_width=self.config.window.width,
             logical_height=self.config.window.height,

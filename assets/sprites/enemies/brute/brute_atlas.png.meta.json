@@ -1,12 +1,12 @@
 {
-  "$schema": "https://gameforge2d.org/schemas/gf-provenance-v1.json",
   "asset_id": "brute",
-  "provenance": {
-    "author": "GameForge Team",
-    "source_repo": "internal_gameforge",
-    "license_spdx": "MIT",
-    "license_tier": "tier_1_permissive_attribution",
-    "attribution_required": true,
-    "attribution_text": "Brute enemy sprite atlas generated for GameForge 2D (MIT License)."
-  }
+  "author": "GameForge ArtForge",
+  "license": "MIT",
+  "origin": "Generado internamente por tools/artforge/characters.py",
+  "frame_size": [
+    48,
+    48
+  ],
+  "frames": 24,
+  "modified": false
 }

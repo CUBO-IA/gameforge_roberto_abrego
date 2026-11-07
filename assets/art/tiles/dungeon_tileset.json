@@ -1,0 +1,349 @@
+{
+  "version": "gf-tiles-v1",
+  "image_path": "dungeon_tileset.png",
+  "tile_size": 32,
+  "columns": 8,
+  "rows": 5,
+  "tiles": {
+    "floor_a": {
+      "index": 0,
+      "rect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "floor_b": {
+      "index": 1,
+      "rect": [
+        32,
+        0,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "floor_c": {
+      "index": 2,
+      "rect": [
+        64,
+        0,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "floor_d": {
+      "index": 3,
+      "rect": [
+        96,
+        0,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "floor_broken": {
+      "index": 4,
+      "rect": [
+        128,
+        0,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "floor_cracked": {
+      "index": 5,
+      "rect": [
+        160,
+        0,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "floor_mossy": {
+      "index": 6,
+      "rect": [
+        192,
+        0,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "floor_puddle": {
+      "index": 7,
+      "rect": [
+        224,
+        0,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "floor_grate": {
+      "index": 8,
+      "rect": [
+        0,
+        32,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "wall_face_0": {
+      "index": 9,
+      "rect": [
+        32,
+        32,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "wall_face_1": {
+      "index": 10,
+      "rect": [
+        64,
+        32,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "wall_face_2": {
+      "index": 11,
+      "rect": [
+        96,
+        32,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "wall_top": {
+      "index": 12,
+      "rect": [
+        128,
+        32,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "wall_cap": {
+      "index": 13,
+      "rect": [
+        160,
+        32,
+        32,
+        14
+      ],
+      "layer": "terrain"
+    },
+    "wall_shadow": {
+      "index": 14,
+      "rect": [
+        192,
+        32,
+        32,
+        14
+      ],
+      "layer": "terrain"
+    },
+    "water_0": {
+      "index": 15,
+      "rect": [
+        224,
+        32,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "water_1": {
+      "index": 16,
+      "rect": [
+        0,
+        64,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "lava_0": {
+      "index": 17,
+      "rect": [
+        32,
+        64,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "lava_1": {
+      "index": 18,
+      "rect": [
+        64,
+        64,
+        32,
+        32
+      ],
+      "layer": "terrain"
+    },
+    "decor_rubble": {
+      "index": 19,
+      "rect": [
+        96,
+        64,
+        32,
+        32
+      ],
+      "layer": "decor"
+    },
+    "decor_bones": {
+      "index": 20,
+      "rect": [
+        128,
+        64,
+        32,
+        32
+      ],
+      "layer": "decor"
+    },
+    "decor_skull": {
+      "index": 21,
+      "rect": [
+        160,
+        64,
+        16,
+        14
+      ],
+      "layer": "decor"
+    },
+    "decor_mushroom": {
+      "index": 22,
+      "rect": [
+        192,
+        64,
+        32,
+        32
+      ],
+      "layer": "decor"
+    },
+    "decor_crystal": {
+      "index": 23,
+      "rect": [
+        224,
+        64,
+        32,
+        32
+      ],
+      "layer": "decor"
+    },
+    "decor_roots": {
+      "index": 24,
+      "rect": [
+        0,
+        96,
+        32,
+        32
+      ],
+      "layer": "decor"
+    },
+    "decor_pebbles": {
+      "index": 25,
+      "rect": [
+        32,
+        96,
+        32,
+        32
+      ],
+      "layer": "decor"
+    },
+    "decor_web": {
+      "index": 26,
+      "rect": [
+        64,
+        96,
+        32,
+        32
+      ],
+      "layer": "decor"
+    },
+    "decor_chain": {
+      "index": 27,
+      "rect": [
+        96,
+        96,
+        10,
+        22
+      ],
+      "layer": "decor"
+    },
+    "tool_torch": {
+      "index": 28,
+      "rect": [
+        128,
+        96,
+        32,
+        32
+      ],
+      "layer": "decor"
+    },
+    "tool_banner": {
+      "index": 29,
+      "rect": [
+        160,
+        96,
+        22,
+        32
+      ],
+      "layer": "decor"
+    },
+    "tool_pillar": {
+      "index": 30,
+      "rect": [
+        192,
+        96,
+        32,
+        32
+      ],
+      "layer": "decor"
+    },
+    "prop_barrel": {
+      "index": 31,
+      "rect": [
+        224,
+        96,
+        24,
+        26
+      ],
+      "layer": "decor"
+    },
+    "prop_crate": {
+      "index": 32,
+      "rect": [
+        0,
+        128,
+        24,
+        24
+      ],
+      "layer": "decor"
+    },
+    "prop_urn": {
+      "index": 33,
+      "rect": [
+        32,
+        128,
+        20,
+        24
+      ],
+      "layer": "decor"
+    }
+  }
+}

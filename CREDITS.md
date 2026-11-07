@@ -11,10 +11,10 @@ Recursos completamente libres de restricciones de autoría:
 
 ## Licencias Permisivas con Atribución (CC-BY 3.0 / 4.0, MIT, OGA-BY)
 Recursos que requieren mención de autoría:
-- **Bruto de Escoria Fundida**: Created for GameForge 2D by GameForge Team
-- **Caballero Forjador**: Created for GameForge 2D by GameForge Team
-- **Cieno de las Profundidades**: Created for GameForge 2D by GameForge Team
-- **Fuego Fatuo Arcano**: Created for GameForge 2D by GameForge Team
+- **Bruto de escoria**: Created for GameForge 2D by GameForge ArtForge
+- **Caballero Forjador**: Created for GameForge 2D by GameForge ArtForge
+- **Cieno**: Created for GameForge 2D by GameForge ArtForge
+- **Fuego fatuo**: Created for GameForge 2D by GameForge ArtForge
 
 ## Copyleft Artístico / ShareAlike (CC-BY-SA 3.0 / 4.0, GPLv3)
 Recursos compartimentados como paquetes de datos externos:

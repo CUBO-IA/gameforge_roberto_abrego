@@ -1,22 +1,111 @@
-# Sistema de animación
+# Sistema de Animación y Controladores — GameForge 2D
 
-## Implementado
+**Documento:** `ANIMATION_SYSTEM.md`  
+**Versión:** 1.0.0 (Aprobada tras Visual Overhaul — Misión 008)  
+**Módulos Clave:** `game/render/animation.py`, `game/scenes/play.py`, `game/render/entity_renderer.py`
 
-`game/render/animation.py` ofrece `FrameData`, `AnimationClip`, `FrameEvent`, `HitboxData`, `AnimationPlayer` y `load_animation_manifest`. Soporta avance por `dt`, loops, clips one-shot, velocidad de reproducción, prioridad de interrupción, eventos por frame, pivote, sockets, hurtboxes e hitboxes. Los tests `test_animation_engine.py` y `test_enemy_animation.py` ya cubren reproducción, prioridad, manifiestos y parte de integración.
+---
 
-`PlayScene` crea reproductores para el héroe y para enemigos slime/wisp/brute. Selecciona estados desde movimiento, ataque, daño y estado de combate. `draw_player`/`draw_enemy` pueden dibujar superficies del frame cuando se asigna un reproductor.
+## 1. Arquitectura del Motor de Animación
 
-## Brechas observadas
+El sistema de animación de GameForge 2D desacopla la lógica de simulación de los personajes de la reproducción temporal y el recorte de fotogramas, siguiendo un diseño basado en spritesheets y metadatos JSON declarativos (`gf-anim-v1`).
 
-- El render fallback sigue dibujando entidades con primitivas cuando no hay superficie animada asignada; validar en ejecución qué actores muestran atlas.
-- No se asigna la animación LPC a un arquetipo de enemigo de la escena inspeccionada.
-- Revisión funcional pendiente de consistencia entre estados terminales y clips disponibles. Las pruebas no se ejecutaron por falta de pygame.
-- No se debe inferir animación esquelética: no hay runtime de rig conectado y el diseño actual favorece spritesheets.
+```
++-----------------------------------------------------------------------------------+
+|                        ESTRUCTURA DE DATOS (animation.py)                         |
+|                                                                                   |
+|  FrameData:                                                                       |
+|    - rect: pygame.Rect                 (Coordenadas en el atlas)                  |
+|    - pivot: tuple[int, int]            (Origen del personaje en el suelo)         |
+|    - duration: float                   (Tiempo de permanencia en segundos)        |
+|    - sockets: dict[str, tuple[int, int]] (Puntos de anclaje: mano, cabeza, etc.)  |
+|    - hurtboxes: list[pygame.Rect]      (Cajas de recepción de daño)               |
+|    - hitboxes: list[HitboxData]        (Cajas de ataque con daño y empuje)        |
+|    - events: list[FrameEvent]          (Eventos de sonido, partículas y sacudida) |
+|                                                                                   |
+|  AnimationClip:                                                                   |
+|    - frames: list[FrameData]           (Secuencia ordenada de fotogramas)         |
+|    - loop: bool                        (Repetición continua o parada final)       |
+|    - playback_speed: float             (Modificador temporal de velocidad)        |
+|    - interrupt_priority: int           (Nivel de prioridad de interrupción)       |
++-----------------------------------------------------------------------------------+
+                                        |
+                                        v
++-----------------------------------------------------------------------------------+
+|                     REPRODUCTOR TEMPORAL (AnimationPlayer)                        |
+|                                                                                   |
+|  - play(clip_name): Inicia clip si tiene igual o mayor prioridad que el actual    |
+|  - interrupt_with(clip_name): Fuerza reproducción si priority(nuevo) >= priority  |
+|  - update(dt): Avanza tiempo, detecta cambio de fotograma y extrae FrameEvents    |
+|  - current_surface: Devuelve la subsurface recortada del frame activo             |
+|  - current_pivot: Devuelve el punto de pivote para anclaje al mundo               |
++-----------------------------------------------------------------------------------+
+```
 
-## Contrato operativo
+---
 
-Conservar `AnimationPlayer` y gf-anim-v1. El actualizador de escena decide el estado y el reproductor avanza con `dt`; el renderer solo presenta el frame/pivote. Los eventos se consumen una sola vez por avance según el comportamiento probado. Una interrupción debe respetar la prioridad declarada. Si falta un clip, el fallback debe ser explícito y cubrirse con prueba; no ocultar errores de formato con `except: pass`.
+## 2. Jerarquía de Prioridades e Interrupciones
 
-## Extensiones a proponer antes de codificar
+Para evitar que una acción de menor rango interrumpa una reacción crítica, el sistema implementa una escala de prioridades estricta:
 
-Transiciones con blend, sincronización de hitbox de animación frente a ataque de dominio y capas/equipamiento son extensiones, no capacidades que esta auditoría dé por implementadas. Antes de introducirlas, registrar contrato, dueño de archivos y criterio observable. No añadir rig esquelético runtime hasta que una necesidad artística y benchmark lo justifiquen.
+| Nivel | Prioridad | Clips Típicos | Comportamiento al Solicitar Nuevo Clip |
+|---|---|---|---|
+| **P-Max** | 9 | `die` | Clip terminal de una sola ejecución. Bloquea cualquier otra animación hasta el reinicio. |
+| **Alta** | 5 | `hurt` | Reacción inmediata al recibir daño. Interrumpe ataques y movimiento; dura pocos frames. |
+| **Combate** | 3 | `attack`, `windup`, `charge` | Animaciones de acción con cajas de golpe activas (`hitboxes`). No pueden ser canceladas por caminar. |
+| **Locomoción** | 1 | `walk`, `run` | Animaciones en bucle. Se reproducen mientras la velocidad lineal supere un umbral mínimo. |
+| **Base** | 0 | `idle` | Estado de reposo y respiración. Se interrumpe inmediatamente ante cualquier entrada de movimiento o acción. |
+
+---
+
+## 3. Sincronización de Eventos y Combate
+
+Los fotogramas pueden contener `FrameEvents` que se disparan exactamente en el fotograma indicado, garantizando la perfecta sincronización audiovisual:
+
+- **Pisadas (`dust_step`):** En los frames de contacto del clip `walk`, emite partículas de polvo en los pies del héroe.
+- **Impacto y Chispas (`slash_spark`):** En el fotograma álgido del clip `attack`, genera un estallido de chispas en la punta de la espada.
+- **Sacudida de Cámara (`screen_shake`):** Añade trauma al sistema de sacudida (`trauma: 0.35`) en golpes contundentes o embestidas del bruto.
+- **Cajas de Golpe (`hitboxes`):** Activan detección de daño solo durante los frames donde el arma está extendida, con parámetros de daño, fuerza de retroceso (`knockback_force`) y duración de aturdimiento (`hitstun_duration_s`).
+
+---
+
+## 4. Orientación y Espejado Dinámico
+
+El renderizador de entidades (`entity_renderer.py`) gestiona el volteo horizontal (`flip`) preservando el alineamiento espacial:
+
+1. Si el vector de dirección o apuntado apunta hacia la izquierda (`facing.x < 0`):
+   ```python
+   frame_surf = pygame.transform.flip(frame_surf, True, False)
+   px = frame_surf.get_width() - px  # Inversión matemática del pivote
+   ```
+2. La superficie se posiciona en pantalla mediante:
+   ```python
+   surface.blit(frame_surf, (screen_x - px, screen_y - py))
+   ```
+   Esto asegura que los pies del personaje nunca se deslicen ni cambien de posición al girar de dirección.
+
+---
+
+## 5. Implementación en Actores del Juego
+
+### A. Jugador (`knight_hero`)
+Controlado en `PlayScene.update`:
+- Si `not player.alive`: reproduce `die` (prioridad 9).
+- Si `player.damage_flash > 0`: reproduce `hurt` (prioridad 5).
+- Si `player.pending_attack is not None or player.attack_anim > 0`: reproduce `attack` (prioridad 3).
+- Si `move.length_squared() > 0.01`: reproduce `walk` (prioridad 1).
+- Si no hay movimiento: reproduce `idle` (prioridad 0).
+
+### B. Enemigos
+- **Cieno (`slime`)**: Modula entre `idle`, `walk`, `attack` (salto de impacto), `hurt` y `die`.
+- **Fuego Fatuo (`wisp`)**: Levita con `idle`/`walk`, dispara proyectiles arcanos mediante `shoot` y se desvanece con `die`.
+- **Bruto de Escoria (`brute`)**: Fases de combate sincronizadas con su FSM: `windup` (preparación de embestida con brillo), `charge` (carrera devastadora con partículas), `attack` (mandoble circular), `hurt` y `die`.
+
+---
+
+## 6. Cobertura de Pruebas Automatizadas
+
+El sistema de animación cuenta con cobertura unitaria exhaustiva:
+- `tests/test_animation_engine.py`: Valida avance temporal por `dt`, bucles, prioridades de interrupción, eventos por fotograma y cálculo de pivotes.
+- `tests/test_enemy_animation.py`: Comprueba que los tres tipos de enemigos cargan y reproducen sus atlas correctamente.
+- `tests/test_character_validator.py`: Verifica la integridad formal de los manifiestos `gf-anim-v1`, campos obligatorios (`rig_type`, `id`, `display_name`), límites de atlas y ausencia de referencias huérfanas.

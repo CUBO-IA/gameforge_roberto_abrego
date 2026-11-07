@@ -3,199 +3,1282 @@
   "metadata": {
     "id": "knight_hero",
     "display_name": "Caballero Forjador",
-    "author": "Agente Arquitecto",
-    "rig_type": "hybrid",
-    "description": "Guerrero con espada corta y armadura ligera de placas",
-    "tags": ["player", "melee", "humanoid"]
+    "author": "GameForge ArtForge",
+    "license": "MIT",
+    "rig_type": "frame_by_frame",
+    "description": "Guerrero de la Forja con yelmo de visor cian, tabardo teal y espada larga",
+    "tags": [
+      "player",
+      "melee",
+      "humanoid",
+      "dark-fantasy"
+    ]
   },
   "texture": {
     "image_path": "knight_hero_atlas.png",
-    "width": 512,
-    "height": 512,
+    "width": 624,
+    "height": 150,
     "format": "RGBA"
   },
   "frames": [
     {
       "id": "idle_0",
-      "rect": [0, 0, 32, 36],
-      "pivot": [16, 36],
-      "duration_ms": 150,
+      "rect": [
+        0,
+        0,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 170,
       "sockets": {
-        "hand_right": [20, 22],
-        "head": [16, 8],
-        "cast_point": [24, 18],
-        "shadow": [16, 36]
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
       },
       "hurtboxes": [
-        [-10, -34, 20, 32]
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
       ],
       "hitboxes": [],
       "events": []
     },
     {
       "id": "idle_1",
-      "rect": [32, 0, 32, 36],
-      "pivot": [16, 36],
-      "duration_ms": 150,
+      "rect": [
+        52,
+        0,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 170,
       "sockets": {
-        "hand_right": [20, 23],
-        "head": [16, 9],
-        "cast_point": [24, 19],
-        "shadow": [16, 36]
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
       },
       "hurtboxes": [
-        [-10, -33, 20, 31]
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "idle_2",
+      "rect": [
+        104,
+        0,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 170,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "idle_3",
+      "rect": [
+        156,
+        0,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 170,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
       ],
       "hitboxes": [],
       "events": []
     },
     {
       "id": "walk_0",
-      "rect": [64, 0, 32, 36],
-      "pivot": [16, 36],
-      "duration_ms": 120,
+      "rect": [
+        208,
+        0,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 95,
       "sockets": {
-        "hand_right": [22, 22],
-        "head": [16, 8],
-        "cast_point": [26, 18],
-        "shadow": [16, 36]
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
       },
       "hurtboxes": [
-        [-10, -34, 20, 32]
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
       ],
       "hitboxes": [],
       "events": [
-        { "name": "play_sfx", "payload": { "sfx_id": "footstep_stone", "volume": 0.4 } },
-        { "name": "spawn_particle", "payload": { "type": "dust_step", "offset": [0, 0] } }
+        {
+          "name": "spawn_particle",
+          "payload": {
+            "type": "dust_step"
+          }
+        }
       ]
     },
     {
-      "id": "attack_slash_0",
-      "rect": [96, 0, 48, 38],
-      "pivot": [20, 38],
-      "duration_ms": 80,
+      "id": "walk_1",
+      "rect": [
+        260,
+        0,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 95,
       "sockets": {
-        "hand_right": [12, 18],
-        "head": [20, 10],
-        "cast_point": [28, 16],
-        "shadow": [20, 38]
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
       },
       "hurtboxes": [
-        [-10, -34, 22, 32]
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "walk_2",
+      "rect": [
+        312,
+        0,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 95,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "walk_3",
+      "rect": [
+        364,
+        0,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 95,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
       ],
       "hitboxes": [],
       "events": [
-        { "name": "play_sfx", "payload": { "sfx_id": "sword_swing_light" } }
+        {
+          "name": "spawn_particle",
+          "payload": {
+            "type": "dust_step"
+          }
+        }
       ]
     },
     {
-      "id": "attack_slash_1",
-      "rect": [144, 0, 54, 40],
-      "pivot": [20, 40],
-      "duration_ms": 100,
+      "id": "walk_4",
+      "rect": [
+        416,
+        0,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 95,
       "sockets": {
-        "hand_right": [36, 20],
-        "head": [20, 10],
-        "cast_point": [42, 16],
-        "shadow": [20, 40]
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
       },
       "hurtboxes": [
-        [-8, -34, 22, 32]
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "walk_5",
+      "rect": [
+        468,
+        0,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 95,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "run_0",
+      "rect": [
+        520,
+        0,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 75,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": [
+        {
+          "name": "spawn_particle",
+          "payload": {
+            "type": "dust_step"
+          }
+        }
+      ]
+    },
+    {
+      "id": "run_1",
+      "rect": [
+        572,
+        0,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 75,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "run_2",
+      "rect": [
+        0,
+        50,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 75,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "run_3",
+      "rect": [
+        52,
+        50,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 75,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": [
+        {
+          "name": "spawn_particle",
+          "payload": {
+            "type": "dust_step"
+          }
+        }
+      ]
+    },
+    {
+      "id": "run_4",
+      "rect": [
+        104,
+        50,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 75,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "run_5",
+      "rect": [
+        156,
+        50,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 75,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "attack_0",
+      "rect": [
+        208,
+        50,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 105,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "attack_1",
+      "rect": [
+        260,
+        50,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 105,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
       ],
       "hitboxes": [
         {
-          "rect": [4, -28, 36, 26],
+          "rect": [
+            6,
+            -24,
+            28,
+            28
+          ],
           "damage": 15.0,
-          "knockback_force": 140.0,
-          "hitstun_duration_s": 0.25,
-          "hit_sound": "sword_hit_flesh"
+          "knockback_force": 120.0,
+          "hitstun_duration_s": 0.18,
+          "hit_sound": "hit"
         }
       ],
       "events": [
-        { "name": "spawn_particle", "payload": { "type": "slash_spark", "offset": [22, -14] } },
-        { "name": "screen_shake", "payload": { "trauma": 0.15 } }
+        {
+          "name": "spawn_particle",
+          "payload": {
+            "type": "slash_spark"
+          }
+        },
+        {
+          "name": "screen_shake",
+          "payload": {
+            "trauma": 0.35
+          }
+        }
       ]
     },
     {
-      "id": "attack_slash_2",
-      "rect": [198, 0, 40, 36],
-      "pivot": [20, 36],
-      "duration_ms": 120,
+      "id": "attack_2",
+      "rect": [
+        312,
+        50,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 105,
       "sockets": {
-        "hand_right": [30, 24],
-        "head": [20, 10],
-        "cast_point": [32, 20],
-        "shadow": [20, 36]
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
       },
       "hurtboxes": [
-        [-10, -34, 20, 32]
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
       ],
       "hitboxes": [],
       "events": []
     },
     {
       "id": "hurt_0",
-      "rect": [240, 0, 32, 36],
-      "pivot": [16, 36],
-      "duration_ms": 200,
+      "rect": [
+        364,
+        50,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 90,
       "sockets": {
-        "hand_right": [16, 22],
-        "head": [16, 8],
-        "shadow": [16, 36]
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
       },
       "hurtboxes": [
-        [-10, -34, 20, 32]
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
       ],
       "hitboxes": [],
-      "events": [
-        { "name": "play_sfx", "payload": { "sfx_id": "player_hurt" } }
-      ]
+      "events": []
+    },
+    {
+      "id": "hurt_1",
+      "rect": [
+        416,
+        50,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 90,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
     },
     {
       "id": "die_0",
-      "rect": [272, 0, 36, 36],
-      "pivot": [18, 36],
-      "duration_ms": 600,
+      "rect": [
+        468,
+        50,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 130,
       "sockets": {
-        "shadow": [18, 36]
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
       },
-      "hurtboxes": [],
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
       "hitboxes": [],
-      "events": [
-        { "name": "play_sfx", "payload": { "sfx_id": "player_death" } }
-      ]
+      "events": []
+    },
+    {
+      "id": "die_1",
+      "rect": [
+        520,
+        50,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 130,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "die_2",
+      "rect": [
+        572,
+        50,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 130,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "die_3",
+      "rect": [
+        0,
+        100,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 130,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "die_4",
+      "rect": [
+        52,
+        100,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 130,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "die_5",
+      "rect": [
+        104,
+        100,
+        52,
+        50
+      ],
+      "pivot": [
+        20,
+        48
+      ],
+      "duration_ms": 130,
+      "sockets": {
+        "hand_right": [
+          26,
+          32
+        ],
+        "head": [
+          20,
+          14
+        ],
+        "cast_point": [
+          28,
+          30
+        ],
+        "shadow": [
+          20,
+          48
+        ]
+      },
+      "hurtboxes": [
+        [
+          -10,
+          -40,
+          20,
+          38
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
     }
   ],
   "clips": {
     "idle": {
-      "frames": ["idle_0", "idle_1"],
+      "frames": [
+        "idle_0",
+        "idle_1",
+        "idle_2",
+        "idle_3"
+      ],
       "loop": true,
       "playback_speed": 1.0,
       "interrupt_priority": 0
     },
     "walk": {
-      "frames": ["walk_0", "idle_0"],
+      "frames": [
+        "walk_0",
+        "walk_1",
+        "walk_2",
+        "walk_3",
+        "walk_4",
+        "walk_5"
+      ],
       "loop": true,
       "playback_speed": 1.0,
-      "interrupt_priority": 0
+      "interrupt_priority": 1
+    },
+    "run": {
+      "frames": [
+        "run_0",
+        "run_1",
+        "run_2",
+        "run_3",
+        "run_4",
+        "run_5"
+      ],
+      "loop": true,
+      "playback_speed": 1.0,
+      "interrupt_priority": 1
     },
     "attack": {
-      "frames": ["attack_slash_0", "attack_slash_1", "attack_slash_2"],
+      "frames": [
+        "attack_0",
+        "attack_1",
+        "attack_2"
+      ],
       "loop": false,
       "playback_speed": 1.0,
       "interrupt_priority": 3
     },
     "hurt": {
-      "frames": ["hurt_0"],
+      "frames": [
+        "hurt_0",
+        "hurt_1"
+      ],
       "loop": false,
       "playback_speed": 1.0,
-      "interrupt_priority": 4
+      "interrupt_priority": 5
     },
     "die": {
-      "frames": ["die_0"],
+      "frames": [
+        "die_0",
+        "die_1",
+        "die_2",
+        "die_3",
+        "die_4",
+        "die_5"
+      ],
       "loop": false,
       "playback_speed": 1.0,
-      "interrupt_priority": 10
+      "interrupt_priority": 9
     }
   }
 }

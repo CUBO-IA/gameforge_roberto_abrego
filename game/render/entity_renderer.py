@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from typing import TYPE_CHECKING
 
 import pygame
 
@@ -13,6 +14,9 @@ from game.entities.player import Player
 from game.entities.projectiles import Projectile
 from game.render import palette
 from game.world.camera import Camera
+
+if TYPE_CHECKING:
+    from game.render.assets import ArtLibrary
 
 
 def _screen(position: Vec2, camera: Camera, shake: Vec2) -> tuple[int, int]:
@@ -266,12 +270,22 @@ def draw_chest(
     shake: Vec2,
     time: float,
     highlighted: bool,
+    art: ArtLibrary | None = None,
 ) -> None:
     x, y = _screen(chest.position, camera, shake)
     draw_shadow(surface, chest.position, camera, shake, 30, 14)
     if highlighted and not chest.opened:
         pulse = 2 + int(math.sin(time * 5) * 2)
         pygame.draw.circle(surface, palette.ACCENT, (x, y), 22 + pulse, 2)
+
+    if art and art.objects:
+        sprite_name = "chest_open" if chest.opened else "chest_closed"
+        sprite = art.object_sprite(sprite_name)
+        if sprite:
+            rect = sprite.get_rect(midbottom=(x, y + 14))
+            surface.blit(sprite, rect)
+            return
+
     body = pygame.Rect(0, 0, 30, 20)
     body.center = (x, y + 3)
     pygame.draw.rect(surface, (28, 20, 16), body.inflate(4, 4), border_radius=3)
@@ -299,9 +313,24 @@ def draw_campfire(
     shake: Vec2,
     time: float,
     highlighted: bool,
+    art: ArtLibrary | None = None,
 ) -> None:
     x, y = _screen(campfire.position, camera, shake)
     draw_shadow(surface, campfire.position, camera, shake, 46, 22)
+    if art and art.objects:
+        base_sprite = art.object_sprite("campfire_base")
+        if base_sprite:
+            rect = base_sprite.get_rect(midbottom=(x, y + 16))
+            surface.blit(base_sprite, rect)
+            frame_idx = int(time * 8.0) % 4
+            flame_sprite = art.object_sprite(f"campfire_flame_{frame_idx}")
+            if flame_sprite:
+                flame_rect = flame_sprite.get_rect(midbottom=(x, y + 6))
+                surface.blit(flame_sprite, flame_rect)
+            if highlighted:
+                pygame.draw.circle(surface, palette.ACCENT, (x, y), 32, 1)
+            return
+
     pygame.draw.ellipse(surface, (54, 50, 60), pygame.Rect(x - 25, y + 2, 50, 20))
     for index in range(5):
         angle = math.tau * index / 5 + 0.3
@@ -339,9 +368,46 @@ def draw_altar(
     shards: int,
     shards_required: int,
     highlighted: bool,
+    art: ArtLibrary | None = None,
 ) -> None:
     x, y = _screen(altar.position, camera, shake)
     draw_shadow(surface, altar.position, camera, shake, 72, 30)
+    if art and art.objects:
+        sprite_name = "altar_active" if altar.activated else "altar_idle"
+        sprite = art.object_sprite(sprite_name)
+        if sprite:
+            rect = sprite.get_rect(midbottom=(x, y + 18))
+            surface.blit(sprite, rect)
+            if altar.activated:
+                pulse = 1.0 + 0.25 * math.sin(time * 6)
+                pygame.draw.polygon(
+                    surface,
+                    (255, 140, 52),
+                    [
+                        (x - 12, y - 22),
+                        (x, y - int(60 * pulse)),
+                        (x + 12, y - 22),
+                    ],
+                )
+                pygame.draw.polygon(
+                    surface,
+                    (255, 226, 150),
+                    [(x - 5, y - 22), (x, y - int(42 * pulse)), (x + 5, y - 22)],
+                )
+            else:
+                for index in range(3):
+                    lit = index < shards
+                    socket_x = x - 15 + index * 15
+                    socket_y = y - 11
+                    if lit:
+                        pygame.draw.circle(surface, palette.ACCENT, (socket_x, socket_y), 4)
+                        pygame.draw.circle(surface, (255, 230, 160), (socket_x, socket_y), 2)
+                if shards >= shards_required:
+                    pygame.draw.circle(surface, palette.ACCENT, (x, y - 16), 20, 2)
+            if highlighted:
+                pygame.draw.circle(surface, palette.ACCENT, (x, y - 10), 42, 1)
+            return
+
     pygame.draw.ellipse(surface, (52, 46, 62), pygame.Rect(x - 36, y - 8, 72, 30))
     pygame.draw.ellipse(surface, (82, 72, 96), pygame.Rect(x - 30, y - 12, 60, 24))
     pygame.draw.rect(surface, (66, 60, 78), pygame.Rect(x - 22, y - 24, 44, 22), border_radius=4)

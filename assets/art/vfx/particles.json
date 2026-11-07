@@ -1,0 +1,115 @@
+{
+  "version": "gf-vfx-v1",
+  "image_path": "particles.png",
+  "cell": 16,
+  "sprites": {
+    "spark": {
+      "rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "tintable": true
+    },
+    "ember": {
+      "rect": [
+        16,
+        0,
+        16,
+        16
+      ],
+      "tintable": true
+    },
+    "smoke": {
+      "rect": [
+        32,
+        0,
+        16,
+        16
+      ],
+      "tintable": true
+    },
+    "blood": {
+      "rect": [
+        48,
+        0,
+        16,
+        16
+      ],
+      "tintable": true
+    },
+    "mote": {
+      "rect": [
+        64,
+        0,
+        16,
+        16
+      ],
+      "tintable": true
+    },
+    "ring": {
+      "rect": [
+        80,
+        0,
+        16,
+        16
+      ],
+      "tintable": true
+    },
+    "dust": {
+      "rect": [
+        0,
+        16,
+        16,
+        16
+      ],
+      "tintable": true
+    },
+    "glint": {
+      "rect": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "tintable": true
+    },
+    "slash": {
+      "rect": [
+        32,
+        16,
+        16,
+        16
+      ],
+      "tintable": true
+    },
+    "star": {
+      "rect": [
+        48,
+        16,
+        16,
+        16
+      ],
+      "tintable": true
+    },
+    "rune": {
+      "rect": [
+        64,
+        16,
+        16,
+        16
+      ],
+      "tintable": true
+    },
+    "shard_glint": {
+      "rect": [
+        80,
+        16,
+        16,
+        16
+      ],
+      "tintable": true
+    }
+  }
+}

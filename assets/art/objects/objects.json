@@ -1,0 +1,146 @@
+{
+  "version": "gf-objects-v1",
+  "image_path": "objects.png",
+  "objects": {
+    "chest_closed": {
+      "rect": [
+        2,
+        30,
+        32,
+        32
+      ],
+      "anchor": "bottom_center",
+      "category": "prop"
+    },
+    "chest_open": {
+      "rect": [
+        36,
+        30,
+        32,
+        32
+      ],
+      "anchor": "bottom_center",
+      "category": "prop"
+    },
+    "campfire_base": {
+      "rect": [
+        70,
+        26,
+        48,
+        36
+      ],
+      "anchor": "bottom_center",
+      "category": "prop"
+    },
+    "altar_idle": {
+      "rect": [
+        120,
+        2,
+        64,
+        60
+      ],
+      "anchor": "bottom_center",
+      "category": "prop"
+    },
+    "altar_active": {
+      "rect": [
+        186,
+        2,
+        64,
+        60
+      ],
+      "anchor": "bottom_center",
+      "category": "prop"
+    },
+    "brazier": {
+      "rect": [
+        2,
+        64,
+        28,
+        36
+      ],
+      "anchor": "bottom_center",
+      "category": "prop"
+    },
+    "campfire_flame_0": {
+      "rect": [
+        32,
+        66,
+        26,
+        34
+      ],
+      "anchor": "bottom_center",
+      "category": "prop"
+    },
+    "campfire_flame_1": {
+      "rect": [
+        60,
+        66,
+        26,
+        34
+      ],
+      "anchor": "bottom_center",
+      "category": "prop"
+    },
+    "campfire_flame_2": {
+      "rect": [
+        88,
+        66,
+        26,
+        34
+      ],
+      "anchor": "bottom_center",
+      "category": "prop"
+    },
+    "campfire_flame_3": {
+      "rect": [
+        116,
+        66,
+        26,
+        34
+      ],
+      "anchor": "bottom_center",
+      "category": "prop"
+    },
+    "shard_0": {
+      "rect": [
+        144,
+        80,
+        14,
+        20
+      ],
+      "anchor": "bottom_center",
+      "category": "prop"
+    },
+    "shard_1": {
+      "rect": [
+        160,
+        80,
+        14,
+        20
+      ],
+      "anchor": "bottom_center",
+      "category": "prop"
+    },
+    "shard_2": {
+      "rect": [
+        176,
+        80,
+        14,
+        20
+      ],
+      "anchor": "bottom_center",
+      "category": "prop"
+    },
+    "shard_3": {
+      "rect": [
+        192,
+        80,
+        14,
+        20
+      ],
+      "anchor": "bottom_center",
+      "category": "prop"
+    }
+  }
+}

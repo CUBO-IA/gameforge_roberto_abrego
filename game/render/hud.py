@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from typing import TYPE_CHECKING
 
 import pygame
 
@@ -17,6 +18,9 @@ from game.systems.quest import QuestState
 from game.world.tilemap import TileMap
 from game.world.tiles import TileType
 
+if TYPE_CHECKING:
+    from game.render.assets import ArtLibrary
+
 MINIMAP_SCALE = 3
 
 
@@ -27,11 +31,13 @@ class Hud:
         tilemap: TileMap,
         quest: QuestState,
         window_size: tuple[int, int],
+        art: ArtLibrary | None = None,
     ) -> None:
         self.fonts = fonts
         self.quest = quest
         self.window_width, self.window_height = window_size
         self.tile_size = tilemap.tile_size
+        self.art = art
         self.minimap = self._build_minimap(tilemap)
 
     def _build_minimap(self, tilemap: TileMap) -> pygame.Surface:
@@ -68,7 +74,7 @@ class Hud:
         fps: float,
     ) -> None:
         panel = pygame.Rect(20, 20, 360, 104)
-        draw_panel(surface, panel)
+        draw_panel(surface, panel, art=self.art)
         draw_text(surface, self.fonts, "VIDA", (panel.x + 16, panel.y + 10), 18, palette.TEXT_DIM)
         draw_bar(
             surface,
@@ -76,6 +82,7 @@ class Hud:
             player.health / player.max_health,
             palette.HEALTH,
             palette.HEALTH_BACK,
+            art=self.art,
         )
         draw_text(
             surface,
@@ -236,10 +243,15 @@ class Hud:
         width = min(self.window_width - 80, 470)
         rect = pygame.Rect(0, 0, width, 52)
         rect.midbottom = (self.window_width // 2, self.window_height - 38)
-        draw_panel(surface, rect, fill=(14, 12, 22, 225))
+        draw_panel(surface, rect, fill=(14, 12, 22, 225), art=self.art)
         draw_key_hint(surface, self.fonts, "E", prompt, (rect.x + 18, rect.y + 12))
 
     def _draw_crosshair(self, surface: pygame.Surface, position: tuple[int, int]) -> None:
+        if self.art and self.art.ui_atlas:
+            crosshair_surf = self.art.ui_atlas.surface_of("crosshair")
+            if crosshair_surf:
+                surface.blit(crosshair_surf, crosshair_surf.get_rect(center=position))
+                return
         x, y = position
         pygame.draw.circle(surface, palette.ACCENT, (x, y), 7, 1)
         pygame.draw.line(surface, palette.ACCENT, (x - 11, y), (x - 5, y), 1)
@@ -251,7 +263,7 @@ class Hud:
         self._dim(surface)
         panel = pygame.Rect(0, 0, 620, 400)
         panel.center = (self.window_width // 2, self.window_height // 2)
-        draw_panel(surface, panel, fill=(16, 15, 26, 246))
+        draw_panel(surface, panel, fill=(16, 15, 26, 246), art=self.art)
         draw_text(
             surface,
             self.fonts,

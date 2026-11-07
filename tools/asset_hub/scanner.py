@@ -72,9 +72,11 @@ class AssetScanner:
                 meta = anim_data.get("metadata", {})
                 asset_id = meta.get("id") or anim_file.stem.replace(".anim", "")
 
-                existing = self.db.get_asset(asset_id)
-                if existing:
-                    continue  # Ya indexado explícitamente
+                cur = self.db._conn.cursor()
+                cur.execute("SELECT manifest_path FROM assets WHERE asset_id = ?", (asset_id,))
+                row = cur.fetchone()
+                if row and str(row["manifest_path"]).endswith(".asset.json"):
+                    continue  # Ya indexado explícitamente desde un .asset.json formal
 
                 tex = anim_data.get("texture", {})
                 tex_rel = tex.get("image_path", "")

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from typing import TYPE_CHECKING
 
 import pygame
 
@@ -12,6 +13,9 @@ from game.world.camera import Camera
 from game.world.tilemap import TileMap
 from game.world.tiles import TILE_DEFS, TileType
 
+if TYPE_CHECKING:
+    from game.render.assets import ArtLibrary
+
 
 def _hash(col: int, row: int) -> int:
     value = (col * 73856093) ^ (row * 19349663) ^ 0x9E3779B9
@@ -19,8 +23,9 @@ def _hash(col: int, row: int) -> int:
 
 
 class TileRenderer:
-    def __init__(self, tilemap: TileMap) -> None:
+    def __init__(self, tilemap: TileMap, art: ArtLibrary | None = None) -> None:
         self.tilemap = tilemap
+        self.art = art
         self.surface = self._build(tilemap)
         self.water_tiles = [
             tilemap.tile_center(col, row)
@@ -53,6 +58,38 @@ class TileRenderer:
         self, surface: pygame.Surface, rect: pygame.Rect, col: int, row: int
     ) -> None:
         value = _hash(col, row)
+        if self.art and self.art.tiles:
+            mod = value % 100
+            if mod < 4:
+                tile_name = "floor_mossy"
+            elif mod < 8:
+                tile_name = "floor_cracked"
+            elif mod < 11:
+                tile_name = "floor_broken"
+            elif mod < 13:
+                tile_name = "floor_puddle"
+            elif mod < 15:
+                tile_name = "floor_grate"
+            else:
+                letter = ("a", "b", "c", "d")[value % 4]
+                tile_name = f"floor_{letter}"
+            tile_surf = self.art.tile(tile_name)
+            if tile_surf:
+                surface.blit(tile_surf, rect.topleft)
+                if value % 47 == 0:
+                    decor = self.art.tile("decor_rubble")
+                    if decor:
+                        surface.blit(decor, rect.topleft)
+                elif value % 61 == 0:
+                    decor = self.art.tile("decor_bones")
+                    if decor:
+                        surface.blit(decor, rect.topleft)
+                elif value % 73 == 0:
+                    decor = self.art.tile("decor_mushrooms")
+                    if decor:
+                        surface.blit(decor, rect.topleft)
+                return
+
         base = palette.FLOOR if value % 3 else palette.FLOOR_ALT
         pygame.draw.rect(surface, base, rect)
         pygame.draw.line(surface, (29, 30, 44), rect.bottomleft, rect.bottomright)
@@ -86,6 +123,22 @@ class TileRenderer:
         open_below = not TILE_DEFS[tilemap.tile_at(col, row + 1)].solid
         open_above = not TILE_DEFS[tilemap.tile_at(col, row - 1)].solid
         value = _hash(col, row)
+
+        if self.art and self.art.tiles:
+            wall_name = f"wall_face_{value % 3}"
+            wall_surf = self.art.tile(wall_name)
+            if wall_surf:
+                surface.blit(wall_surf, rect.topleft)
+                if open_above:
+                    cap = self.art.tile("wall_cap")
+                    if cap:
+                        surface.blit(cap, rect.topleft)
+                if open_below:
+                    shadow = self.art.tile("wall_shadow")
+                    if shadow:
+                        surface.blit(shadow, (rect.left, rect.bottom - shadow.get_height()))
+                return
+
         pygame.draw.rect(surface, palette.WALL_FACE, rect)
         if open_below:
             top = rect.inflate(0, -rect.height // 3)
@@ -121,6 +174,12 @@ class TileRenderer:
     def _draw_water(
         self, surface: pygame.Surface, rect: pygame.Rect, col: int, row: int
     ) -> None:
+        if self.art and self.art.tiles:
+            water_surf = self.art.tile("water_0")
+            if water_surf:
+                surface.blit(water_surf, rect.topleft)
+                return
+
         pygame.draw.rect(surface, palette.WATER, rect)
         value = _hash(col, row)
         for index in range(2):
@@ -136,6 +195,12 @@ class TileRenderer:
     def _draw_lava(
         self, surface: pygame.Surface, rect: pygame.Rect, col: int, row: int
     ) -> None:
+        if self.art and self.art.tiles:
+            lava_surf = self.art.tile("lava_0")
+            if lava_surf:
+                surface.blit(lava_surf, rect.topleft)
+                return
+
         pygame.draw.rect(surface, palette.LAVA, rect)
         value = _hash(col, row)
         pygame.draw.circle(
@@ -164,6 +229,12 @@ class TileRenderer:
                 continue
             if not (-20 <= screen.y <= camera.viewport_height + 20):
                 continue
+            if self.art and self.art.tiles:
+                frame = int(time * 2.5 + (tile.x + tile.y) * 0.05) % 2
+                surf = self.art.tile(f"water_{frame}")
+                if surf:
+                    target.blit(surf, (int(screen.x) - 16, int(screen.y) - 16))
+                    continue
             phase = time * 1.7 + (tile.x + tile.y) * 0.011
             pygame.draw.arc(
                 target,
@@ -179,6 +250,12 @@ class TileRenderer:
                 continue
             if not (-20 <= screen.y <= camera.viewport_height + 20):
                 continue
+            if self.art and self.art.tiles:
+                frame = int(time * 2.5 + (tile.x + tile.y) * 0.05) % 2
+                surf = self.art.tile(f"lava_{frame}")
+                if surf:
+                    target.blit(surf, (int(screen.x) - 16, int(screen.y) - 16))
+                    continue
             pulse = 1.0 + 0.35 * math.sin(time * 3.0 + tile.x * 0.02)
             pygame.draw.circle(
                 target,

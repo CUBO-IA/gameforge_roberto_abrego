@@ -2,19 +2,21 @@
   "version": "gf-anim-v1",
   "metadata": {
     "id": "brute",
-    "display_name": "Bruto de Escoria Fundida",
-    "author": "GameForge Agent",
-    "rig_type": "sprite_sheet",
-    "description": "Enemigo Bruto de Escoria Fundida animado con spritesheets.",
+    "display_name": "Bruto de escoria",
+    "author": "GameForge ArtForge",
+    "license": "MIT",
+    "rig_type": "frame_by_frame",
+    "description": "Ogro de escoria con placas de hierro, grietas de lava y mandoble",
     "tags": [
       "enemy",
-      "brute"
+      "charger",
+      "ogre"
     ]
   },
   "texture": {
     "image_path": "brute_atlas.png",
-    "width": 256,
-    "height": 256,
+    "width": 288,
+    "height": 192,
     "format": "RGBA"
   },
   "frames": [
@@ -23,30 +25,38 @@
       "rect": [
         0,
         0,
-        44,
-        44
+        48,
+        48
       ],
       "pivot": [
-        22,
-        44
+        24,
+        46
       ],
-      "duration_ms": 180,
+      "duration_ms": 170,
       "sockets": {
-        "shadow": [
-          22,
-          44
+        "hand_right": [
+          30,
+          30
         ],
-        "origin": [
-          22,
-          22
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
         ]
       },
       "hurtboxes": [
         [
-          -22,
-          -44,
-          44,
-          44
+          -14,
+          -38,
+          28,
+          34
         ]
       ],
       "hitboxes": [],
@@ -55,32 +65,124 @@
     {
       "id": "idle_1",
       "rect": [
-        44,
+        48,
         0,
-        44,
-        44
+        48,
+        48
       ],
       "pivot": [
-        22,
-        44
+        24,
+        46
       ],
-      "duration_ms": 180,
+      "duration_ms": 170,
       "sockets": {
-        "shadow": [
-          22,
-          44
+        "hand_right": [
+          30,
+          30
         ],
-        "origin": [
-          22,
-          22
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
         ]
       },
       "hurtboxes": [
         [
-          -22,
-          -44,
-          44,
-          44
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "idle_2",
+      "rect": [
+        96,
+        0,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 170,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "idle_3",
+      "rect": [
+        144,
+        0,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 170,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
         ]
       ],
       "hitboxes": [],
@@ -89,32 +191,250 @@
     {
       "id": "walk_0",
       "rect": [
-        88,
+        192,
         0,
-        44,
-        44
+        48,
+        48
       ],
       "pivot": [
-        22,
-        44
+        24,
+        46
       ],
-      "duration_ms": 150,
+      "duration_ms": 120,
       "sockets": {
-        "shadow": [
-          22,
-          44
+        "hand_right": [
+          30,
+          30
         ],
-        "origin": [
-          22,
-          22
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
         ]
       },
       "hurtboxes": [
         [
-          -22,
-          -44,
-          44,
-          44
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "walk_1",
+      "rect": [
+        240,
+        0,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 120,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "walk_2",
+      "rect": [
+        0,
+        48,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 120,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "walk_3",
+      "rect": [
+        48,
+        48,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 120,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "walk_4",
+      "rect": [
+        96,
+        48,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 120,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "walk_5",
+      "rect": [
+        144,
+        48,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 120,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
         ]
       ],
       "hitboxes": [],
@@ -123,32 +443,82 @@
     {
       "id": "windup_0",
       "rect": [
-        132,
-        0,
-        44,
-        44
+        192,
+        48,
+        48,
+        48
       ],
       "pivot": [
-        22,
-        44
+        24,
+        46
       ],
-      "duration_ms": 220,
+      "duration_ms": 130,
       "sockets": {
-        "shadow": [
-          22,
-          44
+        "hand_right": [
+          30,
+          30
         ],
-        "origin": [
-          22,
-          22
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
         ]
       },
       "hurtboxes": [
         [
-          -22,
-          -44,
-          44,
-          44
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "windup_1",
+      "rect": [
+        240,
+        48,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 130,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
         ]
       ],
       "hitboxes": [],
@@ -157,32 +527,124 @@
     {
       "id": "charge_0",
       "rect": [
-        176,
         0,
-        44,
-        44
+        96,
+        48,
+        48
       ],
       "pivot": [
-        22,
-        44
+        24,
+        46
       ],
-      "duration_ms": 120,
+      "duration_ms": 100,
       "sockets": {
-        "shadow": [
-          22,
-          44
+        "hand_right": [
+          30,
+          30
         ],
-        "origin": [
-          22,
-          22
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
         ]
       },
       "hurtboxes": [
         [
-          -22,
-          -44,
-          44,
-          44
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "charge_1",
+      "rect": [
+        48,
+        96,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 100,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "charge_2",
+      "rect": [
+        96,
+        96,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 100,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
         ]
       ],
       "hitboxes": [],
@@ -191,32 +653,82 @@
     {
       "id": "attack_0",
       "rect": [
-        0,
-        44,
-        44,
-        44
+        144,
+        96,
+        48,
+        48
       ],
       "pivot": [
-        22,
-        44
+        24,
+        46
       ],
-      "duration_ms": 160,
+      "duration_ms": 110,
       "sockets": {
-        "shadow": [
-          22,
-          44
+        "hand_right": [
+          30,
+          30
         ],
-        "origin": [
-          22,
-          22
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
         ]
       },
       "hurtboxes": [
         [
-          -22,
-          -44,
-          44,
-          44
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "attack_1",
+      "rect": [
+        192,
+        96,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 110,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
         ]
       ],
       "hitboxes": [],
@@ -225,32 +737,82 @@
     {
       "id": "hurt_0",
       "rect": [
-        44,
-        44,
-        44,
-        44
+        240,
+        96,
+        48,
+        48
       ],
       "pivot": [
-        22,
-        44
+        24,
+        46
       ],
-      "duration_ms": 150,
+      "duration_ms": 90,
       "sockets": {
-        "shadow": [
-          22,
-          44
+        "hand_right": [
+          30,
+          30
         ],
-        "origin": [
-          22,
-          22
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
         ]
       },
       "hurtboxes": [
         [
-          -22,
-          -44,
-          44,
-          44
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "hurt_1",
+      "rect": [
+        0,
+        144,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 90,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
         ]
       ],
       "hitboxes": [],
@@ -259,32 +821,208 @@
     {
       "id": "die_0",
       "rect": [
-        88,
-        44,
-        44,
-        44
+        48,
+        144,
+        48,
+        48
       ],
       "pivot": [
-        22,
-        44
+        24,
+        46
       ],
-      "duration_ms": 500,
+      "duration_ms": 140,
       "sockets": {
-        "shadow": [
-          22,
-          44
+        "hand_right": [
+          30,
+          30
         ],
-        "origin": [
-          22,
-          22
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
         ]
       },
       "hurtboxes": [
         [
-          -22,
-          -44,
-          44,
-          44
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "die_1",
+      "rect": [
+        96,
+        144,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 140,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "die_2",
+      "rect": [
+        144,
+        144,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 140,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "die_3",
+      "rect": [
+        192,
+        144,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 140,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "die_4",
+      "rect": [
+        240,
+        144,
+        48,
+        48
+      ],
+      "pivot": [
+        24,
+        46
+      ],
+      "duration_ms": 140,
+      "sockets": {
+        "hand_right": [
+          30,
+          30
+        ],
+        "head": [
+          24,
+          12
+        ],
+        "cast_point": [
+          32,
+          28
+        ],
+        "shadow": [
+          24,
+          46
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -38,
+          28,
+          34
         ]
       ],
       "hitboxes": [],
@@ -295,7 +1033,9 @@
     "idle": {
       "frames": [
         "idle_0",
-        "idle_1"
+        "idle_1",
+        "idle_2",
+        "idle_3"
       ],
       "loop": true,
       "playback_speed": 1.0,
@@ -304,51 +1044,64 @@
     "walk": {
       "frames": [
         "walk_0",
-        "idle_0"
+        "walk_1",
+        "walk_2",
+        "walk_3",
+        "walk_4",
+        "walk_5"
       ],
       "loop": true,
       "playback_speed": 1.0,
-      "interrupt_priority": 0
+      "interrupt_priority": 1
     },
     "windup": {
       "frames": [
-        "windup_0"
-      ],
-      "loop": false,
-      "playback_speed": 1.0,
-      "interrupt_priority": 2
-    },
-    "charge": {
-      "frames": [
-        "charge_0"
+        "windup_0",
+        "windup_1"
       ],
       "loop": true,
       "playback_speed": 1.0,
-      "interrupt_priority": 2
+      "interrupt_priority": 3
     },
-    "attack": {
+    "charge": {
       "frames": [
-        "attack_0"
+        "charge_0",
+        "charge_1",
+        "charge_2"
       ],
-      "loop": false,
+      "loop": true,
       "playback_speed": 1.0,
       "interrupt_priority": 3
     },
-    "hurt": {
+    "attack": {
       "frames": [
-        "hurt_0"
+        "attack_0",
+        "attack_1"
       ],
       "loop": false,
       "playback_speed": 1.0,
       "interrupt_priority": 4
     },
-    "die": {
+    "hurt": {
       "frames": [
-        "die_0"
+        "hurt_0",
+        "hurt_1"
       ],
       "loop": false,
       "playback_speed": 1.0,
-      "interrupt_priority": 10
+      "interrupt_priority": 5
+    },
+    "die": {
+      "frames": [
+        "die_0",
+        "die_1",
+        "die_2",
+        "die_3",
+        "die_4"
+      ],
+      "loop": false,
+      "playback_speed": 1.0,
+      "interrupt_priority": 9
     }
   }
 }

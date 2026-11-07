@@ -3,11 +3,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 import pygame
 
 from game.render import palette
 from game.render.fonts import FontCache
+
+if TYPE_CHECKING:
+    from game.render.assets import ArtLibrary
 
 
 def draw_text(
@@ -41,7 +45,13 @@ def draw_panel(
     fill: palette.RGBA = (18, 18, 30, 235),
     border: palette.Color = (92, 82, 118),
     radius: int = 10,
+    art: ArtLibrary | None = None,
 ) -> None:
+    if art:
+        panel_surf = art.nine_slice("panel", rect.size)
+        if panel_surf:
+            surface.blit(panel_surf, rect.topleft)
+            return
     panel = pygame.Surface(rect.size, pygame.SRCALPHA)
     pygame.draw.rect(panel, fill, panel.get_rect(), border_radius=radius)
     pygame.draw.rect(panel, border, panel.get_rect(), width=2, border_radius=radius)
@@ -55,8 +65,21 @@ def draw_bar(
     color: palette.Color,
     background: palette.Color,
     border: palette.Color = (12, 12, 20),
+    art: ArtLibrary | None = None,
 ) -> None:
     fraction = max(0.0, min(1.0, fraction))
+    if art:
+        frame_surf = art.nine_slice("bar_frame", rect.size)
+        if frame_surf:
+            surface.blit(frame_surf, rect.topleft)
+            inner_w = max(0, int((rect.width - 6) * fraction))
+            inner_h = max(1, rect.height - 6)
+            if inner_w > 0:
+                fill_surf = art.nine_slice("bar_fill", (inner_w, inner_h))
+                if fill_surf:
+                    surface.blit(fill_surf, (rect.x + 3, rect.y + 3))
+            return
+
     pygame.draw.rect(surface, border, rect.inflate(4, 4), border_radius=5)
     pygame.draw.rect(surface, background, rect, border_radius=4)
     if fraction > 0:

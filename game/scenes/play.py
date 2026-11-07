@@ -131,7 +131,7 @@ class PlayScene(Scene):
 
         self.camera = Camera(app.config.window.width, app.config.window.height)
         self.camera.snap_to(self.player.position, self.tilemap.pixel_width, self.tilemap.pixel_height)
-        self.tile_renderer = TileRenderer(self.tilemap)
+        self.tile_renderer = TileRenderer(self.tilemap, art=getattr(app, "art", None))
         self.dijkstra_map = DijkstraMap(self.tilemap)
         self.lighting = Lighting((app.config.window.width, app.config.window.height))
         self.hud = Hud(
@@ -139,6 +139,7 @@ class PlayScene(Scene):
             self.tilemap,
             self.quest,
             (app.config.window.width, app.config.window.height),
+            art=getattr(app, "art", None),
         )
         self.rng = random.Random(run_seed ^ 0x5F3759DF)
         self.frame_counter = 0
@@ -486,7 +487,7 @@ class PlayScene(Scene):
             self.dungeon = generate_dungeon(self.dungeon.seed, self.floor, self.app.config.dungeon)
         self.tilemap = self.dungeon.tilemap
         self.dijkstra_map = DijkstraMap(self.tilemap)
-        self.tile_renderer = TileRenderer(self.tilemap)
+        self.tile_renderer = TileRenderer(self.tilemap, art=getattr(self.app, "art", None))
         self.camera.snap_to(
             self.dungeon.spawn, self.tilemap.pixel_width, self.tilemap.pixel_height
         )
@@ -514,6 +515,7 @@ class PlayScene(Scene):
             self.tilemap,
             self.quest,
             (self.app.config.window.width, self.app.config.window.height),
+            art=getattr(self.app, "art", None),
         )
 
         theme = floor_theme_name(self.floor)
@@ -640,6 +642,7 @@ class PlayScene(Scene):
             nearby=self.nearby,
             shard_count=self.inventory.count("shard"),
             shards_required=self.quest.shards_required,
+            art=getattr(self.app, "art", None),
         )
         shake = self.effects.current_shake()
         draw_lighting(

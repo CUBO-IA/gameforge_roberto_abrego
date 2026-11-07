@@ -8,6 +8,7 @@ centrada en orquestar input y sistemas.
 from __future__ import annotations
 
 import math
+from typing import TYPE_CHECKING
 
 import pygame
 
@@ -17,6 +18,9 @@ from game.render.effects import Effects
 from game.render.entity_renderer import draw_attack_arc
 from game.render.lighting import Lighting
 from game.world.camera import Camera
+
+if TYPE_CHECKING:
+    from game.render.assets import ArtLibrary
 
 
 def draw_play_world(
@@ -36,6 +40,7 @@ def draw_play_world(
     nearby: tuple[object, str] | None,
     shard_count: int,
     shards_required: int,
+    art: ArtLibrary | None = None,
 ) -> None:
     """Dibuja el mundo completo sobre la superficie de la escena."""
     surface.fill(palette.BACKGROUND_DEEP)
@@ -79,11 +84,11 @@ def draw_play_world(
     for _, kind, obj in drawables:
         if kind == "chest":
             entity_renderer.draw_chest(
-                surface, obj, camera, shake, time, is_highlighted(obj)
+                surface, obj, camera, shake, time, is_highlighted(obj), art=art
             )
         elif kind == "campfire":
             entity_renderer.draw_campfire(
-                surface, obj, camera, shake, time, is_highlighted(obj)
+                surface, obj, camera, shake, time, is_highlighted(obj), art=art
             )
         elif kind == "altar":
             entity_renderer.draw_altar(
@@ -95,6 +100,7 @@ def draw_play_world(
                 shard_count,
                 shards_required,
                 is_highlighted(obj),
+                art=art,
             )
         elif kind == "enemy":
             entity_renderer.draw_enemy(surface, obj, player.position, camera, shake, time)

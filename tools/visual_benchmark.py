@@ -55,6 +55,7 @@ def main() -> int:
     parser.add_argument("--frames", type=int, default=180)
     parser.add_argument("--seed", type=int, default=SEED)
     parser.add_argument("--output", default="artifacts/visual")
+    parser.add_argument("--no-art", action="store_true", help="Desactiva ArtLibrary para medir línea base procedural.")
     args = parser.parse_args()
 
     output_dir = Path(args.output) / args.label
@@ -64,7 +65,13 @@ def main() -> int:
     tracemalloc.start()
     load_started = time.perf_counter()
     app = Application(headless=True, data_dir=output_dir / "data")
+    if args.no_art:
+        app.art = None
     scene = PlayScene(app, seed=args.seed)
+    if args.no_art:
+        from game.render.tile_renderer import TileRenderer
+        scene.tile_renderer = TileRenderer(scene.tilemap, art=None)
+        scene.hud.art = None
     app.replace_scene(scene)
     load_ms = (time.perf_counter() - load_started) * 1000.0
 

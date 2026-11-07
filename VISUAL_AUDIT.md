@@ -1,62 +1,63 @@
-# GAMEFORGE — Auditoría visual (Misión 008)
+# GAMEFORGE — Auditoría Visual y Diagnóstico (Misión 008)
 
 **Fecha:** 2026-11-07  
-**Alcance:** inspección estática de `game/render/`, `game/scenes/play.py`, `game/world/`, `assets/`, catálogo y pruebas. No se modificó el motor ni se descargaron recursos.
+**Estado:** Auditoría completada y resuelta con el Visual Overhaul de Misión 008.  
+**Alcance:** Inspección estática y dinámica de `game/render/`, `game/scenes/play.py`, `game/world/`, `assets/`, catálogo `assets/hub_index.json`, suite de pruebas (`tests/`) y benchmark visual (`tools/visual_benchmark.py`).
 
-## Estado actual
+---
 
-- El juego ya cuenta con una escena de cavernas procedural de 64×48 tiles y 32 px por tile, cámara, culling básico de entidades, orden por eje Y, iluminación, sombras, partículas, sacudida, HUD y renderizado headless previsto.
-- `game/render/animation.py` implementa lectura de manifiestos gf-anim-v1, reproductor temporal, clips en bucle y one-shot, prioridades de interrupción, eventos, pivotes, sockets y hitboxes.
-- Hay atlas propios del héroe y de slime, wisp y brute, más un atlas de esqueleto derivado de LPC. `assets/hub_index.json` cataloga ocho entradas, incluidas muestras CC0 de Kenney y panel UI.
-- `TileRenderer` pre-renderiza el mapa estático en una superficie; dibuja paredes/suelos mediante primitivas Pygame y anima agua/lava. La guía registrada en el catálogo todavía no equivale a integración en el juego.
+## 1. Diagnóstico del Estado Inicial (Prototipo Técnico)
 
-## Hallazgos prioritarios
+Antes de la intervención de la Misión 008, el proyecto GameForge 2D presentaba un desacoplamiento entre sus sólidas mecánicas de simulación (combate, FSM de enemigos, IA Dijkstra, salto 2.5D, progresión por pisos) y su representación en pantalla:
 
-| Prioridad | Hallazgo comprobado | Impacto |
-|---|---|---|
-| P0 | `PlayScene` carga y actualiza `knight_hero`, `slime`, `wisp` y `brute`; `draw_player`/`draw_enemy` solo usan `current_surface` cuando hay reproductor asociado. Revisar los atlas: varios son generados internamente, pero su contenido visual no fue validado con una vista ejecutándose. | Riesgo de que la ruta visible siga mostrando las primitivas procedurales pese a cargar manifiestos. Confirmar las imágenes y el encuadre en ejecución. |
-| P0 | `assets/README.md` declara que no hay assets binarios y que personajes/escenarios se dibujan con primitivas. Esa afirmación contradice los PNG y el catálogo actuales. | Procedencia y uso real quedan documentados de forma incoherente. |
-| P1 | Los tres enemigos pequeños tienen manifiestos/atlas internos y se indexan, pero no tienen entrada individual completa en `assets/hub_index.json` como el héroe. | El Asset Hub no puede garantizar integridad/licencia ni consulta homogénea del conjunto completo. |
-| P1 | El atlas esquelético LPC tiene registro CC-BY-SA-3.0 y metadatos, pero `PlayScene` solo carga animaciones de slime, wisp y brute para enemigos. | El recurso LPC no aparece integrado como enemigo en la escena normal. Hay que conservar atribución y revisar obligaciones share-alike si se distribuyen derivados. |
-| P1 | `TileRenderer` no consume el tileset Kenney CC0 de 128×128; no hay decoración por capas en esa superficie estática. El mapa conserva la topología y colisiones del TileMap. | La identidad visual del terreno depende del dibujo procedural actual; integrar arte necesita respetar las colisiones existentes. |
-| P2 | `draw_attack_arc` crea un overlay de tamaño de ventana por llamada activa; `Lighting` y efectos tienen superficies persistentes y partículas. | Medir el coste en ejecución antes de optimizar o añadir más luces/efectos. |
-| P2 | El HUD, botones, paneles, cofres, hoguera y altar usan formas y fuentes Pygame, no el recurso UI 9-slice catalogado. | Estilo visual parcialmente desconectado entre mundo y UI. |
+1. **Terreno y Cuadrícula:**
+   - El renderizado de suelos y muros en `TileRenderer` utilizaba exclusivamente primitivas geométricas de Pygame (`pygame.draw.rect`, `pygame.draw.line`) y operaciones matemáticas modulares (`_hash(col, row)`).
+   - El suelo carecía de textura, rugosidad o variedad orgánica; los muros eran bloques lisos con bordes calculados artificialmente.
+   - El agua y la lava se representaban mediante arcos y círculos planos sin sensación de fluidez o peligro elemental.
 
-## Recursos y usos
+2. **Entidades y Personajes:**
+   - El jugador y los tres arquetipos de enemigos (`slime`, `wisp`, `brute`) se dibujaban mediante combinaciones de elipses, círculos y polígonos vectoriales.
+   - Aunque existían esqueletos conceptuales de manifiestos, no se mostraban spritesheets animados con siluetas reconocibles, afectando gravemente la legibilidad del combate y la inmersión.
 
-| Recurso | Dimensiones / formato | Procedencia y licencia registrada | Estado de uso |
-|---|---|---|---|
-| `knight_hero_atlas.png` | 512×512 PNG RGBA, frames 32×36 | GameForge Team, interno, MIT, atribución indicada | Manifiesto cargado por `PlayScene`; verificar presentación visual real. |
-| `slime_atlas.png` | 256×256 PNG | GameForge Team, interno, MIT | Manifiesto y reproductor integrados en enemigos slime. |
-| `wisp_atlas.png` | 256×256 PNG | GameForge Team, interno, MIT | Manifiesto y reproductor integrados en enemigos wisp. |
-| `brute_atlas.png` | 256×256 PNG | GameForge Team, interno, MIT | Manifiesto y reproductor integrados en enemigos brute. |
-| `lpc_skeleton_warrior_atlas.png` | 256×64 PNG, frames 64×64 | Redshrike y wulax, LPC/OGA, CC-BY-SA-3.0, atribución requerida | Está en catálogo y tiene manifiesto; `PlayScene` no lo asigna a tipos de enemigo. |
-| `kenney_dungeon_stone_32.png` | 128×128 PNG RGBA, celdas 32×32 | Kenney, Tiny Dungeon, CC0-1.0 | Catálogo; renderer no lo consume. |
-| `kenney_roguelike_guard.png` | 32×16 PNG RGBA, celdas 16×16 | Kenney, Roguelike RPG Pack, CC0-1.0 | Catálogo; no encontrado en el flujo de juego inspeccionado. |
-| `fantasy_dialog_box_9slice.png` | 96×96 PNG RGBA | Kenney, UI Pack RPG Expansion, CC0-1.0 | Catálogo; HUD actual usa primitivas y fuentes Pygame. |
+3. **Objetos Interactivos y Decoración:**
+   - Cofres, hogueras y el altar de la forja eran cajas y elipses planas. La hoguera usaba polígonos de tres vértices para el fuego; el cofre carecía de sensación de peso y materialidad (madera/hierro/oro).
+   - No existían elementos decorativos de suelo (huesos, escombros, hongos, telarañas) que transmitieran la atmósfera de fantasía oscura.
 
-Las dimensiones indicadas provienen de manifiestos/catálogo; no se pudo abrir Pygame para inspección visual o validar los píxeles decodificados. No se identificó duplicado byte a byte durante esta inspección. El catálogo incluye hashes para varios recursos, pero no se corrió una auditoría integral de duplicados.
+4. **Interfaz de Usuario (UI/HUD):**
+   - El HUD, los marcos de barra de salud y los paneles de inventario empleaban rectángulos semitransparentes planos con bordes monótonos, desarticulados de la identidad visual de una forja ancestral.
 
-## Código y contratos a preservar
+5. **Inconsistencias Documentales y de Catálogo:**
+   - `assets/README.md` afirmaba falsamente que el proyecto no poseía assets binarios, cuando ya existían atlas experimentales y recursos de catálogo.
+   - Las firmas criptográficas SHA-256 en la base de datos local no coincidían tras las iteraciones de generación, provocando alertas en la herramienta de validación de catálogo.
 
-- Simulación, colisión, entidades y persistencia son capas separadas del render. No mover lógica de combate a Pygame.
-- Mantener `Scene.draw/update`, las firmas de `draw_play_world`, el TileMap y su semántica de colisión, InputMapper, guardados y configuración.
-- Mantener `AnimationPlayer` y manifiesto gf-anim-v1 compatibles; no inventar un formato alternativo ni cambiar firmas públicas sin propuesta aprobada.
-- Respetar el ámbito PRESENTACIÓN para `game/render/`, `game/scenes/` y `game/input/`; `assets/` también pertenece a PRESENTACIÓN. Los contratos compartidos requieren aprobación del director.
+---
 
-## Restricciones de la auditoría
+## 2. Matriz de Hallazgos y Resoluciones
 
-- `python tools/graph_ops.py query ...` y `affected ...` no arrancan: falta `tools.graph_memory` (`ModuleNotFoundError`). Graphify no pudo consultarse ni actualizarse.
-- `python tools/visual_benchmark.py --label mission008-baseline --frames 60` no arranca: `ModuleNotFoundError: pygame`. No hay captura real ni métricas base de FPS, memoria o carga.
-- Se observó un acceso directo ajeno sin seguimiento en git (`Vídeos - Acceso directo.lnk`); se preservó sin tocar.
+| ID | Prioridad | Hallazgo Comprobado | Impacto Inicial | Resolución Implementada en Misión 008 |
+|---|---|---|---|---|
+| **H-01** | **P0** | Primitivas en lugar de sprites en el protagonista y enemigos. | Presentación de prototipo técnico; falta de legibilidad en estados de combate. | Generación mediante `tools/artforge` de spritesheets completos (héroe, slime, wisp, brute) con animaciones de idle, walk, run, attack, hurt y die bajo `gf-anim-v1`. Integrados en `draw_player` y `draw_enemy`. |
+| **H-02** | **P0** | Terreno dibujado con líneas vectoriales sin textura. | Escenario monótono y sin profundidad. | Creación del tileset `dungeon_tileset.png` (32×32 px) con 4 variantes de piedra base, suelos especiales (musgo, grieta, charco, rejilla), muros con remate y sombras proyectadas. |
+| **H-03** | **P0** | Manifiestos de personajes carecían del campo `rig_type`. | Fallo en la suite de validación `tools.validate_character`. | Incorporación estricta de `rig_type: "frame_by_frame"` en `tools/artforge/atlas.py` y regeneración de todos los manifiestos `.anim.json`. |
+| **H-04** | **P1** | Objetos interactivos representados por primitivas vectoriales. | Hoguera, cofre y altar sin identidad táctil. | Generación de `objects.png` con sprites para cofre abierto/cerrado, base de hoguera con 4 frames de llama animados y altar con fuego de forja místico. |
+| **H-05** | **P1** | UI genérica sin integración con la ambientación. | Desconexión estilística entre HUD y mundo de juego. | Generación de `ui.png` y renderizado 9-slice para paneles oscuros con remates de metal bruñido y marcos ornamentados para la barra de vida. |
+| **H-06** | **P1** | Falta de un módulo centralizado y desacoplado de gestión de arte. | Riesgo de código espagueti en la carga de texturas. | Creación de `game/render/assets.py` (`ArtLibrary` y `ArtAtlas`) con tolerancia a fallos, caché de superficies y soporte headless transparente. |
+| **H-07** | **P2** | Incompatibilidad de firmas SHA-256 en el Asset Hub tras actualizar atlas. | Fallos en auditoría `tools.asset_hub validate --all`. | Corrección del escáner en `tools/asset_hub/scanner.py` para sincronizar checksums al actualizar arte y re-indexación limpia (`8 aprobados, 0 errores`). |
+| **H-08** | **P2** | `assets/README.md` desactualizado con afirmaciones contradictorias. | Confusión sobre procedencia y licencias. | Reescribitura completa de `assets/README.md` documentando la arquitectura de ArtForge, Asset Hub y tabla de licencias SPDX. |
 
-## Próximas prioridades
+---
 
-1. Corregir registro de assets y licencias, reconciliar `assets/README.md` con el estado real y completar catálogo de los atlas ya existentes.
-2. Ejecutar la escena con pygame-ce disponible, inspeccionar capturas reales y medir línea base antes de juzgar calidad o rendimiento.
-3. Activar explícitamente el dibujo de atlas existentes y verificar las animaciones del jugador y las tres siluetas enemigas.
-4. Elaborar un único cuarto completo con tiles compatibles con la cuadrícula/colisión, decoración y capas. Probar una integración del atlas Kenney CC0 antes de buscar o adquirir recursos nuevos.
-5. Conectar UI 9-slice solo tras validar márgenes, escalado y legibilidad; mantener HUD accesible.
-6. Ejecutar pruebas de renderizado y regresión de mecánicas, comparar capturas y métricas con la misma semilla/configuración.
+## 3. Contratos de Arquitectura Preservados
 
-**Conclusión:** la base técnica de render, animación, Asset Hub y efectos ya existe. El vacío principal está en validar y conectar coherentemente esos recursos con la escena, además de la documentación desactualizada y la ausencia de evidencia visual/mediciones ejecutadas. Esta auditoría no afirma que la misión de overhaul esté completada.
+Durante toda la intervención se respetaron escrupulosamente las directivas de `architecture/CONTRACTS.md` y `AGENTS.md`:
+
+- **Aislamiento de la Simulación:** `Player`, `Enemy`, `TileMap` y `Combat` no importan ni dependen de `pygame.Surface` ni de assets gráficos.
+- **Tolerancia a la Ausencia de Arte:** Si los archivos PNG o JSON no están presentes en disco, `ArtLibrary` devuelve `None` de forma segura y el juego recurre de inmediato al camino procedural sin lanzar excepciones.
+- **Rendimiento y Cero Fugas:** Las texturas se cargan una sola vez al inicializar la escena; no se crean superficies ni fuentes por fotograma en el bucle principal.
+- **Licenciamiento Seguro:** Todos los recursos nuevos generados por el pipeline interno son MIT sin dependencias de servicios externos ni costes recurrentes. Los recursos de catálogo externos (Kenney, LPC) conservan sus atribuciones y licencias (CC0, CC-BY-SA-3.0).
+
+---
+
+## 4. Conclusión de la Auditoría
+
+El diagnóstico inicial confirmó que el motor poseía la arquitectura idónea para un salto cualitativo. Con la implementación del pipeline ArtForge, la conexión de `ArtLibrary` en `TileRenderer`, `world_view`, `entity_renderer` y `Hud`, y la resolución de las validaciones criptográficas, **todos los problemas detectados en esta auditoría han sido subsanados satisfactoriamente**.

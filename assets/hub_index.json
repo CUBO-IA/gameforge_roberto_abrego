@@ -5,36 +5,37 @@
     {
       "schema_version": "gf-asset-catalog-v1.0.0",
       "asset_id": "brute",
-      "name": "Bruto de Escoria Fundida",
+      "name": "Bruto de escoria",
       "kind": "creature_enemy",
       "taxonomy": {
         "genre": "top_down_rpg",
         "theme": "dungeon",
-        "visual_style": "pixel_art_44x44",
+        "visual_style": "pixel_art_48x48",
         "tags": [
           "enemy",
-          "brute"
+          "charger",
+          "ogre"
         ]
       },
       "image": {
         "relative_path": "assets/sprites/enemies/brute/brute_atlas.png",
-        "width": 256,
-        "height": 256,
+        "width": 288,
+        "height": 192,
         "has_alpha": true,
         "color_mode": "RGBA",
-        "sha256": "47f6d7a36aadca75953da44048c416ca30972414139bafaeb0409811df090592",
-        "dhash": "4840400000000000"
+        "sha256": "6333128b1cc1dc04f09f39e0da5ed37969c1d50c54ca4c7a64341669c766915a",
+        "dhash": "21492c4d48492049"
       },
       "geometry": {
         "layout_type": "packed_atlas",
         "frame_size": [
-          44,
-          44
+          48,
+          48
         ],
         "anchor_preset": "bottom_center",
         "anchor_offset": [
-          22,
-          44
+          24,
+          48
         ]
       },
       "character_data": {
@@ -47,7 +48,7 @@
         "available_clips": [
           {
             "name": "idle",
-            "frame_count": 2,
+            "frame_count": 4,
             "directions": [
               "all"
             ],
@@ -56,7 +57,7 @@
           },
           {
             "name": "walk",
-            "frame_count": 2,
+            "frame_count": 6,
             "directions": [
               "all"
             ],
@@ -65,16 +66,16 @@
           },
           {
             "name": "windup",
-            "frame_count": 1,
+            "frame_count": 2,
             "directions": [
               "all"
             ],
             "duration_ms": 100,
-            "is_looping": false
+            "is_looping": true
           },
           {
             "name": "charge",
-            "frame_count": 1,
+            "frame_count": 3,
             "directions": [
               "all"
             ],
@@ -83,7 +84,7 @@
           },
           {
             "name": "attack",
-            "frame_count": 1,
+            "frame_count": 2,
             "directions": [
               "all"
             ],
@@ -92,7 +93,7 @@
           },
           {
             "name": "hurt",
-            "frame_count": 1,
+            "frame_count": 2,
             "directions": [
               "all"
             ],
@@ -101,7 +102,7 @@
           },
           {
             "name": "die",
-            "frame_count": 1,
+            "frame_count": 5,
             "directions": [
               "all"
             ],
@@ -112,12 +113,12 @@
         "has_paperdoll_layers": false
       },
       "provenance": {
-        "author": "GameForge Team",
+        "author": "GameForge ArtForge",
         "source_repo": "internal_gameforge",
         "license_spdx": "MIT",
         "license_tier": "tier_1_permissive_attribution",
         "attribution_required": true,
-        "attribution_text": "Created for GameForge 2D by GameForge Team"
+        "attribution_text": "Created for GameForge 2D by GameForge ArtForge"
       },
       "engine_compatibility": {
         "gf_anim_v1_ready": true,
@@ -350,32 +351,33 @@
       "taxonomy": {
         "genre": "top_down_rpg",
         "theme": "dungeon",
-        "visual_style": "pixel_art_32x36",
+        "visual_style": "pixel_art_52x50",
         "tags": [
           "player",
           "melee",
-          "humanoid"
+          "humanoid",
+          "dark-fantasy"
         ]
       },
       "image": {
         "relative_path": "assets/sprites/characters/player/knight_hero_atlas.png",
-        "width": 512,
-        "height": 512,
+        "width": 624,
+        "height": 150,
         "has_alpha": true,
         "color_mode": "RGBA",
-        "sha256": "0185953c5baf5ba69460a8cbbdc6b47a704d93dd59fbb1c47255e318e99319ac",
-        "dhash": "9000000000000000"
+        "sha256": "e9ce0c3a6beecef53abde6752fec9824d8ce4786c46a7ebd54cdc40052a466da",
+        "dhash": "49496c4951000000"
       },
       "geometry": {
         "layout_type": "packed_atlas",
         "frame_size": [
-          32,
-          36
+          52,
+          50
         ],
         "anchor_preset": "bottom_center",
         "anchor_offset": [
-          16,
-          36
+          26,
+          50
         ]
       },
       "character_data": {
@@ -388,7 +390,7 @@
         "available_clips": [
           {
             "name": "idle",
-            "frame_count": 2,
+            "frame_count": 4,
             "directions": [
               "all"
             ],
@@ -397,7 +399,16 @@
           },
           {
             "name": "walk",
-            "frame_count": 2,
+            "frame_count": 6,
+            "directions": [
+              "all"
+            ],
+            "duration_ms": 100,
+            "is_looping": true
+          },
+          {
+            "name": "run",
+            "frame_count": 6,
             "directions": [
               "all"
             ],
@@ -415,7 +426,7 @@
           },
           {
             "name": "hurt",
-            "frame_count": 1,
+            "frame_count": 2,
             "directions": [
               "all"
             ],
@@ -424,7 +435,7 @@
           },
           {
             "name": "die",
-            "frame_count": 1,
+            "frame_count": 6,
             "directions": [
               "all"
             ],
@@ -435,12 +446,12 @@
         "has_paperdoll_layers": false
       },
       "provenance": {
-        "author": "GameForge Team",
+        "author": "GameForge ArtForge",
         "source_repo": "internal_gameforge",
         "license_spdx": "MIT",
         "license_tier": "tier_1_permissive_attribution",
         "attribution_required": true,
-        "attribution_text": "Created for GameForge 2D by GameForge Team"
+        "attribution_text": "Created for GameForge 2D by GameForge ArtForge"
       },
       "engine_compatibility": {
         "gf_anim_v1_ready": true,
@@ -549,7 +560,7 @@
     {
       "schema_version": "gf-asset-catalog-v1.0.0",
       "asset_id": "slime",
-      "name": "Cieno de las Profundidades",
+      "name": "Cieno",
       "kind": "creature_enemy",
       "taxonomy": {
         "genre": "top_down_rpg",
@@ -557,17 +568,18 @@
         "visual_style": "pixel_art_32x32",
         "tags": [
           "enemy",
-          "slime"
+          "melee",
+          "ooze"
         ]
       },
       "image": {
         "relative_path": "assets/sprites/enemies/slime/slime_atlas.png",
-        "width": 256,
-        "height": 256,
+        "width": 192,
+        "height": 96,
         "has_alpha": true,
         "color_mode": "RGBA",
-        "sha256": "0f7205986eb1d514d876e2b8ed04c388801b7e8c1eb353d9014b806cdd999f32",
-        "dhash": "2800000000000000"
+        "sha256": "c63d546d75d917c2f2db64183f976e022049d2347871a2277b42ea375c2cb4f5",
+        "dhash": "006d48004d006048"
       },
       "geometry": {
         "layout_type": "packed_atlas",
@@ -591,7 +603,7 @@
         "available_clips": [
           {
             "name": "idle",
-            "frame_count": 2,
+            "frame_count": 4,
             "directions": [
               "all"
             ],
@@ -600,7 +612,7 @@
           },
           {
             "name": "walk",
-            "frame_count": 2,
+            "frame_count": 4,
             "directions": [
               "all"
             ],
@@ -609,7 +621,7 @@
           },
           {
             "name": "attack",
-            "frame_count": 1,
+            "frame_count": 2,
             "directions": [
               "all"
             ],
@@ -618,7 +630,7 @@
           },
           {
             "name": "hurt",
-            "frame_count": 1,
+            "frame_count": 2,
             "directions": [
               "all"
             ],
@@ -627,7 +639,7 @@
           },
           {
             "name": "die",
-            "frame_count": 1,
+            "frame_count": 4,
             "directions": [
               "all"
             ],
@@ -638,12 +650,12 @@
         "has_paperdoll_layers": false
       },
       "provenance": {
-        "author": "GameForge Team",
+        "author": "GameForge ArtForge",
         "source_repo": "internal_gameforge",
         "license_spdx": "MIT",
         "license_tier": "tier_1_permissive_attribution",
         "attribution_required": true,
-        "attribution_text": "Created for GameForge 2D by GameForge Team"
+        "attribution_text": "Created for GameForge 2D by GameForge ArtForge"
       },
       "engine_compatibility": {
         "gf_anim_v1_ready": true,
@@ -654,36 +666,37 @@
     {
       "schema_version": "gf-asset-catalog-v1.0.0",
       "asset_id": "wisp",
-      "name": "Fuego Fatuo Arcano",
+      "name": "Fuego fatuo",
       "kind": "creature_enemy",
       "taxonomy": {
         "genre": "top_down_rpg",
         "theme": "dungeon",
-        "visual_style": "pixel_art_28x28",
+        "visual_style": "pixel_art_32x32",
         "tags": [
           "enemy",
-          "wisp"
+          "ranged",
+          "spirit"
         ]
       },
       "image": {
         "relative_path": "assets/sprites/enemies/wisp/wisp_atlas.png",
-        "width": 256,
-        "height": 256,
+        "width": 192,
+        "height": 96,
         "has_alpha": true,
         "color_mode": "RGBA",
-        "sha256": "e37845d6f33545783c0f39f14ebaf3fddd6f099a68605400259dc511921a40a5",
-        "dhash": "2000000000000000"
+        "sha256": "0ca00dbb49455841b057e204d35a45471aa27e447d9ce1a3ef4da3cb4fa70bf8",
+        "dhash": "4949004949004940"
       },
       "geometry": {
         "layout_type": "packed_atlas",
         "frame_size": [
-          28,
-          28
+          32,
+          32
         ],
         "anchor_preset": "bottom_center",
         "anchor_offset": [
-          14,
-          28
+          16,
+          32
         ]
       },
       "character_data": {
@@ -696,7 +709,7 @@
         "available_clips": [
           {
             "name": "idle",
-            "frame_count": 2,
+            "frame_count": 6,
             "directions": [
               "all"
             ],
@@ -705,7 +718,7 @@
           },
           {
             "name": "walk",
-            "frame_count": 2,
+            "frame_count": 4,
             "directions": [
               "all"
             ],
@@ -714,7 +727,7 @@
           },
           {
             "name": "shoot",
-            "frame_count": 1,
+            "frame_count": 2,
             "directions": [
               "all"
             ],
@@ -723,7 +736,7 @@
           },
           {
             "name": "hurt",
-            "frame_count": 1,
+            "frame_count": 2,
             "directions": [
               "all"
             ],
@@ -732,7 +745,7 @@
           },
           {
             "name": "die",
-            "frame_count": 1,
+            "frame_count": 4,
             "directions": [
               "all"
             ],
@@ -743,12 +756,12 @@
         "has_paperdoll_layers": false
       },
       "provenance": {
-        "author": "GameForge Team",
+        "author": "GameForge ArtForge",
         "source_repo": "internal_gameforge",
         "license_spdx": "MIT",
         "license_tier": "tier_1_permissive_attribution",
         "attribution_required": true,
-        "attribution_text": "Created for GameForge 2D by GameForge Team"
+        "attribution_text": "Created for GameForge 2D by GameForge ArtForge"
       },
       "engine_compatibility": {
         "gf_anim_v1_ready": true,
