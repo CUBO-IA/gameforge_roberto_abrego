@@ -17,6 +17,7 @@ from game.core.math2d import Vec2
 from game.entities.enemy_catalog import EnemyDefinition, definition_for
 from game.entities.projectiles import ProjectileSpec
 from game.world.collision import has_line_of_sight, move_circle
+from game.world.spatial import SpatialHash
 from game.world.tilemap import TileMap
 
 
@@ -228,18 +229,25 @@ class Enemy:
 
 
 def separate_enemies(enemies: list[Enemy], tilemap: TileMap) -> None:
-    """Evita que los enemigos se apilen, empujándolos suavemente."""
-    for index, first in enumerate(enemies):
-        if not first.alive:
+    """Evita que los enemigos se apilen, empujándolos suavemente.
+
+    Utiliza SpatialHash para mantener un coste O(n) amortizado.
+    """
+    alive = [e for e in enemies if e.alive]
+    if len(alive) < 2:
+        return
+
+    # SpatialHash para comparar únicamente vecinos cercanos
+    grid: SpatialHash[Enemy] = SpatialHash(cell_size=48.0)
+    for enemy in alive:
+        grid.insert(enemy, enemy.position, enemy.radius)
+
+    for first, second in grid.query_pairs():
+        delta = second.position - first.position
+        minimum = first.radius + second.radius - 2.0
+        distance = delta.length()
+        if distance >= minimum or distance <= 1e-6:
             continue
-        for second in enemies[index + 1 :]:
-            if not second.alive:
-                continue
-            delta = second.position - first.position
-            minimum = first.radius + second.radius - 2.0
-            distance = delta.length()
-            if distance >= minimum or distance <= 1e-6:
-                continue
-            push = delta.normalized() * ((minimum - distance) * 0.5)
-            first._move(tilemap, -push)
-            second._move(tilemap, push)
+        push = delta.normalized() * ((minimum - distance) * 0.5)
+        first._move(tilemap, -push)
+        second._move(tilemap, push)

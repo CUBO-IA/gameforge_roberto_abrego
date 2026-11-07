@@ -30,13 +30,23 @@ def update_enemies(
     player: Player,
     tilemap: TileMap,
     rng,
+    frame_counter: int = 0,
 ) -> EngagementEvents:
-    """Actualiza a todos los enemigos y recoge disparos y contactos."""
+    """Actualiza a los enemigos aplicando staggering para entidades distantes."""
     events = EngagementEvents()
-    for enemy in list(enemies):
+    for index, enemy in enumerate(enemies):
         if not enemy.alive:
             continue
-        intent = enemy.update(dt, player.position, player.radius, tilemap, rng)
+        dist_sq = (enemy.position - player.position).length_squared()
+        # Staggering: si el enemigo está muy lejos (> 750 px), actualizar 1 de cada 3 frames
+        if dist_sq > 562500.0:  # 750^2
+            if (index + frame_counter) % 3 != 0:
+                continue
+            effective_dt = dt * 3.0
+        else:
+            effective_dt = dt
+
+        intent = enemy.update(effective_dt, player.position, player.radius, tilemap, rng)
         if intent.projectile is not None:
             events.projectiles.append(intent.projectile)
         if (

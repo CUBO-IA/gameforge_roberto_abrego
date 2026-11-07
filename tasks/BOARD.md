@@ -7,17 +7,24 @@ Columnas: PROPUESTA → APROBADA → EN CURSO → ENTREGADA → VERIFICADA.
 
 ## ENTREGADA
 
-### T-201 — Fase 2: multiplanta, misiones, A*, crafting — ENTREGADA 2026-11-06
-- Responsable: GAMEPLAY + IA/NPC + PROCEDURAL
+### T-301 — Fase 3: Mundo grande y escala — ENTREGADA 2026-11-06
+- Responsable: GAMEPLAY + PROCEDURAL + IA/NPC + PRESENTACIÓN
 - Resultado:
-  - Navegación A* con cuota de CPU y caché LRU en `game/ai/astar.py`.
-  - Sistema de misiones data-driven (`game/data/quests.json`, `game/sim/quest.py`).
-  - Sistema de crafting atómico con recetas en `game/data/recipes.json` y `game/sim/crafting.py`.
-  - Encadenamiento multiplanta de 3 pisos con transiciones en `game/sim/floor.py` y `game/scenes/play.py`.
-- Verificación: 23 tests nuevos (155 tests totales pasando), `tools/verify.py` OK (0 ruff, bench p95 1.32 ms).
-- Informe completo: `tasks/reports/T-201.md`.
+  - Partición espacial `SpatialHash` en `game/world/spatial.py`.
+  - Separación de enemigos y ataques optimizados con SpatialHash.
+  - Frustum culling de renderizado en `game/render/world_view.py`.
+  - Staggering de actualización para entidades lejanas en `game/sim/engagement.py`.
+  - Cargador de mapas autorales de Tiled en `game/world/tiled_loader.py`.
+- Verificación: 10 tests nuevos (165 tests totales pasando), `tools/verify.py` OK (0 ruff, bench p95 1.17 ms).
+- Benchmark a gran escala: 100 entidades simultáneas con p95 = 6.58 ms (presupuesto 16.67 ms).
+- Informe completo: `tasks/reports/T-301.md`.
 
 ## VERIFICADA (por el DIRECTOR 2026-11-06)
+
+### T-201 — Fase 2: multiplanta, misiones, A*, crafting
+- Responsable: GAMEPLAY + IA/NPC + PROCEDURAL
+- Resultado: A* cuotado en `game/ai/astar.py`, misiones data-driven (`quests.json`), recetas (`recipes.json`) y 3 plantas encadenadas con victoria en el núcleo.
+- Verificación: Commit `a12f9fd`, 155 tests verdes, bench p95 1.25 ms. Criterios cumplidos al 100%.
 
 ### T-000 — Fase 0: cimientos
 - Responsable: DIRECTOR/ARQUITECTO

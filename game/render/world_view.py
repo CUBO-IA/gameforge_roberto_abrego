@@ -44,15 +44,32 @@ def draw_play_world(
     surface.blit(tile_renderer.surface, (-int(top_left.x), -int(top_left.y)))
     tile_renderer.draw_animated(surface, camera, time, shake)
 
+    margin = 80.0
+    view_min_x = top_left.x - margin
+    view_max_x = top_left.x + camera.viewport_width + margin
+    view_min_y = top_left.y - margin
+    view_max_y = top_left.y + camera.viewport_height + margin
+
+    def in_view(pos: Vec2, radius: float = 32.0) -> bool:
+        return (
+            view_min_x - radius <= pos.x <= view_max_x + radius
+            and view_min_y - radius <= pos.y <= view_max_y + radius
+        )
+
     drawables: list[tuple[float, str, object]] = []
     for chest in chests:
-        drawables.append((chest.position.y, "chest", chest))
-    drawables.append((campfire.position.y, "campfire", campfire))
-    drawables.append((altar.position.y, "altar", altar))
+        if in_view(chest.position, 32.0):
+            drawables.append((chest.position.y, "chest", chest))
+    if in_view(campfire.position, 48.0):
+        drawables.append((campfire.position.y, "campfire", campfire))
+    if in_view(altar.position, 48.0):
+        drawables.append((altar.position.y, "altar", altar))
     for enemy in enemies:
-        drawables.append((enemy.position.y, "enemy", enemy))
+        if enemy.alive and in_view(enemy.position, enemy.radius + 16.0):
+            drawables.append((enemy.position.y, "enemy", enemy))
     for projectile in projectiles:
-        drawables.append((projectile.position.y, "projectile", projectile))
+        if in_view(projectile.position, projectile.radius):
+            drawables.append((projectile.position.y, "projectile", projectile))
     drawables.append((player.position.y, "player", player))
     drawables.sort(key=lambda item: item[0])
 

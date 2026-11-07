@@ -109,6 +109,7 @@ class PlayScene(Scene):
             (app.config.window.width, app.config.window.height),
         )
         self.rng = random.Random(run_seed ^ 0x5F3759DF)
+        self.frame_counter = 0
         self.paused = False
         self.show_inventory = False
         self.toast = ""
@@ -231,7 +232,10 @@ class PlayScene(Scene):
                         self._kill(enemy)
                 self.enemies = [enemy for enemy in self.enemies if enemy.alive]
 
-        events = update_enemies(self.enemies, dt, self.player, self.tilemap, self.rng)
+        self.frame_counter += 1
+        events = update_enemies(
+            self.enemies, dt, self.player, self.tilemap, self.rng, self.frame_counter
+        )
         for spec in events.projectiles:
             self.projectiles.append(spawn_projectile(spec))
             self.app.audio.play("shoot")
