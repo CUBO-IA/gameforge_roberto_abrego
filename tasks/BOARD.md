@@ -8,7 +8,12 @@ Columnas: PROPUESTA → APROBADA → EN CURSO → ENTREGADA → VERIFICADA.
 ## EN CURSO
 (Ninguna tarea en curso en este momento. Todas las fases F0 a F5 han sido completadas satisfactoriamente).
 
-## VERIFICADA (por el DIRECTOR 2026-11-06)
+## VERIFICADA (por el DIRECTOR 2026-11-07)
+
+### T-601 — Investigación de Repositorios, Auditoría Legal y Propuesta Arquitectónica
+- Responsable: DIRECTOR/ARQUITECTO
+- Resultado: 12 repositorios analizados en `REPOSITORY_RESEARCH.md`, justificación en `TECH_STACK_RECOMMENDATION.md`, capas puras y presupuestos en `ARCHITECTURE_PROPOSAL.md`, análisis de licencias y riesgos en `DEPENDENCY_AUDIT.md`, 9 algoritmos clave en `REUSABLE_ALGORITHMS.md`, tabla de referencias `OPEN_SOURCE_REFERENCES.md` y suite de pruebas `tests/test_research_deliverables.py`.
+- Verificación: 185 tests verdes, `tools/verify.py` OK, benchmark p95 = 1.25 ms. Criterios cumplidos al 100%.
 
 ### T-501 — Fase 5: Distribución y empaquetado
 - Responsable: DIRECTOR/ARQUITECTO + PRESENTACIÓN

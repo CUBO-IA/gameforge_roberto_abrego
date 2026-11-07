@@ -94,6 +94,11 @@ game/
 
 Documentación técnica detallada:
 - Auditoría maestra y arquitectura: [`GAMEFORGE_2D_ARCHITECTURE_REVIEW.md`](GAMEFORGE_2D_ARCHITECTURE_REVIEW.md).
+- Investigación de 12 repositorios: [`REPOSITORY_RESEARCH.md`](REPOSITORY_RESEARCH.md).
+- Recomendación de stack tecnológico: [`TECH_STACK_RECOMMENDATION.md`](TECH_STACK_RECOMMENDATION.md).
+- Propuesta de arquitectura definitiva: [`ARCHITECTURE_PROPOSAL.md`](ARCHITECTURE_PROPOSAL.md).
+- Auditoría de licencias y dependencias: [`DEPENDENCY_AUDIT.md`](DEPENDENCY_AUDIT.md).
+- Catálogo de algoritmos reutilizables: [`REUSABLE_ALGORITHMS.md`](REUSABLE_ALGORITHMS.md).
 - Manual del jugador: [`documentation/GUIA_JUGADOR.md`](documentation/GUIA_JUGADOR.md).
 - Contratos de interfaces: [`architecture/CONTRACTS.md`](architecture/CONTRACTS.md).
 - Matriz de propiedad de archivos: [`architecture/OWNERSHIP.md`](architecture/OWNERSHIP.md).
