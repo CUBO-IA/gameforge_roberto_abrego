@@ -18,6 +18,7 @@ Para una investigación técnica y legal exhaustiva de cada repositorio, consult
 | **pygame-topdownengine** | https://github.com/shaurya-sharma-dev/pygame-topdownengine | MIT / CC0 | **Patrones** | Adoptados patrones de Z-axis, sombras y Y-sorting |
 | **Procedural-Maps** | https://github.com/strwdr/Procedural-Maps | **SIN LICENCIA** | **Prohibido** | Código prohibido por copyright; concepto Whittaker limpio |
 | **opensimplex-island** | https://github.com/lmas/opensimplex | MIT / CC0 | **Algoritmo** | Adoptada máscara de decaimiento radial para cavernas |
+| **Nemotron Personas El Salvador** | https://huggingface.co/datasets/nvidia/Nemotron-Personas-El-Salvador | CC-BY-4.0 | **Adoptado** | Perfiles demográficos, narrativa y diálogos de NPCs del Hub |
 
 ## Política de Licencias y Dependencias
 - No copiar código sin verificar licencia (estrictamente prohibido copiar repositorios sin licencia explícita).

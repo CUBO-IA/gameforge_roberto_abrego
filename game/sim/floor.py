@@ -7,14 +7,36 @@ y las condiciones de victoria final en la última planta.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import StrEnum
 
 MAX_FLOORS: int = 3
+
+
+class FloorType(StrEnum):
+    DUNGEON = "dungeon"
+    CAVERN = "cavern"
+
 
 FLOOR_THEMES: dict[int, str] = {
     1: "El Umbral Olvidado",
     2: "La Cripta de Ceniza",
     3: "El Núcleo de la Fragua",
 }
+
+FLOOR_TYPES: dict[int, FloorType] = {
+    1: FloorType.DUNGEON,  # El Umbral Olvidado: arquitectura de salas y corredores
+    2: FloorType.CAVERN,   # La Cripta de Ceniza: cavernas subterráneas orgánicas
+    3: FloorType.DUNGEON,  # El Núcleo de la Fragua: cámara central
+}
+
+
+def floor_type_for(floor: int, variant: str | None = None) -> FloorType:
+    """Determina si un piso utiliza generación de mazmorra clásica o caverna orgánica."""
+    if variant == "cavern":
+        return FloorType.CAVERN
+    if variant == "dungeon":
+        return FloorType.DUNGEON
+    return FLOOR_TYPES.get(floor, FloorType.DUNGEON)
 
 
 def floor_bonus(floor: int) -> int:
@@ -58,6 +80,7 @@ class FloorTransition:
     next_floor: int
     theme: str
     shards_required: int
+    floor_type: FloorType = FloorType.DUNGEON
 
 
 def calculate_floor_transition(current_floor: int) -> FloorTransition | None:
@@ -70,4 +93,5 @@ def calculate_floor_transition(current_floor: int) -> FloorTransition | None:
         next_floor=next_floor,
         theme=floor_theme_name(next_floor),
         shards_required=shards_required_for_floor(next_floor),
+        floor_type=floor_type_for(next_floor),
     )

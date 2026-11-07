@@ -12,6 +12,7 @@ import random
 import pygame
 
 from game.ai.astar import clear_path_cache
+from game.ai.dijkstra import DijkstraMap
 from game.core.math2d import Vec2
 from game.entities.enemies import Enemy
 from game.entities.interactables import Campfire, Chest, ForgeAltar
@@ -37,8 +38,10 @@ from game.sim.engagement import (
     update_enemies,
 )
 from game.sim.floor import (
+    FloorType,
     finish_score,
     floor_theme_name,
+    floor_type_for,
     is_final_floor,
     shards_required_for_floor,
 )
@@ -52,6 +55,7 @@ from game.sim.quest import QuestManager
 from game.systems.inventory import Inventory, InventoryError
 from game.systems.quest import QuestState
 from game.world.camera import Camera
+from game.world.cavern_generation import generate_cavern
 from game.world.collision import circle_hits_solid
 from game.world.generation import generate_dungeon
 from game.world.tilemap import TileMap
@@ -69,7 +73,10 @@ class PlayScene(Scene):
             run_seed = seed if seed is not None else random.SystemRandom().randrange(1, 2**31)
         else:
             run_seed = snapshot.seed
-        self.dungeon = generate_dungeon(run_seed, self.floor, app.config.dungeon)
+        if floor_type_for(self.floor) == FloorType.CAVERN:
+            self.dungeon = generate_cavern(run_seed, self.floor, app.config.dungeon)
+        else:
+            self.dungeon = generate_dungeon(run_seed, self.floor, app.config.dungeon)
         self.tilemap: TileMap = self.dungeon.tilemap
         self.player = Player(self.dungeon.spawn, app.config.player)
         self.inventory = Inventory()
@@ -101,6 +108,7 @@ class PlayScene(Scene):
         self.camera = Camera(app.config.window.width, app.config.window.height)
         self.camera.snap_to(self.player.position, self.tilemap.pixel_width, self.tilemap.pixel_height)
         self.tile_renderer = TileRenderer(self.tilemap)
+        self.dijkstra_map = DijkstraMap(self.tilemap)
         self.lighting = Lighting((app.config.window.width, app.config.window.height))
         self.hud = Hud(
             app.fonts,
@@ -213,6 +221,8 @@ class PlayScene(Scene):
         self.player.update(dt, move, aim, dash, attack, self.tilemap, jump=jump)
         if self.player.jump_started:
             self.effects.burst(self.player.position, palette.TEXT_MUTED, 6, 40)
+        if self.player.ceiling_hit:
+            self.effects.burst(self.player.position - Vec2(0, self.player.z), palette.TEXT_MUTED, 4, 30)
         if self.player.dash_started:
             self.app.audio.play("dash")
             self.effects.burst(self.player.position, palette.ACCENT, 10, 90)
@@ -237,7 +247,13 @@ class PlayScene(Scene):
 
         self.frame_counter += 1
         events = update_enemies(
-            self.enemies, dt, self.player, self.tilemap, self.rng, self.frame_counter
+            self.enemies,
+            dt,
+            self.player,
+            self.tilemap,
+            self.rng,
+            self.frame_counter,
+            dijkstra_map=self.dijkstra_map,
         )
         for spec in events.projectiles:
             self.projectiles.append(spawn_projectile(spec))
@@ -388,8 +404,12 @@ class PlayScene(Scene):
     def _descend_floor(self) -> None:
         self.floor += 1
         clear_path_cache()
-        self.dungeon = generate_dungeon(self.dungeon.seed, self.floor, self.app.config.dungeon)
+        if floor_type_for(self.floor) == FloorType.CAVERN:
+            self.dungeon = generate_cavern(self.dungeon.seed, self.floor, self.app.config.dungeon)
+        else:
+            self.dungeon = generate_dungeon(self.dungeon.seed, self.floor, self.app.config.dungeon)
         self.tilemap = self.dungeon.tilemap
+        self.dijkstra_map = DijkstraMap(self.tilemap)
         self.tile_renderer = TileRenderer(self.tilemap)
         self.camera.snap_to(
             self.dungeon.spawn, self.tilemap.pixel_width, self.tilemap.pixel_height

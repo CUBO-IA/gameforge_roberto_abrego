@@ -83,41 +83,50 @@
         },
         {
           "id":6,
-          "name":"npc_merchant",
+          "name":"Doña Rosa",
           "type":"npc",
           "x":128,
           "y":352,
           "width":32,
           "height":32,
           "properties":[
-            {"name":"dialog","type":"string","value":"¡Bienvenido, aventurero!"},
-            {"name":"role","type":"string","value":"merchant"}
+            {"name":"uuid","type":"string","value":"108fefeb-c9f6-4429-8ce1-a67eaad444ef"},
+            {"name":"role","type":"string","value":"merchant"},
+            {"name":"dataset","type":"string","value":"nvidia/Nemotron-Personas-El-Salvador"},
+            {"name":"department","type":"string","value":"La Libertad"},
+            {"name":"dialog","type":"string","value":"¡Buenas! Pase adelante al puesto, tengo frascos de brasa para su travesía."}
           ]
         },
         {
           "id":7,
-          "name":"npc_blacksmith",
+          "name":"Maestro José",
           "type":"npc",
           "x":512,
           "y":352,
           "width":32,
           "height":32,
           "properties":[
-            {"name":"dialog","type":"string","value":"Forjaré lo que necesites."},
-            {"name":"role","type":"string","value":"blacksmith"}
+            {"name":"uuid","type":"string","value":"2e2bca1d-f265-4214-beb3-858d676f2907"},
+            {"name":"role","type":"string","value":"blacksmith"},
+            {"name":"dataset","type":"string","value":"nvidia/Nemotron-Personas-El-Salvador"},
+            {"name":"department","type":"string","value":"Santa Ana"},
+            {"name":"dialog","type":"string","value":"Treinta años levantando estructuras en Santa Ana me enseñaron que un acero firme salva vidas."}
           ]
         },
         {
           "id":8,
-          "name":"npc_elder",
+          "name":"Don Antonio",
           "type":"npc",
           "x":320,
           "y":64,
           "width":32,
           "height":32,
           "properties":[
-            {"name":"dialog","type":"string","value":"Los fragmentos solares te esperan abajo."},
-            {"name":"role","type":"string","value":"quest_giver"}
+            {"name":"uuid","type":"string","value":"0b125a4d-c467-4cc5-8789-968ae1ba7f01"},
+            {"name":"role","type":"string","value":"quest_giver"},
+            {"name":"dataset","type":"string","value":"nvidia/Nemotron-Personas-El-Salvador"},
+            {"name":"department","type":"string","value":"Santa Ana"},
+            {"name":"dialog","type":"string","value":"Muchacho, ochenta y ocho años me enseñaron rigor. Lleva la cuenta exacta de fragmentos solares."}
           ]
         }
       ],

@@ -1,0 +1,47 @@
+{
+  "dataset": "nvidia/Nemotron-Personas-El-Salvador",
+  "source_url": "https://huggingface.co/datasets/nvidia/Nemotron-Personas-El-Salvador",
+  "license": "CC-BY-4.0",
+  "attribution": "NVIDIA Sovereign AI Initiative & WideLabs / El Salvador National Demographics",
+  "personas": {
+    "elder": {
+      "uuid": "0b125a4d-c467-4cc5-8789-968ae1ba7f01",
+      "role": "elder",
+      "department": "Santa Ana",
+      "municipality": "Santa Ana Centro",
+      "age": 88,
+      "sex": "Masculino",
+      "occupation": "Actividades de hospitales",
+      "professional_persona": "Antonio, de 88 años, lleva más de setenta años trabajando en el Hospital Regional de Santa Ana Centro. Tras terminar la secundaria ingresó como auxiliar administrativo, archivando historias clínicas y gestionando la agenda de consultas. Con el tiempo se convirtió en encargado de insumos médicos, supervisando la recepción y distribución de medicamentos y material de curación. Es conocido por su puntualidad y por revisar minuciosamente cada registro, temiendo cualquier equivocación. Aunque su trato con pacientes es breve y directo, su rigor y vigilancia constante lo convierten en un pilar fiable del equipo.",
+      "cultural_background": "Antonio, de 88 años, nació y ha vivido toda su vida en el corazón de Santa Ana Centro. Cada domingo su familia se reúne para compartir pupusas de queso y atole, mientras la abuela rememora la Feria del Café de los años veinte. En julio no falta a la procesión de la patrona, Santa Ana, y observa con atención los puestos de artesanías. Reservado y a veces cortante, se muestra siempre responsable: cuida que el jardín quede impecable y se preocupa por la salud de sus nietos.",
+      "culinary_persona": "Antonio, de 88 años, prefiere los sabores que le recuerdan a su infancia en el centro de Santa Ana. Cada mañana se deleita con café de altura, acompañado de pan dulce de yema. En el almuerzo elige pupusas de queso con loroco, hechas en la cocina de su esposa, y una sopa de gallina con verduras. Los domingos no pueden faltar los tamales de elote con atole de avena y una porción de yuca frita con curtido. Aunque la costa ofrece ceviche y mariscos, él se inclina por la carne asada al carbón y las empanadas de maíz que vende la feria del Café. Así combina lo típico salvadoreño con las especialidades de la zona occidental urbana.",
+      "skills": "[\"registro y archivo de historias clínicas\", \"manejo de agendas y citas médicas\", \"control de inventario de insumos y material médico\", \"aplicación de protocolos de higiene y bioseguridad\", \"atención y orientación al paciente en la recepción\", \"uso de software de gestión hospitalaria para facturación y seguros\", \"colaboración con enfermer@s y técnicos en la logística de salas\"]"
+    },
+    "merchant": {
+      "uuid": "108fefeb-c9f6-4429-8ce1-a67eaad444ef",
+      "role": "merchant",
+      "department": "La Libertad",
+      "municipality": "La Libertad Centro",
+      "age": 39,
+      "sex": "Femenino",
+      "occupation": "Venta al por menor de alimentos, bebidas y tabaco en puestos de venta y mercados",
+      "professional_persona": "Rosa, 39 años, lleva más de quince años dedicados a la venta al por menor de alimentos, bebidas y tabaco en puestos de mercado. Con la secundaria completa, empezó a los dieciocho como asistente en el puesto familiar de La Libertad Centro, aprendiendo a organizar el inventario y a atender a los clientes. A los veinticinco abrió su propio puesto, donde negocia directamente con proveedores, controla la caja y mantiene la limpieza exigida por las normas sanitarias. Su facilidad para conversar y su disposición a probar productos nuevos la convierten en una figura conocida; cuando surge algún imprevisto, actúa con serenidad y busca la solución más rápida.",
+      "cultural_background": "Rosa, 39 años, vive en la zona rural de La Libertad Centro, donde la vida gira entre la huerta de maíz y las charcas de pescadores. Cada diciembre celebra con su familia la fiesta patronal de San Juan Opico, bailando cumbia, compartiendo pupusas de queso y encendiendo faroles de palma. En la Semana de los Santos lleva a los niños a la iglesia y prepara pan de yema. Le gusta organizar el puesto de comida del barrio, conserva las recetas de su madre y siempre prueba nuevas salsas.",
+      "culinary_persona": "Rosa prefiere los sabores que la tierra de La Libertad le regala. En su cocina siempre hay una olla de frijoles con chicharrón y epazote, y los domingos prepara puchero de gallina con mazorca y plátano verde, servido con arroz blanco. Le encanta el ceviche de camarón con limón de la zona y salsa de tomate casera, y a veces asa pescado a la plancha con salsa de coco y cilantro. En las reuniones del barrio lleva el puchero y el ceviche, y la gente se sienta alrededor del fogón a conversar. Entre sus dulces favoritos están los cocadas de miel y el pan de yema que hornea para las fiestas.",
+      "skills": "[\"Atención al cliente y trato amable en el puesto de mercado\", \"Manejo de caja y control de efectivo\", \"Gestión de inventario y reposición de alimentos y bebidas\", \"Conocimiento de normas sanitarias y de seguridad para la venta de alimentos y tabaco\", \"Negociación y coordinación con proveedores locales\", \"Organización y presentación atractiva del puesto de venta\", \"Aplicación de precios, promociones y venta cruzada de productos\", \"Capacidad para trabajar bajo presión durante los picos de venta\"]"
+    },
+    "blacksmith": {
+      "uuid": "2e2bca1d-f265-4214-beb3-858d676f2907",
+      "role": "blacksmith",
+      "department": "Santa Ana",
+      "municipality": "Santa Ana Oeste",
+      "age": 51,
+      "sex": "Masculino",
+      "occupation": "Construcción de edificios",
+      "professional_persona": "José, de 51 años, lleva más de 30 años trabajando en la construcción de edificios en Santa Ana Oeste. Tras terminar el bachillerato se incorporó como peón a una empresa local y, con el tiempo, aprendió a leer planos, a operar la mezcladora de concreto y a supervisar la colocación de los muros. Ha participado en la edificación de varios condominios y en la remodelación de oficinas, siempre bajo la dirección de capataces. Su forma de laborar es práctica: prefiere los trabajos manuales y, aunque a veces necesita que le recuerden los pedidos de materiales, termina las obras cumpliendo con los requisitos de calidad.",
+      "cultural_background": "José, 51 años, vive en Santa Ana Oeste. Cada julio, durante las fiestas patronales de Santa Ana, se junta con su familia para comer tamales de elote y atole, aunque a menudo olvida llevar lo que le toca. En Semana Santa recuerda las procesiones que su abuelo le mostraba, pero prefiere observar desde el patio, pues el ruido de los cohetes le pone nervioso. Los domingos se detiene en la esquina de la calle Central a tomar un café y charlar un rato con el vecino, sin mucho alboroto.",
+      "culinary_persona": "José, 51 años, prefiere la cocina de Santa Ana que combina tradición y sabores locales. En la mañana disfruta un café de la zona con pan de yuca recién horneado y, a veces, una empanada de yuca rellena de frijoles negros. Para el almuerzo se inclina por pupusas de revuelta, hechas con masa de maíz del altiplano y rellenas de chicharrón y queso, o tamales de elote envueltos en hoja de plátano que su madre prepara en las fiestas patronales. Le gusta el chorizo de Santa Ana, ahumado con achiote, y la sopa de mondongo de la región, aunque el ruido del mercado le pone nervioso, lleva atole a casa de su hermana como gesto de voluntad.",
+      "skills": "[\"interpretar y seguir planos estructurales de edificios\", \"manejar herramientas manuales y eléctricas como taladro y amoladora\", \"aplicar normas de seguridad y uso de equipo de protección personal en obra\", \"operar mezcladora de concreto y controlar la dosificación de materiales\", \"realizar armado y amarre de estructuras de hormigón armado\", \"cortar y perforar perfiles de acero para la estructura\", \"coordinar y supervisar a los albañiles y peones en la obra\", \"verificar la calidad de los materiales y el cumplimiento de especificaciones\"]"
+    }
+  }
+}

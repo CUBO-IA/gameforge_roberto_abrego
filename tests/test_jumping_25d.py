@@ -117,3 +117,30 @@ def test_player_update_backwards_compatibility(player_cfg: PlayerConfig, empty_m
     # Llamada con 6 argumentos (sin el parámetro jump)
     player.update(0.016, Vec2(), Vec2(1, 0), False, False, empty_map)
     assert player.z == 0.0
+
+
+def test_player_jump_hits_ceiling(player_cfg: PlayerConfig, empty_map: TileMap) -> None:
+    player = Player(Vec2(64, 64), player_cfg)
+    ceiling_height = 16.0  # Techo bajo
+
+    # Saltar con techo bajo
+    player.update(0.016, Vec2(), Vec2(1, 0), dash=False, attack=False, tilemap=empty_map, jump=True, ceiling_z=ceiling_height)
+    assert player.jump_started
+
+    # Avanzar simulación hasta chocar contra el techo
+    for _ in range(10):
+        player.update(0.016, Vec2(), Vec2(1, 0), dash=False, attack=False, tilemap=empty_map, jump=False, ceiling_z=ceiling_height)
+        if player.ceiling_hit:
+            break
+
+    assert player.ceiling_hit
+    assert player.z <= ceiling_height
+    assert player.vz <= 0.0  # La velocidad vertical se invierte hacia abajo
+
+
+def test_player_cannot_jump_under_zero_ceiling(player_cfg: PlayerConfig, empty_map: TileMap) -> None:
+    player = Player(Vec2(64, 64), player_cfg)
+    # Techo nulo o demasiado bajo
+    player.update(0.016, Vec2(), Vec2(1, 0), dash=False, attack=False, tilemap=empty_map, jump=True, ceiling_z=2.0)
+    assert not player.jump_started
+    assert player.z == 0.0

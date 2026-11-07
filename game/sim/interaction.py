@@ -17,6 +17,7 @@ from game.systems.inventory import Inventory
 CHEST_RANGE = 54.0
 CAMPFIRE_RANGE = 62.0
 ALTAR_RANGE = 74.0
+NPC_RANGE = 56.0
 
 
 @dataclass(frozen=True, slots=True)
@@ -43,6 +44,7 @@ def find_nearest_interaction(
     player_position,
     shard_count: int,
     shards_required: int,
+    npcs: list | None = None,
 ) -> tuple[object, str] | None:
     """Objeto interactuable más cercano al jugador y su etiqueta."""
     candidates: list[tuple[float, object, str]] = []
@@ -64,6 +66,11 @@ def find_nearest_interaction(
             else f"Fragua: faltan {remaining} fragmentos"
         )
         candidates.append((distance, altar, label))
+    if npcs:
+        for npc in npcs:
+            distance = npc.position.distance_to(player_position)
+            if distance <= NPC_RANGE:
+                candidates.append((distance, npc, f"Hablar con {npc.name}"))
     if not candidates:
         return None
     candidates.sort(key=lambda entry: entry[0])

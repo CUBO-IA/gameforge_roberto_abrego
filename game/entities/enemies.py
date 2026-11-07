@@ -12,6 +12,7 @@ import random
 from dataclasses import dataclass, field
 
 from game.ai.astar import find_path
+from game.ai.dijkstra import DijkstraMap
 from game.core.config import EnemyStats
 from game.core.math2d import Vec2
 from game.entities.enemy_catalog import EnemyDefinition, definition_for
@@ -70,6 +71,7 @@ class Enemy:
         player_radius: float,
         tilemap: TileMap,
         rng: random.Random,
+        dijkstra_map: DijkstraMap | None = None,
     ) -> EnemyIntent:
         if dt <= 0 or not self.alive:
             return EnemyIntent()
@@ -94,7 +96,14 @@ class Enemy:
             self._update_charger(definition, dt, direction, distance, tilemap)
         else:
             self._update_melee(
-                definition, dt, direction, distance, player_radius, tilemap, player_position
+                definition,
+                dt,
+                direction,
+                distance,
+                player_radius,
+                tilemap,
+                player_position,
+                dijkstra_map,
             )
 
         self.knockback = self.knockback * math.exp(-10.0 * dt)
@@ -117,16 +126,26 @@ class Enemy:
         player_radius: float,
         tilemap: TileMap,
         player_position: Vec2,
+        dijkstra_map: DijkstraMap | None = None,
     ) -> None:
         desired = self.radius + player_radius - 2.0
         if distance > desired:
             move_dir = direction
             if distance > 40.0 and not has_line_of_sight(tilemap, self.position, player_position):
-                path = find_path(tilemap, self.position, player_position, budget_ms=1.0)
-                if path and len(path) > 0:
-                    diff = path[0] - self.position
-                    if diff.length_squared() > 1e-4:
-                        move_dir = diff.normalized()
+                # Consulta O(1) si disponemos de mapa Dijkstra para enjambre
+                dijkstra_dir = (
+                    dijkstra_map.direction_toward_source(self.position.x, self.position.y)
+                    if dijkstra_map is not None
+                    else None
+                )
+                if dijkstra_dir is not None:
+                    move_dir = dijkstra_dir
+                else:
+                    path = find_path(tilemap, self.position, player_position, budget_ms=1.0)
+                    if path and len(path) > 0:
+                        diff = path[0] - self.position
+                        if diff.length_squared() > 1e-4:
+                            move_dir = diff.normalized()
 
             wobble = 1.0 + definition.param("wobble_amplitude") * math.sin(
                 self.anim_time * definition.param("wobble_frequency")

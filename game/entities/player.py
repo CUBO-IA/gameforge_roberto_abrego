@@ -43,6 +43,8 @@ class Player:
         self.gravity = 520.0
         self.jump_speed = 190.0
         self.jump_started = False
+        self.ceiling_z: float | None = None
+        self.ceiling_hit = False
 
     @property
     def max_health(self) -> float:
@@ -69,12 +71,14 @@ class Player:
         attack: bool,
         tilemap: TileMap,
         jump: bool = False,
+        ceiling_z: float | None = None,
     ) -> None:
         if dt <= 0 or not self.alive:
             return
         self.pending_attack = None
         self.dash_started = False
         self.jump_started = False
+        self.ceiling_hit = False
 
         self.attack_cooldown = max(0.0, self.attack_cooldown - dt)
         self.attack_anim = max(0.0, self.attack_anim - dt)
@@ -82,14 +86,25 @@ class Player:
         self.invulnerability = max(0.0, self.invulnerability - dt)
         self.damage_flash = max(0.0, self.damage_flash - dt)
 
-        # Mecánica 2.5D: elevación y salto vertical sobre peligros
+        # Mecánica 2.5D: elevación, salto vertical y colisión contra techos
+        effective_ceiling = ceiling_z if ceiling_z is not None else self.ceiling_z
+
         if jump and self.z <= 0.0 and not self.is_dashing:
-            self.vz = self.jump_speed
-            self.jump_started = True
+            if effective_ceiling is None or effective_ceiling > 4.0:
+                self.vz = self.jump_speed
+                self.jump_started = True
 
         if self.z > 0.0 or self.vz > 0.0:
             self.z += self.vz * dt
             self.vz -= self.gravity * dt
+
+            # Colisión con techo: frena y empuja hacia abajo
+            if effective_ceiling is not None and self.z >= effective_ceiling:
+                self.z = effective_ceiling
+                self.ceiling_hit = True
+                if self.vz > 0.0:
+                    self.vz = -50.0
+
             if self.z <= 0.0:
                 self.z = 0.0
                 self.vz = 0.0

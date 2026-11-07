@@ -10,6 +10,11 @@ Columnas: PROPUESTA → APROBADA → EN CURSO → ENTREGADA → VERIFICADA.
 
 ## VERIFICADA (por el DIRECTOR 2026-11-07)
 
+### T-603 — Integración del Sistema: Swarm AI, Diálogos Nemotron El Salvador, Cavernas Dinámicas y Colisión de Techos
+- Responsable: DIRECTOR/ARQUITECTO
+- Resultado: Swarm AI en `sim/engagement.py` y `entities/enemies.py` con `DijkstraMap`, diálogos culturales y comercio en `sim/dialog.py` utilizando los personajes de `nvidia/Nemotron-Personas-El-Salvador` (Doña Rosa, Maestro José, Don Antonio), despacho automático de caverna orgánica en piso 2 en `sim/floor.py` y `scenes/play.py`, y colisión contra techos en salto 2.5D en `entities/player.py`.
+- Verificación: 228 tests verdes, ruff clean, benchmark p95 = 1.24 ms. Criterios cumplidos al 100%.
+
 ### T-602 — Expansión Mecánicas: Salto 2.5D, Cavernas, Swarm AI y Hub Narrativo
 - Responsable: DIRECTOR/ARQUITECTO
 - Resultado: Salto 2.5D con gravedad e inmunidad aérea en `player.py`, generador de cavernas orgánicas en `cavern_generation.py` (celular + radial + BFS), mapa Dijkstra O(W×H)/O(1) en `ai/dijkstra.py` para hordas, hub narrativo 20×15 en `hub_town.json` con 3 NPCs y soporte `NpcSpec` en `tiled_loader.py`.
