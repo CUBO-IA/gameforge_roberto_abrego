@@ -1,116 +1,99 @@
 # GAMEFORGE 2D — La Fragua Olvidada
 
-Vertical slice jugable de acción-aventura 2D desarrollado con **Python 3.11+** y
-**Pygame CE**. Explora una mazmorra generada proceduralmente, recupera tres
-fragmentos de ascua, derrota a los enemigos y activa la Fragua. Guarda y carga
-partidas, consulta la clasificación local y ejecuta la batería de pruebas.
+Juego RPG 2D de acción y aventura desarrollado en **Python 3.11+** con **Pygame CE**.
+Diseñado y construido mediante una arquitectura limpia por capas puras y coordinación multiagente: mazmorras procedurales navegables (3 plantas), combate en tiempo real, búsqueda de rutas con A\*, misiones dirigidas por datos, fabricación alquímica, partición espacial $O(1)$, Lienzo Virtual adaptable y persistencia multi-ranura.
 
-## Estado
+---
 
-| Sistema | Estado |
-|---|---|
-| Bucle principal, ventana y escenas | Funcional |
-| Mazmorra procedural determinista + validación BFS | Funcional |
-| Movimiento, colisión tile-based y cámara | Funcional |
-| Combate cuerpo a cuerpo, dash, proyectiles e IA | Funcional |
-| Cofres, hoguera, altar y objetivo | Funcional |
-| Inventario y consumibles | Funcional |
-| Guardado/carga JSON atómico y validado | Funcional |
-| Clasificación SQLite | Funcional |
-| Menú, HUD, pausa, ayuda, resultados | Funcional |
-| Pruebas automatizadas | Ver `documentation/TESTING.md` |
-| Audio sintetizado | Funcional con degradación a silencio |
+## Estado del Proyecto (Fases 0 a 5)
 
-## Ejecutar
+| Sistema / Componente | Capa | Estado |
+|---|---|---|
+| **Bucle principal y ciclo de vida** | `game/app.py` | Completo con delta time acotado (`<= 50 ms`) y headless mode |
+| **Lienzo Virtual (Virtual Canvas)** | `game/render/canvas.py` | Resolución lógica 1280×720 con Letterbox/Pillarbox dinámico |
+| **Generación procedural (BFS)** | `game/world/generation.py` | Determinista por semilla, escalado de plantas y validación Flood Fill |
+| **Cargador de mapas Tiled** | `game/world/tiled_loader.py` | Importación de mapas autorales JSON de Tiled Map Editor |
+| **Partición espacial ($O(1)$)** | `game/world/spatial.py` | Spatial Hash para separación de entidades y culling |
+| **Navegación inteligente (A\*)** | `game/ai/astar.py` | Búsqueda con cuota de CPU (`<= 1.5 ms`) y caché LRU |
+| **Enemigos data-driven** | `game/data/enemies.json` | Arquetipos configurables (melee, ranged, charger) sin código por tipo |
+| **Simulación pura (Combate & Floor)** | `game/sim/` | Lógica desacoplada de Pygame: combate, looteo, transiciones de piso |
+| **Misiones data-driven** | `game/data/quests.json` | Objetivos de cacería, cofres y altares con recompensas |
+| **Fabricación alquímica (Crafting)** | `game/data/recipes.json` | Transmutación atómica de recursos con rollback en `game/sim/crafting.py` |
+| **Persistencia multi-ranura** | `game/persistence/` | Slots 1, 2 y 3 en JSON atómico y clasificaciones en SQLite |
+| **Suite de verificación integral** | `tools/verify.py` | Batería unificada de ruff, pytest (175+ tests) y benchmarks |
+| **Empaquetado y distribución** | `tools/build_dist.py` | Especificación PyInstaller (`gameforge.spec`) |
 
+---
+
+## Cómo Ejecutar
+
+### Con el gestor de entornos `uv` (Recomendado)
+```bash
+uv run python -m game
+```
+
+### Con venv tradicional de Python
 ```bash
 python -m venv .venv
-# Windows: .venv\Scripts\activate
-# Linux/macOS: source .venv/bin/activate
-python -m pip install -e ".[dev]"
+# Windows: .venv\Scripts\activate | Linux/macOS: source .venv/bin/activate
+pip install -e ".[dev]"
 python -m game
 ```
 
-Comandos útiles:
-
+### Comandos de Utilidad y Verificación
 ```bash
-python -m game --new-game --seed 123     # partida directa con semilla fija
-python -m game --headless --frames 120   # smoke test sin ventana
-pytest                                   # pruebas
-python benchmark/bench_generation.py     # medición de generación
-python benchmark/bench_simulation.py     # medición de simulación
+# Verificación integral oficial (lint + tests + benchmarks)
+uv run --extra dev python tools/verify.py
+
+# Batería de pruebas automatizadas
+uv run --extra dev pytest -q
+
+# Smoke test sin ventana gráfica (Headless CI)
+uv run python -m game --headless --frames 120
+
+# Benchmarks de rendimiento
+uv run python benchmark/bench_generation.py
+uv run python benchmark/bench_simulation.py --enemies 100
 ```
 
-## Controles
+---
 
-| Entrada | Acción |
+## Controles del Juego
+
+| Tecla / Botón | Acción |
 |---|---|
-| WASD / flechas | Mover |
-| Ratón | Apuntar |
-| Clic izquierdo / J / Espacio | Atacar |
-| Shift / K | Dash (invulnerabilidad breve) |
-| E | Interactuar |
-| Q | Usar frasco de brasa |
-| I | Inventario |
-| F5 | Guardar |
-| ESC | Pausa / volver |
-| M (en pausa) | Salir al menú |
+| `W`, `A`, `S`, `D` / Flechas | Mover personaje |
+| `Cursor del ratón` | Apuntar en 360 grados |
+| `Clic izquierdo` / Espacio | Ataque en abanico (daño + knockback) |
+| `Clic derecho` / Shift | Esquiva rápida / Dash (con invulnerabilidad temporal) |
+| `E` | Interactuar (abrir cofres, descansar en hoguera, activar altar) |
+| `Q` | Beber frasco de brasa (curación) |
+| `Esc` / `P` | Pausar y menú rápido |
+| `F5` | Guardar partida (durante pausa o en hoguera) |
+| `F11` | Alternar pantalla completa |
 
-## Bucle de juego
+---
 
-1. Despiertas junto a una hoguera en una mazmorra de una sola planta.
-2. Los cofres contienen tres fragmentos de ascua, frascos y monedas.
-3. Los enemigos (cieno, fuego fatuo y bruto) patrullan y atacan.
-4. Descansa en la hoguera para curarte y guardar.
-5. Lleva los tres fragmentos al altar de la Fragua y actívalo para ganar.
-6. La puntuación se registra en SQLite; el guardado se elimina al terminar.
+## Arquitectura de Capas Puras
 
-## Persistencia
-
-- **JSON**: una ranura (`slot1.json`) en el directorio de datos de usuario.
-  Escritura atómica (temporal + `os.replace`) y validación estricta de tipos,
-  rangos, versión de esquema, tamaño máximo y colecciones.
-- **SQLite**: `scores.sqlite3` con una fila por partida terminada y consultas
-  de clasificación.
-- Localización por defecto:
-  - Windows: `%LOCALAPPDATA%\GameForge`
-  - macOS: `~/Library/Application Support/GameForge`
-  - Linux: `$XDG_DATA_HOME/GameForge` o `~/.local/share/GameForge`
-  - Se puede forzar con `--data-dir` o `GAMEFORGE_DATA_DIR`.
-
-## Arquitectura (resumen)
+Flujo unidireccional estricto sin dependencias circulares:
+$$\text{core} \leftarrow \text{world} \leftarrow \text{entities} \leftarrow \text{ai} \leftarrow \text{sim} \leftarrow \text{scenes} \leftarrow \text{app}$$
 
 ```
 game/
-  core/         configuración validada y matemáticas sin pygame
-  input/        acciones abstractas y mapeo de teclas/ratón
-  world/        tiles, generación determinista, colisiones, cámara
-  entities/     jugador, enemigos, proyectiles, objetos
-  systems/      inventario, combate y objetivo
-  persistence/  guardado JSON y clasificación SQLite
-  render/       arte procedural, HUD, iluminación, efectos, audio
-  scenes/       menú, partida, ayuda, clasificación, resultados
-  data/         config.json empaquetado
+├── core/         configuración inmutable, matemáticas Vec2 deterministas
+├── world/        tilemap, colisiones, generación BFS, spatial hash, cargador Tiled
+├── entities/     jugador, catálogo de enemigos data-driven, proyectiles, cofres
+├── ai/           búsqueda de caminos A* cuotada y caché LRU
+├── sim/          sistemas puros: combate, engagement, floor, misiones, crafting
+├── persistence/  guardado atómico JSON (3 slots) y clasificaciones SQLite
+├── render/       lienzo virtual (canvas), HUD, iluminación, partículas y audio
+├── scenes/       menú, juego (play), pausa, clasificación y resultados
+└── data/         config.json, enemies.json, quests.json, recipes.json
 ```
 
-La lógica de dominio (jugador, IA, colisiones, inventario, guardado) no importa
-Pygame y se prueba sin abrir ventana. El renderizado solo lee estado.
-
-Decisiones y contratos: `documentation/ARCHITECTURE.md`,
-`documentation/DECISIONS.md` y `architecture/CONTRACTS.md`.
-Dependencias y licencias: `documentation/DEPENDENCIES.md`.
-
-## Assets
-
-No se distribuyen sprites, mapas, música ni fuentes externas: todo el arte y
-los sonidos se generan en tiempo de ejecución. Esto evita problemas de licencia
-y mantiene el repositorio ligero. Ver `assets/README.md`.
-
-## Limitaciones conocidas
-
-- Una sola planta por partida (la semilla permite rejugabilidad).
-- La clasificación es local; no hay backend online.
-- El audio depende de que el dispositivo esté disponible; si falla, el juego
-  continúa en silencio y lo registra en el log.
-- La ventana usa resolución fija de 1280x720 (configurable por JSON).
-- No se ha probado en todas las plataformas; ver informe de pruebas.
+Documentación técnica detallada:
+- Auditoría maestra y arquitectura: [`GAMEFORGE_2D_ARCHITECTURE_REVIEW.md`](GAMEFORGE_2D_ARCHITECTURE_REVIEW.md).
+- Manual del jugador: [`documentation/GUIA_JUGADOR.md`](documentation/GUIA_JUGADOR.md).
+- Contratos de interfaces: [`architecture/CONTRACTS.md`](architecture/CONTRACTS.md).
+- Matriz de propiedad de archivos: [`architecture/OWNERSHIP.md`](architecture/OWNERSHIP.md).

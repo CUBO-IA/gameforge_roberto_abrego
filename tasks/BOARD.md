@@ -5,19 +5,20 @@ aceptación, informe (`tasks/reports/T-XXX.md`).
 
 Columnas: PROPUESTA → APROBADA → EN CURSO → ENTREGADA → VERIFICADA.
 
-## ENTREGADA
-
-### T-401 — Fase 4: Presentación, Lienzo Virtual y Multi-ranura — ENTREGADA 2026-11-06
-- Responsable: PRESENTACIÓN + DIRECTOR
-- Resultado:
-  - `VirtualCanvas` con letterbox/pillarbox y escalado dinámico en `game/render/canvas.py`.
-  - Mapeo inverso de ratón `screen_to_logical` inmune a cambios de resolución.
-  - Sistema de guardado multi-ranura (`slot1.json`, `slot2.json`, `slot3.json`) con aislamiento total.
-  - Controlador de música de fondo en `game/render/audio.py`.
-- Verificación: 10 tests nuevos (175 tests totales pasando), `tools/verify.py` OK (0 ruff, bench p95 1.17 ms).
-- Informe completo: `tasks/reports/T-401.md`.
+## EN CURSO
+(Ninguna tarea en curso en este momento. Todas las fases F0 a F5 han sido completadas satisfactoriamente).
 
 ## VERIFICADA (por el DIRECTOR 2026-11-06)
+
+### T-501 — Fase 5: Distribución y empaquetado
+- Responsable: DIRECTOR/ARQUITECTO + PRESENTACIÓN
+- Resultado: Especificación `gameforge.spec`, script compilador `tools/build_dist.py`, manual de usuario `documentation/GUIA_JUGADOR.md`, `README.md` actualizado y suite de pruebas `tests/test_distribution.py`.
+- Verificación: 179 tests verdes, `tools/verify.py` OK, empaquetador validado con `--check-only`. Criterios cumplidos al 100%.
+
+### T-401 — Fase 4: Presentación, Lienzo Virtual y Multi-ranura
+- Responsable: PRESENTACIÓN + DIRECTOR
+- Resultado: `VirtualCanvas` con letterbox/pillarbox en `game/render/canvas.py`, mapeo de ratón, guardado multi-ranura y audio.
+- Verificación: Commit `5a73916`, 175 tests verdes, bench p95 1.16 ms. Criterios cumplidos al 100%.
 
 ### T-301 — Fase 3: Mundo grande y escala
 - Responsable: GAMEPLAY + PROCEDURAL + IA/NPC + PRESENTACIÓN
