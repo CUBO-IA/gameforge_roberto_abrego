@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "recipes": [
+    {
+      "id": "recipe_potion",
+      "name": "Frasco de Brasa",
+      "description": "Sintetiza una poción de curación a partir de un fragmento solar y monedas.",
+      "ingredients": {
+        "shard": 1,
+        "coin": 2
+      },
+      "result_item": "potion",
+      "result_quantity": 1
+    },
+    {
+      "id": "recipe_greater_potion",
+      "name": "Doble Frasco de Brasa",
+      "description": "Elabora dos pociones curativas concentradas.",
+      "ingredients": {
+        "shard": 2,
+        "coin": 5
+      },
+      "result_item": "potion",
+      "result_quantity": 2
+    },
+    {
+      "id": "recipe_shard_infusion",
+      "name": "Infusión Alquímica de Fragmento",
+      "description": "Funde monedas en un fragmento de energía solar.",
+      "ingredients": {
+        "coin": 8
+      },
+      "result_item": "shard",
+      "result_quantity": 1
+    }
+  ]
+}

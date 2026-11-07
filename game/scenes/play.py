@@ -11,6 +11,7 @@ import random
 
 import pygame
 
+from game.ai.astar import clear_path_cache
 from game.core.math2d import Vec2
 from game.entities.enemies import Enemy
 from game.entities.interactables import Campfire, Chest, ForgeAltar
@@ -28,19 +29,26 @@ from game.render.tile_renderer import TileRenderer
 from game.render.world_view import draw_lighting, draw_play_overlay, draw_play_world
 from game.scenes.base import Scene
 from game.sim.combat import resolve_player_attack
+from game.sim.crafting import craft, load_recipes
 from game.sim.engagement import (
     move_projectiles,
     projectile_hits_player,
     spawn_projectile,
     update_enemies,
 )
-from game.sim.floor import finish_score
+from game.sim.floor import (
+    finish_score,
+    floor_theme_name,
+    is_final_floor,
+    shards_required_for_floor,
+)
 from game.sim.interaction import (
     find_nearest_interaction,
     loot_message,
     open_chest,
     use_potion,
 )
+from game.sim.quest import QuestManager
 from game.systems.inventory import Inventory, InventoryError
 from game.systems.quest import QuestState
 from game.world.camera import Camera
@@ -79,6 +87,12 @@ class PlayScene(Scene):
         self.projectiles: list[Projectile] = []
         self.chests_opened: set[str] = set()
         self.defeated_ids: set[str] = set()
+        self.quest_manager = QuestManager()
+        self.quest_manager.start_floor(self.floor)
+        try:
+            self.recipes = {r.id: r for r in load_recipes()}
+        except Exception:
+            self.recipes = {}
 
         if snapshot is not None:
             self._restore(snapshot)
@@ -275,6 +289,9 @@ class PlayScene(Scene):
             enemy.position, palette.ENEMY_COLORS.get(enemy.kind, palette.TEXT), 22, 220, add=True
         )
         self.effects.shake.add(3.0)
+        for reward in self.quest_manager.on_kill(enemy.kind, self.inventory):
+            self.score += reward.score
+            self._toast(f"Misión: {reward.title} (+{reward.score} pts)")
 
     # ------------------------------------------------------------------ interact
 
@@ -313,6 +330,9 @@ class PlayScene(Scene):
         self.effects.add_text(
             f"+{result.quantity} {item.name}", chest.position + Vec2(0, -20), item.color, 20
         )
+        for reward in self.quest_manager.on_chest_opened(self.inventory):
+            self.score += reward.score
+            self._toast(f"Misión: {reward.title} (+{reward.score} pts)")
         if result.item_id == "coin":
             self.score += result.quantity
         else:
@@ -338,15 +358,76 @@ class PlayScene(Scene):
         if self.quest.activate(self.inventory):
             self.altar.activated = True
             self.score += 500
-            self.victory_timer = 2.2
-            self.app.audio.play("victory")
-            self.effects.burst(self.altar.position, palette.ACCENT, 60, 280, add=True)
-            self.effects.shake.add(10.0)
-            self._toast("La Fragua despierta. La ascua vuelve a arder.")
+            for reward in self.quest_manager.on_altar_activated(self.inventory):
+                self.score += reward.score
+                self._toast(f"Misión: {reward.title} (+{reward.score} pts)")
+
+            if is_final_floor(self.floor):
+                self.victory_timer = 2.2
+                self.app.audio.play("victory")
+                self.effects.burst(self.altar.position, palette.ACCENT, 60, 280, add=True)
+                self.effects.shake.add(10.0)
+                self._toast("¡La Fragua Suprema despierta! Has conquistado el Núcleo.")
+            else:
+                self.app.audio.play("victory")
+                self.effects.burst(self.altar.position, palette.ACCENT, 50, 240, add=True)
+                self.effects.shake.add(8.0)
+                self._descend_floor()
         else:
             remaining = self.quest.shards_required - self.inventory.count("shard")
-            self._toast(f"La Fragua exige {remaining} fragmento(s) más.")
+            self._toast(f"El Altar exige {remaining} fragmento(s) más.")
             self.app.audio.play("denied")
+
+    def _descend_floor(self) -> None:
+        self.floor += 1
+        clear_path_cache()
+        self.dungeon = generate_dungeon(self.dungeon.seed, self.floor, self.app.config.dungeon)
+        self.tilemap = self.dungeon.tilemap
+        self.tile_renderer = TileRenderer(self.tilemap)
+        self.camera.snap_to(
+            self.dungeon.spawn, self.tilemap.pixel_width, self.tilemap.pixel_height
+        )
+        self.player.position = self.dungeon.spawn
+        self.chests = [
+            Chest(spec.id, spec.position, spec.item_id, spec.quantity)
+            for spec in self.dungeon.chests
+        ]
+        self.enemies = [
+            Enemy(spec.id, spec.kind, spec.position, self.app.config.enemies[spec.kind])
+            for spec in self.dungeon.enemies
+        ]
+        self.campfire = Campfire(self.dungeon.campfire)
+        self.altar = ForgeAltar(self.dungeon.altar)
+        self.projectiles.clear()
+        self.chests_opened.clear()
+        self.defeated_ids.clear()
+
+        new_shards = shards_required_for_floor(self.floor)
+        self.quest = QuestState(new_shards)
+        self.quest_manager.start_floor(self.floor)
+        self.hud = Hud(
+            self.app.fonts,
+            self.tilemap,
+            self.quest,
+            (self.app.config.window.width, self.app.config.window.height),
+        )
+
+        theme = floor_theme_name(self.floor)
+        self._toast(f"Has descendido a {theme} (Planta {self.floor}).")
+        self._save(show_toast=False)
+
+    def craft_recipe(self, recipe_id: str) -> bool:
+        recipe = self.recipes.get(recipe_id)
+        if recipe is None:
+            return False
+        result = craft(recipe, self.inventory)
+        if result.success:
+            self.app.audio.play("pickup")
+            self._toast(result.message)
+            return True
+        self.app.audio.play("denied")
+        self._toast(result.message)
+        return False
 
     def _use_potion(self) -> None:
         result = use_potion(self.player, self.inventory, self.app.config.player.potion_heal)

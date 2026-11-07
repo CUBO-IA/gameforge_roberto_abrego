@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "quests": [
+    {
+      "id": "quest_f1_shards",
+      "title": "La Llamada de la Fragua",
+      "description": "Recupera fragmentos solares y activa el Altar de la Planta 1.",
+      "floor": 1,
+      "type": "altar",
+      "target": "",
+      "count": 3,
+      "reward_score": 500,
+      "reward_item": "coin",
+      "reward_count": 5
+    },
+    {
+      "id": "quest_f1_slimes",
+      "title": "Cacería de Lodos",
+      "description": "Derrota a 4 Slimes en la primera planta.",
+      "floor": 1,
+      "type": "kill",
+      "target": "slime",
+      "count": 4,
+      "reward_score": 150,
+      "reward_item": "potion",
+      "reward_count": 1
+    },
+    {
+      "id": "quest_f2_wisps",
+      "title": "Purificación de Ánimas",
+      "description": "Extingue a 3 Wisps en la segunda planta.",
+      "floor": 2,
+      "type": "kill",
+      "target": "wisp",
+      "count": 3,
+      "reward_score": 250,
+      "reward_item": "shard",
+      "reward_count": 1
+    },
+    {
+      "id": "quest_f2_chests",
+      "title": "Tesoros Enterrados",
+      "description": "Abre 3 cofres sellados en la segunda planta.",
+      "floor": 2,
+      "type": "chest",
+      "target": "",
+      "count": 3,
+      "reward_score": 200,
+      "reward_item": "coin",
+      "reward_count": 10
+    },
+    {
+      "id": "quest_f3_brutes",
+      "title": "Desafío de los Brutos",
+      "description": "Vence a 2 Brutos en el corazón de la Fragua.",
+      "floor": 3,
+      "type": "kill",
+      "target": "brute",
+      "count": 2,
+      "reward_score": 400,
+      "reward_item": "potion",
+      "reward_count": 2
+    },
+    {
+      "id": "quest_f3_final",
+      "title": "El Despertar de la Fragua Olvidada",
+      "description": "Activa el Altar Supremo en la Planta 3 con 5 fragmentos.",
+      "floor": 3,
+      "type": "altar",
+      "target": "",
+      "count": 5,
+      "reward_score": 1000,
+      "reward_item": "coin",
+      "reward_count": 20
+    }
+  ]
+}

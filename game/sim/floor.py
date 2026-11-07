@@ -1,14 +1,20 @@
 """Progresión por plantas y puntuación derivada.
 
-La Fase 2 extenderá este módulo con la transición real entre plantas
-(``FloorTransition``) encadenando pisos del generador.
+Gestiona las transiciones entre pisos de la mazmorra, el escalado de dificultad
+y las condiciones de victoria final en la última planta.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from game.core.math2d import Vec2
+MAX_FLOORS: int = 3
+
+FLOOR_THEMES: dict[int, str] = {
+    1: "El Umbral Olvidado",
+    2: "La Cripta de Ceniza",
+    3: "El Núcleo de la Fragua",
+}
 
 
 def floor_bonus(floor: int) -> int:
@@ -30,9 +36,38 @@ def finish_score(shards: int, floor: int, victory: bool) -> int:
     return shard_bonus(shards) + floor_bonus(floor) + (victory_bonus() if victory else 0)
 
 
+def is_final_floor(floor: int) -> bool:
+    """Indica si la planta especificada es la planta final del juego."""
+    return floor >= MAX_FLOORS
+
+
+def shards_required_for_floor(floor: int) -> int:
+    """Fragmentos solares necesarios para activar el Altar de cada planta."""
+    return 2 + floor  # Planta 1: 3, Planta 2: 4, Planta 3: 5
+
+
+def floor_theme_name(floor: int) -> str:
+    return FLOOR_THEMES.get(floor, f"Planta Subterránea {floor}")
+
+
 @dataclass(frozen=True, slots=True)
 class FloorTransition:
-    """Datos de una transición a la siguiente planta (Fase 2)."""
+    """Datos de una transición a la siguiente planta."""
 
+    current_floor: int
     next_floor: int
-    spawn: Vec2
+    theme: str
+    shards_required: int
+
+
+def calculate_floor_transition(current_floor: int) -> FloorTransition | None:
+    """Calcula la transición hacia el siguiente piso o None si ya es el final."""
+    if is_final_floor(current_floor):
+        return None
+    next_floor = current_floor + 1
+    return FloorTransition(
+        current_floor=current_floor,
+        next_floor=next_floor,
+        theme=floor_theme_name(next_floor),
+        shards_required=shards_required_for_floor(next_floor),
+    )

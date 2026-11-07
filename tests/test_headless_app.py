@@ -86,6 +86,8 @@ def test_chest_interaction_and_potion(app: Application) -> None:
 
 def test_victory_records_score_and_removes_save(app: Application) -> None:
     scene = PlayScene(app, seed=9)
+    scene.floor = 3  # Planta final (Fase 2)
+    scene.quest.shards_required = 3
     app.replace_scene(scene)
     scene.inventory.add("shard", 3)
     scene.player.position = scene.altar.position.copy()

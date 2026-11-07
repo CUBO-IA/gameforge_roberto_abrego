@@ -11,6 +11,7 @@ import math
 import random
 from dataclasses import dataclass, field
 
+from game.ai.astar import find_path
 from game.core.config import EnemyStats
 from game.core.math2d import Vec2
 from game.entities.enemy_catalog import EnemyDefinition, definition_for
@@ -91,7 +92,9 @@ class Enemy:
         elif definition.behavior == "charger":
             self._update_charger(definition, dt, direction, distance, tilemap)
         else:
-            self._update_melee(definition, dt, direction, distance, player_radius, tilemap)
+            self._update_melee(
+                definition, dt, direction, distance, player_radius, tilemap, player_position
+            )
 
         self.knockback = self.knockback * math.exp(-10.0 * dt)
         return intent
@@ -112,13 +115,22 @@ class Enemy:
         distance: float,
         player_radius: float,
         tilemap: TileMap,
+        player_position: Vec2,
     ) -> None:
         desired = self.radius + player_radius - 2.0
         if distance > desired:
+            move_dir = direction
+            if distance > 40.0 and not has_line_of_sight(tilemap, self.position, player_position):
+                path = find_path(tilemap, self.position, player_position, budget_ms=1.0)
+                if path and len(path) > 0:
+                    diff = path[0] - self.position
+                    if diff.length_squared() > 1e-4:
+                        move_dir = diff.normalized()
+
             wobble = 1.0 + definition.param("wobble_amplitude") * math.sin(
                 self.anim_time * definition.param("wobble_frequency")
             )
-            step = direction * (self.stats.speed * wobble * dt)
+            step = move_dir * (self.stats.speed * wobble * dt)
             step = step + self.knockback * dt
             self._move(tilemap, step)
         else:
