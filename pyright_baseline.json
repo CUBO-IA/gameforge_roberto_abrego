@@ -1,0 +1,5 @@
+{
+  "total_errors": 46,
+  "required_zero": ["game/core/", "game/world/"],
+  "updated_at": "2026-11-07"
+}

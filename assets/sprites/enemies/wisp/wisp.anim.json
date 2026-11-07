@@ -1,0 +1,270 @@
+{
+  "version": "gf-anim-v1",
+  "metadata": {
+    "id": "wisp",
+    "display_name": "Fuego Fatuo Arcano",
+    "author": "GameForge Agent",
+    "rig_type": "sprite_sheet",
+    "description": "Enemigo Fuego Fatuo Arcano animado con spritesheets.",
+    "tags": [
+      "enemy",
+      "wisp"
+    ]
+  },
+  "texture": {
+    "image_path": "wisp_atlas.png",
+    "width": 256,
+    "height": 256,
+    "format": "RGBA"
+  },
+  "frames": [
+    {
+      "id": "idle_0",
+      "rect": [
+        0,
+        0,
+        28,
+        28
+      ],
+      "pivot": [
+        14,
+        28
+      ],
+      "duration_ms": 140,
+      "sockets": {
+        "shadow": [
+          14,
+          28
+        ],
+        "origin": [
+          14,
+          14
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -28,
+          28,
+          28
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "idle_1",
+      "rect": [
+        28,
+        0,
+        28,
+        28
+      ],
+      "pivot": [
+        14,
+        28
+      ],
+      "duration_ms": 140,
+      "sockets": {
+        "shadow": [
+          14,
+          28
+        ],
+        "origin": [
+          14,
+          14
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -28,
+          28,
+          28
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "walk_0",
+      "rect": [
+        56,
+        0,
+        28,
+        28
+      ],
+      "pivot": [
+        14,
+        28
+      ],
+      "duration_ms": 120,
+      "sockets": {
+        "shadow": [
+          14,
+          28
+        ],
+        "origin": [
+          14,
+          14
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -28,
+          28,
+          28
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "shoot_0",
+      "rect": [
+        84,
+        0,
+        28,
+        28
+      ],
+      "pivot": [
+        14,
+        28
+      ],
+      "duration_ms": 200,
+      "sockets": {
+        "shadow": [
+          14,
+          28
+        ],
+        "origin": [
+          14,
+          14
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -28,
+          28,
+          28
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "hurt_0",
+      "rect": [
+        112,
+        0,
+        28,
+        28
+      ],
+      "pivot": [
+        14,
+        28
+      ],
+      "duration_ms": 150,
+      "sockets": {
+        "shadow": [
+          14,
+          28
+        ],
+        "origin": [
+          14,
+          14
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -28,
+          28,
+          28
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "die_0",
+      "rect": [
+        140,
+        0,
+        28,
+        28
+      ],
+      "pivot": [
+        14,
+        28
+      ],
+      "duration_ms": 400,
+      "sockets": {
+        "shadow": [
+          14,
+          28
+        ],
+        "origin": [
+          14,
+          14
+        ]
+      },
+      "hurtboxes": [
+        [
+          -14,
+          -28,
+          28,
+          28
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    }
+  ],
+  "clips": {
+    "idle": {
+      "frames": [
+        "idle_0",
+        "idle_1"
+      ],
+      "loop": true,
+      "playback_speed": 1.0,
+      "interrupt_priority": 0
+    },
+    "walk": {
+      "frames": [
+        "walk_0",
+        "idle_0"
+      ],
+      "loop": true,
+      "playback_speed": 1.0,
+      "interrupt_priority": 0
+    },
+    "shoot": {
+      "frames": [
+        "shoot_0"
+      ],
+      "loop": false,
+      "playback_speed": 1.0,
+      "interrupt_priority": 3
+    },
+    "hurt": {
+      "frames": [
+        "hurt_0"
+      ],
+      "loop": false,
+      "playback_speed": 1.0,
+      "interrupt_priority": 4
+    },
+    "die": {
+      "frames": [
+        "die_0"
+      ],
+      "loop": false,
+      "playback_speed": 1.0,
+      "interrupt_priority": 10
+    }
+  }
+}

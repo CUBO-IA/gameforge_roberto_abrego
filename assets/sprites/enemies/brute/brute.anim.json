@@ -1,0 +1,354 @@
+{
+  "version": "gf-anim-v1",
+  "metadata": {
+    "id": "brute",
+    "display_name": "Bruto de Escoria Fundida",
+    "author": "GameForge Agent",
+    "rig_type": "sprite_sheet",
+    "description": "Enemigo Bruto de Escoria Fundida animado con spritesheets.",
+    "tags": [
+      "enemy",
+      "brute"
+    ]
+  },
+  "texture": {
+    "image_path": "brute_atlas.png",
+    "width": 256,
+    "height": 256,
+    "format": "RGBA"
+  },
+  "frames": [
+    {
+      "id": "idle_0",
+      "rect": [
+        0,
+        0,
+        44,
+        44
+      ],
+      "pivot": [
+        22,
+        44
+      ],
+      "duration_ms": 180,
+      "sockets": {
+        "shadow": [
+          22,
+          44
+        ],
+        "origin": [
+          22,
+          22
+        ]
+      },
+      "hurtboxes": [
+        [
+          -22,
+          -44,
+          44,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "idle_1",
+      "rect": [
+        44,
+        0,
+        44,
+        44
+      ],
+      "pivot": [
+        22,
+        44
+      ],
+      "duration_ms": 180,
+      "sockets": {
+        "shadow": [
+          22,
+          44
+        ],
+        "origin": [
+          22,
+          22
+        ]
+      },
+      "hurtboxes": [
+        [
+          -22,
+          -44,
+          44,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "walk_0",
+      "rect": [
+        88,
+        0,
+        44,
+        44
+      ],
+      "pivot": [
+        22,
+        44
+      ],
+      "duration_ms": 150,
+      "sockets": {
+        "shadow": [
+          22,
+          44
+        ],
+        "origin": [
+          22,
+          22
+        ]
+      },
+      "hurtboxes": [
+        [
+          -22,
+          -44,
+          44,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "windup_0",
+      "rect": [
+        132,
+        0,
+        44,
+        44
+      ],
+      "pivot": [
+        22,
+        44
+      ],
+      "duration_ms": 220,
+      "sockets": {
+        "shadow": [
+          22,
+          44
+        ],
+        "origin": [
+          22,
+          22
+        ]
+      },
+      "hurtboxes": [
+        [
+          -22,
+          -44,
+          44,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "charge_0",
+      "rect": [
+        176,
+        0,
+        44,
+        44
+      ],
+      "pivot": [
+        22,
+        44
+      ],
+      "duration_ms": 120,
+      "sockets": {
+        "shadow": [
+          22,
+          44
+        ],
+        "origin": [
+          22,
+          22
+        ]
+      },
+      "hurtboxes": [
+        [
+          -22,
+          -44,
+          44,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "attack_0",
+      "rect": [
+        0,
+        44,
+        44,
+        44
+      ],
+      "pivot": [
+        22,
+        44
+      ],
+      "duration_ms": 160,
+      "sockets": {
+        "shadow": [
+          22,
+          44
+        ],
+        "origin": [
+          22,
+          22
+        ]
+      },
+      "hurtboxes": [
+        [
+          -22,
+          -44,
+          44,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "hurt_0",
+      "rect": [
+        44,
+        44,
+        44,
+        44
+      ],
+      "pivot": [
+        22,
+        44
+      ],
+      "duration_ms": 150,
+      "sockets": {
+        "shadow": [
+          22,
+          44
+        ],
+        "origin": [
+          22,
+          22
+        ]
+      },
+      "hurtboxes": [
+        [
+          -22,
+          -44,
+          44,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "die_0",
+      "rect": [
+        88,
+        44,
+        44,
+        44
+      ],
+      "pivot": [
+        22,
+        44
+      ],
+      "duration_ms": 500,
+      "sockets": {
+        "shadow": [
+          22,
+          44
+        ],
+        "origin": [
+          22,
+          22
+        ]
+      },
+      "hurtboxes": [
+        [
+          -22,
+          -44,
+          44,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "events": []
+    }
+  ],
+  "clips": {
+    "idle": {
+      "frames": [
+        "idle_0",
+        "idle_1"
+      ],
+      "loop": true,
+      "playback_speed": 1.0,
+      "interrupt_priority": 0
+    },
+    "walk": {
+      "frames": [
+        "walk_0",
+        "idle_0"
+      ],
+      "loop": true,
+      "playback_speed": 1.0,
+      "interrupt_priority": 0
+    },
+    "windup": {
+      "frames": [
+        "windup_0"
+      ],
+      "loop": false,
+      "playback_speed": 1.0,
+      "interrupt_priority": 2
+    },
+    "charge": {
+      "frames": [
+        "charge_0"
+      ],
+      "loop": true,
+      "playback_speed": 1.0,
+      "interrupt_priority": 2
+    },
+    "attack": {
+      "frames": [
+        "attack_0"
+      ],
+      "loop": false,
+      "playback_speed": 1.0,
+      "interrupt_priority": 3
+    },
+    "hurt": {
+      "frames": [
+        "hurt_0"
+      ],
+      "loop": false,
+      "playback_speed": 1.0,
+      "interrupt_priority": 4
+    },
+    "die": {
+      "frames": [
+        "die_0"
+      ],
+      "loop": false,
+      "playback_speed": 1.0,
+      "interrupt_priority": 10
+    }
+  }
+}

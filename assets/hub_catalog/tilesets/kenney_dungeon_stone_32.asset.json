@@ -1,0 +1,47 @@
+{
+  "schema_version": "gf-asset-catalog-v1.0.0",
+  "asset_id": "kenney_dungeon_stone_32",
+  "name": "Kenney Dungeon Stone Tileset 32x32",
+  "kind": "tileset",
+  "taxonomy": {
+    "genre": "top_down_rpg",
+    "theme": "dungeon",
+    "visual_style": "pixel_art_32x32",
+    "tags": ["stone", "wall", "floor", "dungeon", "stairs", "kenney"]
+  },
+  "image": {
+    "relative_path": "assets/hub_catalog/tilesets/kenney_dungeon_stone_32.png",
+    "width": 128,
+    "height": 128,
+    "has_alpha": true,
+    "color_mode": "RGBA"
+  },
+  "geometry": {
+    "layout_type": "uniform_grid",
+    "frame_size": [32, 32],
+    "padding": 0,
+    "spacing": 0,
+    "anchor_preset": "top_left",
+    "anchor_offset": [0, 0]
+  },
+  "tileset_data": {
+    "tile_dimensions": [32, 32],
+    "terrain_types": ["stone_floor", "stone_wall"],
+    "autotile_supported": "wang_16",
+    "solid_tile_indices": [4, 5, 6, 7]
+  },
+  "provenance": {
+    "author": "Kenney (Kenney.nl)",
+    "original_url": "https://kenney.nl/assets/tiny-dungeon",
+    "source_repo": "kenney.nl",
+    "license_spdx": "CC0-1.0",
+    "license_tier": "tier_0_public_domain",
+    "attribution_required": false,
+    "attribution_text": "Tiny Dungeon assets by Kenney, CC0 1.0 Universal."
+  },
+  "engine_compatibility": {
+    "gf_anim_v1_ready": false,
+    "tilemap_ready": true,
+    "canvas_scale_compatible": true
+  }
+}

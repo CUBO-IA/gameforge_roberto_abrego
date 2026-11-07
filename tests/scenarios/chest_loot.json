@@ -1,0 +1,20 @@
+{
+  "id": "chest_loot",
+  "description": "Teletransporte al cofre más cercano, interacción con E y botín en inventario.",
+  "config": {
+    "seed": 5,
+    "timeout_frames": 30,
+    "headless": true
+  },
+  "initial_state": {
+    "teleport_to": "nearest_chest"
+  },
+  "input_timeline": [
+    { "frame": 5, "action": "press", "key": "E" },
+    { "frame": 6, "action": "release", "key": "E" }
+  ],
+  "assertions": [
+    { "at_frame": 8, "type": "any_chest_opened" },
+    { "at_frame": 8, "type": "inventory_not_empty" }
+  ]
+}

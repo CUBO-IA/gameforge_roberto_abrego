@@ -1,0 +1,368 @@
+{
+  "version": "gf-anim-v1",
+  "metadata": {
+    "id": "lpc_skeleton_warrior",
+    "display_name": "LPC Skeleton Warrior Animated",
+    "author": "Stephen Challener (Redshrike), Johannes Sjölund (wulax)",
+    "rig_type": "frame_by_frame",
+    "tags": [
+      "undead",
+      "skeleton",
+      "warrior",
+      "humanoid",
+      "melee",
+      "sword",
+      "enemy"
+    ]
+  },
+  "texture": {
+    "image_path": "lpc_skeleton_warrior_atlas.png",
+    "width": 256,
+    "height": 64,
+    "format": "RGBA"
+  },
+  "frames": [
+    {
+      "id": "walk_0",
+      "rect": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "pivot": [
+        32,
+        58
+      ],
+      "duration_ms": 100,
+      "hurtboxes": [
+        [
+          12,
+          12,
+          38,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "sockets": {
+        "hand_r": [
+          51,
+          38
+        ],
+        "hand_l": [
+          12,
+          38
+        ]
+      }
+    },
+    {
+      "id": "walk_1",
+      "rect": [
+        64,
+        0,
+        64,
+        64
+      ],
+      "pivot": [
+        32,
+        58
+      ],
+      "duration_ms": 100,
+      "hurtboxes": [
+        [
+          12,
+          12,
+          38,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "sockets": {
+        "hand_r": [
+          51,
+          38
+        ],
+        "hand_l": [
+          12,
+          38
+        ]
+      }
+    },
+    {
+      "id": "walk_2",
+      "rect": [
+        128,
+        0,
+        64,
+        64
+      ],
+      "pivot": [
+        32,
+        58
+      ],
+      "duration_ms": 100,
+      "hurtboxes": [
+        [
+          12,
+          12,
+          38,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "sockets": {
+        "hand_r": [
+          51,
+          38
+        ],
+        "hand_l": [
+          12,
+          38
+        ]
+      }
+    },
+    {
+      "id": "walk_3",
+      "rect": [
+        192,
+        0,
+        64,
+        64
+      ],
+      "pivot": [
+        32,
+        58
+      ],
+      "duration_ms": 100,
+      "hurtboxes": [
+        [
+          12,
+          12,
+          38,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "sockets": {
+        "hand_r": [
+          51,
+          38
+        ],
+        "hand_l": [
+          12,
+          38
+        ]
+      }
+    },
+    {
+      "id": "attack_0",
+      "rect": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "pivot": [
+        32,
+        58
+      ],
+      "duration_ms": 80,
+      "hurtboxes": [
+        [
+          12,
+          12,
+          38,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "sockets": {
+        "hand_r": [
+          51,
+          38
+        ],
+        "hand_l": [
+          12,
+          38
+        ]
+      }
+    },
+    {
+      "id": "attack_1",
+      "rect": [
+        64,
+        0,
+        64,
+        64
+      ],
+      "pivot": [
+        32,
+        58
+      ],
+      "duration_ms": 80,
+      "hurtboxes": [
+        [
+          12,
+          12,
+          38,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "sockets": {
+        "hand_r": [
+          51,
+          38
+        ],
+        "hand_l": [
+          12,
+          38
+        ]
+      }
+    },
+    {
+      "id": "attack_2",
+      "rect": [
+        128,
+        0,
+        64,
+        64
+      ],
+      "pivot": [
+        32,
+        58
+      ],
+      "duration_ms": 80,
+      "hurtboxes": [
+        [
+          12,
+          12,
+          38,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "sockets": {
+        "hand_r": [
+          51,
+          38
+        ],
+        "hand_l": [
+          12,
+          38
+        ]
+      }
+    },
+    {
+      "id": "hurt_0",
+      "rect": [
+        192,
+        0,
+        64,
+        64
+      ],
+      "pivot": [
+        32,
+        58
+      ],
+      "duration_ms": 100,
+      "hurtboxes": [
+        [
+          12,
+          12,
+          38,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "sockets": {
+        "hand_r": [
+          51,
+          38
+        ],
+        "hand_l": [
+          12,
+          38
+        ]
+      }
+    },
+    {
+      "id": "hurt_1",
+      "rect": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "pivot": [
+        32,
+        58
+      ],
+      "duration_ms": 100,
+      "hurtboxes": [
+        [
+          12,
+          12,
+          38,
+          44
+        ]
+      ],
+      "hitboxes": [],
+      "sockets": {
+        "hand_r": [
+          51,
+          38
+        ],
+        "hand_l": [
+          12,
+          38
+        ]
+      }
+    }
+  ],
+  "clips": {
+    "walk": {
+      "loop": true,
+      "priority": 20,
+      "frames": [
+        "walk_0",
+        "walk_1",
+        "walk_2",
+        "walk_3"
+      ]
+    },
+    "attack": {
+      "loop": false,
+      "priority": 50,
+      "frames": [
+        "attack_0",
+        "attack_1",
+        "attack_2"
+      ]
+    },
+    "hurt": {
+      "loop": false,
+      "priority": 80,
+      "frames": [
+        "hurt_0",
+        "hurt_1"
+      ]
+    },
+    "idle": {
+      "loop": true,
+      "priority": 10,
+      "frames": [
+        "walk_0",
+        "walk_1"
+      ]
+    },
+    "die": {
+      "loop": false,
+      "priority": 100,
+      "frames": [
+        "hurt_0",
+        "hurt_1"
+      ]
+    }
+  }
+}

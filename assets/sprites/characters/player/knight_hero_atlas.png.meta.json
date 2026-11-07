@@ -1,0 +1,12 @@
+{
+  "$schema": "https://gameforge2d.org/schemas/gf-provenance-v1.json",
+  "asset_id": "knight_hero",
+  "provenance": {
+    "author": "GameForge Team",
+    "source_repo": "internal_gameforge",
+    "license_spdx": "MIT",
+    "license_tier": "tier_1_permissive_attribution",
+    "attribution_required": true,
+    "attribution_text": "Knight Hero sprite atlas created for GameForge 2D (MIT License)."
+  }
+}

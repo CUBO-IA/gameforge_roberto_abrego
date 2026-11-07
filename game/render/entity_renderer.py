@@ -51,6 +51,16 @@ def draw_player(
         if int(time * 24) % 2 == 0:
             return
 
+    anim_player = getattr(player, "anim_player", None)
+    if anim_player is not None and getattr(anim_player, "current_surface", None) is not None:
+        frame_surf = anim_player.current_surface
+        px, py = getattr(anim_player, "current_pivot", (frame_surf.get_width() // 2, frame_surf.get_height()))
+        if player.facing.x < 0:
+            frame_surf = pygame.transform.flip(frame_surf, True, False)
+            px = frame_surf.get_width() - px
+        surface.blit(frame_surf, (x - px, y - py))
+        return
+
     angle = player.facing.angle()
     facing = player.facing
     perpendicular = Vec2(-facing.y, facing.x)
@@ -162,7 +172,15 @@ def draw_enemy(
     color = palette.ENEMY_COLORS.get(enemy.kind, (160, 160, 160))
     to_player = (player_position - enemy.position).normalized()
 
-    if enemy.kind == "slime":
+    anim_player = getattr(enemy, "anim_player", None)
+    if anim_player is not None and getattr(anim_player, "current_surface", None) is not None:
+        frame_surf = anim_player.current_surface
+        px, py = getattr(anim_player, "current_pivot", (frame_surf.get_width() // 2, frame_surf.get_height()))
+        if to_player.x < 0:
+            frame_surf = pygame.transform.flip(frame_surf, True, False)
+            px = frame_surf.get_width() - px
+        surface.blit(frame_surf, (x - px, y - py))
+    elif enemy.kind == "slime":
         wobble = math.sin(enemy.anim_time * 6.0) * 0.16
         width = int(enemy.radius * 2 * (1 + wobble))
         height = int(enemy.radius * 2 * (1 - wobble * 0.7))

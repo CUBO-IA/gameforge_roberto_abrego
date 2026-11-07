@@ -44,6 +44,7 @@ class Enemy:
     knockback: Vec2 = field(default_factory=Vec2)
     _charge_direction: Vec2 = field(default_factory=Vec2)
     _strafe_sign: float = 1.0
+    anim_player: object = None
 
     def __post_init__(self) -> None:
         if self.health <= 0:

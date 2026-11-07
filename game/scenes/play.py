@@ -8,6 +8,7 @@ esta escena traduce entrada a intenciones y resultados a presentación.
 from __future__ import annotations
 
 import random
+from pathlib import Path
 
 import pygame
 
@@ -23,6 +24,7 @@ from game.input.actions import Action
 from game.persistence.savegame import RunSnapshot, SaveGameError, save_run
 from game.persistence.scores import RunResult
 from game.render import palette
+from game.render.animation import AnimationPlayer, load_animation_manifest
 from game.render.effects import Effects
 from game.render.hud import Hud
 from game.render.lighting import Lighting
@@ -105,6 +107,28 @@ class PlayScene(Scene):
             self._restore(snapshot)
 
         self.effects = Effects((app.config.window.width, app.config.window.height))
+        self.player_anim: AnimationPlayer | None = None
+        try:
+            player_anim_path = Path("assets/sprites/characters/player/knight_hero.anim.json")
+            if player_anim_path.is_file():
+                clips, _ = load_animation_manifest(player_anim_path)
+                self.player_anim = AnimationPlayer(clips)
+                self.player_anim.play("idle")
+                self.player.anim_player = self.player_anim
+        except Exception:
+            self.player_anim = None
+
+        self.enemy_clips_cache: dict[str, dict[str, object]] = {}
+        for kind in ("slime", "wisp", "brute"):
+            anim_path = Path(f"assets/sprites/enemies/{kind}/{kind}.anim.json")
+            if anim_path.is_file():
+                try:
+                    e_clips, _ = load_animation_manifest(anim_path)
+                    self.enemy_clips_cache[kind] = e_clips
+                except Exception:
+                    pass
+        self._init_enemy_animations()
+
         self.camera = Camera(app.config.window.width, app.config.window.height)
         self.camera.snap_to(self.player.position, self.tilemap.pixel_width, self.tilemap.pixel_height)
         self.tile_renderer = TileRenderer(self.tilemap)
@@ -134,6 +158,14 @@ class PlayScene(Scene):
         )
 
     # ------------------------------------------------------------------ setup
+
+    def _init_enemy_animations(self) -> None:
+        for enemy in self.enemies:
+            clips = self.enemy_clips_cache.get(enemy.kind)
+            if clips:
+                anim = AnimationPlayer(clips)
+                anim.play("idle")
+                enemy.anim_player = anim
 
     def _restore(self, snapshot: RunSnapshot) -> None:
         self.elapsed = snapshot.elapsed
@@ -219,10 +251,39 @@ class PlayScene(Scene):
         jump = input_map.was_pressed(Action.JUMP)
 
         self.player.update(dt, move, aim, dash, attack, self.tilemap, jump=jump)
+        if self.player_anim is not None:
+            if not self.player.alive:
+                self.player_anim.interrupt_with("die")
+            elif self.player.damage_flash > 0:
+                self.player_anim.interrupt_with("hurt")
+            elif self.player.pending_attack is not None or self.player.attack_anim > 0:
+                self.player_anim.interrupt_with("attack")
+            elif move.length_squared() > 0.01:
+                self.player_anim.play("walk")
+            else:
+                self.player_anim.play("idle")
+
+            for ev in self.player_anim.update(dt):
+                if ev.name == "spawn_particle":
+                    ptype = ev.payload.get("type", "dust")
+                    if ptype == "dust_step":
+                        self.effects.burst(self.player.position, palette.TEXT_DIM, 2, 20)
+                    elif ptype == "slash_spark":
+                        self.effects.burst(
+                            self.player.position + self.player.facing * 18,
+                            (255, 200, 80),
+                            8,
+                            120,
+                            add=True,
+                        )
+                elif ev.name == "screen_shake":
+                    trauma = float(ev.payload.get("trauma", 0.1))
+                    self.effects.shake.add(trauma * 10.0)
+
         if self.player.jump_started:
-            self.effects.burst(self.player.position, palette.TEXT_MUTED, 6, 40)
+            self.effects.burst(self.player.position, palette.TEXT_DIM, 6, 40)
         if self.player.ceiling_hit:
-            self.effects.burst(self.player.position - Vec2(0, self.player.z), palette.TEXT_MUTED, 4, 30)
+            self.effects.burst(self.player.position - Vec2(0, self.player.z), palette.TEXT_DIM, 4, 30)
         if self.player.dash_started:
             self.app.audio.play("dash")
             self.effects.burst(self.player.position, palette.ACCENT, 10, 90)
@@ -260,6 +321,21 @@ class PlayScene(Scene):
             self.app.audio.play("shoot")
         for damage in events.touch_damage:
             self._hurt(damage)
+
+        for enemy in self.enemies:
+            anim = getattr(enemy, "anim_player", None)
+            if anim is not None:
+                if not enemy.alive:
+                    anim.interrupt_with("die")
+                elif enemy.hit_flash > 0:
+                    anim.interrupt_with("hurt")
+                elif enemy.kind == "brute" and enemy.state in ("windup", "charge"):
+                    anim.play(enemy.state)
+                elif enemy.kind == "wisp" and enemy.shoot_cooldown > (enemy.stats.shoot_cooldown - 0.25):
+                    anim.interrupt_with("shoot")
+                else:
+                    anim.play("walk")
+                anim.update(dt)
 
         self.projectiles = move_projectiles(self.projectiles, dt, self.tilemap)
         for projectile in list(self.projectiles):
@@ -423,6 +499,7 @@ class PlayScene(Scene):
             Enemy(spec.id, spec.kind, spec.position, self.app.config.enemies[spec.kind])
             for spec in self.dungeon.enemies
         ]
+        self._init_enemy_animations()
         self.campfire = Campfire(self.dungeon.campfire)
         self.altar = ForgeAltar(self.dungeon.altar)
         self.projectiles.clear()

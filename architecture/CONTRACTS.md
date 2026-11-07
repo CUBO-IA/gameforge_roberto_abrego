@@ -165,3 +165,30 @@ pública requiere análisis de impacto y actualización de tests.
 ## `game.render.canvas`
 - Desacoplamiento de resolución lógica (diseño fijo 1280x720) y física de ventana.
 - `map_mouse_to_logical(pos: tuple[int, int]) -> tuple[int, int] | None`: Mapeo transparente con corrección de letterbox/pillarbox para las escenas.
+
+---
+
+# Contratos de Herramientas y Memoria Operativa (v0.3.0)
+
+## `tools.graph_ops` / `tools.graph_memory`
+- **Aislamiento:** Se ejecuta en un entorno aislado (`uv tool` / `graphifyy`) sin contaminar las dependencias del runtime de `game/`.
+- **`GraphEngine.build_initial_graph(agent_id: str) -> dict`**:
+  - Extrae AST determinista de Python (cero tokens de LLM).
+  - Extrae estructura de documentos Markdown y vincula menciones de código.
+  - Extrae ontología de decisiones (`documentation/DECISIONS.md`, `tasks/BOARD.md`, directivas y contratos).
+  - Genera `graphify-out/graph.json` y `GRAPH_REPORT.md`.
+  - Registra el evento en `graphify-out/audit.log` y actualiza `.manifest.json`.
+- **`GraphEngine.update_incremental(changed_paths, deleted_paths, agent_id) -> dict`**:
+  - Detecta *drift* vía hash SHA-256. Re-extrae únicamente el delta modificado en < 300 ms.
+  - Poda nodos huérfanos de archivos eliminados.
+- **`GraphEngine.query(question: str, agent_id: str) -> dict`**:
+  - Recorrido semántico y filtrado de símbolos sin volcar archivos masivos en el contexto.
+- **`GraphEngine.affected(node_id: str, depth: int = 2, agent_id: str) -> dict`**:
+  - Travesía inversa para cálculo determinista de dependientes y radio de explosión (*blast radius*).
+- **`ManifestTracker.check_drift() -> DriftReport`**:
+  - Retorna `is_fresh: bool`, listas de archivos `modified`, `added`, `deleted` y `renamed`.
+  - Criterio estricto: falla (`exit code 1`) si el sistema de archivos no coincide con el manifiesto.
+- **Servidor MCP (`graphify-mcp`)**:
+  - Transporte `stdio` para agentes locales y `Streamable HTTP` para orquestadores.
+  - Expone herramientas estándar: `query_graph`, `get_node`, `get_neighbors`, `god_nodes`, `graph_stats`, `shortest_path`.
+  - Hot-reload automático de `graph.json` ante cambios en disco.

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://gameforge2d.org/schemas/gf-provenance-v1.json",
+  "asset_id": "lpc_skeleton_warrior",
+  "provenance": {
+    "author": "Stephen Challener (Redshrike), Johannes Sjölund (wulax)",
+    "original_url": "https://opengameart.org/content/liberated-pixel-cup-lpc-base-assets-sprites-map-tiles",
+    "source_repo": "OpenGameArt/LiberatedPixelCup",
+    "license_spdx": "CC-BY-SA-3.0",
+    "license_tier": "tier_2_copyleft_warning",
+    "attribution_required": true,
+    "attribution_text": "Skeleton Warrior by Stephen Challener (Redshrike) and Johannes Sjölund (wulax), OpenGameArt Liberated Pixel Cup, licensed under CC-BY-SA 3.0.",
+    "modifications_made": "Extracted and mapped to GameForge gf-anim-v1 format."
+  },
+  "checksums": {
+    "sha256": "66543c63f8dfba237fecb6dbf9c40f9278b98a6aae54240382a0b06da480c661"
+  }
+}

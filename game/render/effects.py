@@ -252,3 +252,197 @@ class Effects:
             )
             image = fonts.get(text.size, True).render(text.text, True, color)
             surface.blit(image, image.get_rect(center=(int(screen.x), int(screen.y))))
+
+
+class HitstopManager:
+    """Gestiona micro-pausas de la simulación tras impactos pesados (Game Juice)."""
+
+    __slots__ = ("duration_remaining",)
+
+    def __init__(self) -> None:
+        self.duration_remaining: float = 0.0
+
+    def trigger(self, duration_s: float) -> None:
+        """Activa o extiende la pausa de hitstop."""
+        self.duration_remaining = max(self.duration_remaining, duration_s)
+
+    def update(self, dt: float) -> bool:
+        """Avanza el temporizador. Devuelve True si la simulación debe avanzar, False si sigue congelada."""
+        if self.duration_remaining > 0.0:
+            self.duration_remaining -= dt
+            if self.duration_remaining <= 0.0:
+                self.duration_remaining = 0.0
+                return True
+            return False
+        return True
+
+    @property
+    def is_frozen(self) -> bool:
+        return self.duration_remaining > 0.0
+
+
+class TraumaScreenShake:
+    """Sacudida de pantalla basada en el modelo físico de Trauma no lineal (Squirrel Eiserloh)."""
+
+    __slots__ = (
+        "trauma",
+        "max_offset_px",
+        "max_angle_deg",
+        "decay_rate",
+        "time_accumulator",
+    )
+
+    def __init__(
+        self,
+        max_offset_px: float = 16.0,
+        max_angle_deg: float = 2.5,
+        decay_rate: float = 2.0,
+    ) -> None:
+        self.trauma: float = 0.0
+        self.max_offset_px = max_offset_px
+        self.max_angle_deg = max_angle_deg
+        self.decay_rate = decay_rate
+        self.time_accumulator: float = 0.0
+
+    def add_trauma(self, amount: float) -> None:
+        """Añade trauma acotado en el intervalo [0.0, 1.0]."""
+        self.trauma = min(1.0, self.trauma + amount)
+
+    def update(self, dt: float) -> None:
+        """Avanza la oscilación armónica y decae el trauma."""
+        self.time_accumulator += dt * 32.0
+        self.trauma = max(0.0, self.trauma - self.decay_rate * dt)
+
+    def offset(self, rng: random.Random | None = None) -> Vec2:
+        """Calcula el desplazamiento 2D resultante de la sacudida."""
+        if self.trauma <= 0.001:
+            return Vec2()
+
+        shake = self.trauma * self.trauma
+        # Composición armónica pseudo-aleatoria
+        ox = self.max_offset_px * shake * (
+            math.sin(self.time_accumulator) + 0.5 * math.sin(self.time_accumulator * 2.3)
+        )
+        oy = self.max_offset_px * shake * (
+            math.cos(self.time_accumulator * 1.4) + 0.5 * math.cos(self.time_accumulator * 3.1)
+        )
+        return Vec2(ox, oy)
+
+    def get_transform(self) -> tuple[Vec2, float]:
+        """Devuelve la traslación y el ángulo de rotación (grados)."""
+        if self.trauma <= 0.001:
+            return Vec2(), 0.0
+
+        shake = self.trauma * self.trauma
+        off = self.offset()
+        angle = self.max_angle_deg * shake * math.sin(self.time_accumulator * 0.9)
+        return off, angle
+
+
+class ParticlePool:
+    """Pool preasignado de partículas continuas de memoria sin asignaciones dinámicas por frame."""
+
+    __slots__ = (
+        "capacity",
+        "count",
+        "x",
+        "y",
+        "vx",
+        "vy",
+        "life",
+        "max_life",
+        "size",
+        "color_r",
+        "color_g",
+        "color_b",
+        "drag",
+        "gravity",
+        "blend_add",
+    )
+
+    def __init__(self, capacity: int = 800) -> None:
+        self.capacity = capacity
+        self.count = 0
+        self.x = [0.0] * capacity
+        self.y = [0.0] * capacity
+        self.vx = [0.0] * capacity
+        self.vy = [0.0] * capacity
+        self.life = [0.0] * capacity
+        self.max_life = [1.0] * capacity
+        self.size = [2.0] * capacity
+        self.color_r = [255] * capacity
+        self.color_g = [255] * capacity
+        self.color_b = [255] * capacity
+        self.drag = [1.0] * capacity
+        self.gravity = [0.0] * capacity
+        self.blend_add = [False] * capacity
+
+    def spawn(
+        self,
+        x: float,
+        y: float,
+        vx: float,
+        vy: float,
+        life: float,
+        size: float,
+        color: tuple[int, int, int],
+        drag: float = 1.0,
+        gravity: float = 0.0,
+        blend_add: bool = False,
+    ) -> bool:
+        """Genera una partícula en O(1). Devuelve False si el pool está saturado."""
+        if self.count >= self.capacity:
+            return False
+
+        idx = self.count
+        self.x[idx] = x
+        self.y[idx] = y
+        self.vx[idx] = vx
+        self.vy[idx] = vy
+        self.life[idx] = life
+        self.max_life[idx] = life
+        self.size[idx] = size
+        self.color_r[idx], self.color_g[idx], self.color_b[idx] = color
+        self.drag[idx] = drag
+        self.gravity[idx] = gravity
+        self.blend_add[idx] = blend_add
+        self.count += 1
+        return True
+
+    def update(self, dt: float) -> None:
+        """Actualización compacta con eliminación swap-and-pop en O(1)."""
+        i = 0
+        while i < self.count:
+            self.life[i] -= dt
+            if self.life[i] <= 0.0:
+                self.count -= 1
+                if i < self.count:
+                    self._swap(i, self.count)
+                continue
+
+            drag_factor = max(0.0, 1.0 - (self.drag[i] * dt))
+            self.vx[i] *= drag_factor
+            self.vy[i] = (self.vy[i] + self.gravity[i] * dt) * drag_factor
+            self.x[i] += self.vx[i] * dt
+            self.y[i] += self.vy[i] * dt
+            i += 1
+
+    def _swap(self, a: int, b: int) -> None:
+        self.x[a], self.x[b] = self.x[b], self.x[a]
+        self.y[a], self.y[b] = self.y[b], self.y[a]
+        self.vx[a], self.vx[b] = self.vx[b], self.vx[a]
+        self.vy[a], self.vy[b] = self.vy[b], self.vy[a]
+        self.life[a], self.life[b] = self.life[b], self.life[a]
+        self.max_life[a], self.max_life[b] = self.max_life[b], self.max_life[a]
+        self.size[a], self.size[b] = self.size[b], self.size[a]
+        self.color_r[a], self.color_r[b] = self.color_r[b], self.color_r[a]
+        self.color_g[a], self.color_g[b] = self.color_g[b], self.color_g[a]
+        self.color_b[a], self.color_b[b] = self.color_b[b], self.color_b[a]
+        self.drag[a], self.drag[b] = self.drag[b], self.drag[a]
+        self.gravity[a], self.gravity[b] = self.gravity[b], self.gravity[a]
+        self.blend_add[a], self.blend_add[b] = self.blend_add[b], self.blend_add[a]
+
+    def clear(self) -> None:
+        """Reinicia el contador de partículas activas en O(1)."""
+        self.count = 0
+

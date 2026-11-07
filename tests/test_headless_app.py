@@ -10,6 +10,7 @@ from game.__main__ import main
 from game.app import Application
 from game.core.math2d import Vec2
 from game.persistence.savegame import load_run
+from game.render import palette
 from game.scenes.play import PlayScene
 from game.scenes.results import ResultsScene
 
@@ -45,6 +46,19 @@ def test_play_scene_update_and_draw(app: Application) -> None:
     scene.draw(app.screen)
     assert scene.player.alive
     assert scene.dungeon.seed == 123
+
+
+def test_walk_animation_emits_dust_with_palette_color(
+    app: Application, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    scene = PlayScene(app, seed=13)
+    app.replace_scene(scene)
+    monkeypatch.setattr(app.input, "move_vector", lambda: Vec2(1.0, 0.0))
+
+    for _ in range(20):
+        scene.update(1 / 60)
+
+    assert any(particle.color == palette.TEXT_DIM for particle in scene.effects.particles.particles)
 
 
 def test_save_and_restore_through_scene(app: Application) -> None:

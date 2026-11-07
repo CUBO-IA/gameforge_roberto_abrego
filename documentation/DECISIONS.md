@@ -84,3 +84,34 @@ SQLite o audio.
 error de guardado/puntuación; el audio ausente se registra y el juego sigue.  
 **Consecuencias:** no se ocultan fallos con `except Exception: pass`; las capas
 superiores deciden cómo presentar el error.
+
+## ADR-009 — GF-Graph: Sistema unificado local de grafos, memoria y contexto operativo
+
+**Estado:** aceptada  
+**Contexto:** La colaboración multiagente requiere conocimiento persistente de la topología
+de código, contratos y memoria de decisiones. Las soluciones investigadas (GitNexus, CodeGraph,
+ctx, Graphiti, Cognee, Aider RepoMap, LangGraph) presentan redundancias y arrastran dependencias
+pesadas no justificadas (Node.js, Rust compilado, Neo4j, LanceDB, LangChain).  
+**Decisión:** Diseñar e integrar la arquitectura unificada `GF-Graph`: almacenamiento ACID en SQLite
+WAL local (`.gameforge/graph.db`), extracción determinista con `ast` nativo de Python, cálculo de
+centralidad/relevancia con PageRank (inspirado en Aider), esqueletos estructurales (inspirado en ctx),
+invalidación bi-temporal con 5 estados epistémicos (inspirado en Graphiti) y recibos de auditoría
+pre-flight de uso obligatorio.  
+**Consecuencias:** Cero dependencias de servicios de pago o cloud; cero llamadas a LLMs para
+extracción sintáctica; reducción >85% en tokens de contexto por tarea; compatibilidad 100% con
+Python 3.11+ y suite `verify.py`.
+
+## ADR-010 — Integración de Graphify como motor de comprensión estructural y memoria operativa
+
+**Estado:** aceptada (Misión 005)  
+**Contexto:** Se requiere materializar la memoria operativa y la topología de código en un motor
+probado que soporte interoperabilidad nativa con Claude Code, Claude Desktop y herramientas agénticas
+mediante el protocolo MCP (Model Context Protocol), con extracción incremental y sin suscripciones.  
+**Decisión:** Adoptar `graphifyy` (v0.9.85) en un entorno aislado (`uv tool`) coordinado por
+`tools/graph_ops.py` y `tools/graph_memory/`. Integrar extracción AST determinista para código,
+parser de estructura para Markdown, y un extractor ontológico para la memoria de decisiones
+(ADRs, tareas, contratos, problemas y soluciones con estados epistémicos). Exponer el grafo
+vía servidor MCP (`graphify.serve`) y hacer obligatoria la verificación de frescura del grafo en `tools/verify.py`.  
+**Consecuencias:** Rendimiento medido de 3.64 s en cold build y 235 ms en actualización incremental;
+reducción de tokens del 99.68%; soporte de radio de explosión (*blast radius*) en 583 ms; aislamiento
+total del entorno del juego (cero dependencias adicionales en `.venv`); auditoría transparente en `audit.log`.

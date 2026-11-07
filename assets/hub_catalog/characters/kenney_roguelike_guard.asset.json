@@ -1,0 +1,55 @@
+{
+  "schema_version": "gf-asset-catalog-v1.0.0",
+  "asset_id": "kenney_roguelike_guard",
+  "name": "Kenney Roguelike Guard 16x16",
+  "kind": "character",
+  "taxonomy": {
+    "genre": "top_down_rpg",
+    "theme": "dungeon",
+    "visual_style": "pixel_art_16x16",
+    "tags": ["guard", "humanoid", "armor", "npc", "kenney"]
+  },
+  "image": {
+    "relative_path": "assets/hub_catalog/characters/kenney_roguelike_guard.png",
+    "width": 32,
+    "height": 16,
+    "has_alpha": true,
+    "color_mode": "RGBA"
+  },
+  "geometry": {
+    "layout_type": "uniform_grid",
+    "frame_size": [16, 16],
+    "padding": 0,
+    "spacing": 0,
+    "anchor_preset": "bottom_center",
+    "anchor_offset": [8, 16]
+  },
+  "character_data": {
+    "directions_supported": ["down"],
+    "available_clips": [
+      {
+        "name": "walk",
+        "frame_count": 2,
+        "directions": ["down"],
+        "duration_ms": 150,
+        "is_looping": true
+      }
+    ],
+    "has_paperdoll_layers": false,
+    "paperdoll_slot": "none"
+  },
+  "provenance": {
+    "author": "Kenney (Kenney.nl)",
+    "original_url": "https://kenney.nl/assets/roguelike-rpg-pack",
+    "source_repo": "kenney.nl",
+    "license_spdx": "CC0-1.0",
+    "license_tier": "tier_0_public_domain",
+    "attribution_required": false,
+    "attribution_text": "Roguelike RPG Pack by Kenney, CC0 1.0 Universal."
+  },
+  "engine_compatibility": {
+    "gf_anim_v1_ready": false,
+    "tilemap_ready": false,
+    "canvas_scale_compatible": true
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": "gf-asset-catalog-v1.0.0",
+  "asset_id": "fantasy_dialog_box_9slice",
+  "name": "Fantasy Parchment Dialog Box 9-Slice",
+  "kind": "ui_component",
+  "taxonomy": {
+    "genre": "top_down_rpg",
+    "theme": "fantasy_medieval",
+    "visual_style": "ui_clean",
+    "tags": ["dialog", "window", "panel", "9slice", "parchment", "gold_border"]
+  },
+  "image": {
+    "relative_path": "assets/hub_catalog/ui/fantasy_dialog_box_9slice.png",
+    "width": 96,
+    "height": 96,
+    "has_alpha": true,
+    "color_mode": "RGBA"
+  },
+  "geometry": {
+    "layout_type": "9_slice",
+    "frame_size": [96, 96],
+    "padding": 0,
+    "spacing": 0,
+    "anchor_preset": "top_left",
+    "anchor_offset": [0, 0]
+  },
+  "ui_data": {
+    "slice_margins": [24, 24, 24, 24],
+    "supported_states": ["normal"],
+    "recommended_min_size": [120, 80]
+  },
+  "provenance": {
+    "author": "Kenney (Kenney.nl)",
+    "original_url": "https://kenney.nl/assets/ui-pack-rpg-expansion",
+    "source_repo": "shorepine/kenney",
+    "license_spdx": "CC0-1.0",
+    "license_tier": "tier_0_public_domain",
+    "attribution_required": false,
+    "attribution_text": "UI Pack RPG Expansion by Kenney (kenney.nl), CC0 1.0 Universal."
+  },
+  "engine_compatibility": {
+    "gf_anim_v1_ready": false,
+    "tilemap_ready": false,
+    "canvas_scale_compatible": true
+  }
+}

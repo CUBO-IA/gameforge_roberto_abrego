@@ -87,7 +87,9 @@ def load_tiled_json(
     mapping = gid_map if gid_map is not None else DEFAULT_GID_MAP
 
     tile_layer_found = False
-    tiles_matrix: list[list[TileType]] = [
+    # El tipo incluye int porque TileMap acepta GIDs crudos además de TileType;
+    # la lista es invariante y debe coincidir exactamente con la firma.
+    tiles_matrix: list[list[TileType | int]] = [
         [TileType.WALL for _ in range(width)] for _ in range(height)
     ]
 

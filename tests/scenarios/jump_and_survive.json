@@ -1,0 +1,19 @@
+{
+  "id": "jump_and_survive",
+  "description": "El jugador salta, alcanza altura 2.5D, sigue vivo y no penetra muros.",
+  "config": {
+    "seed": 11,
+    "timeout_frames": 40,
+    "headless": true
+  },
+  "initial_state": {},
+  "input_timeline": [
+    { "frame": 10, "action": "press", "key": "SPACE" },
+    { "frame": 11, "action": "release", "key": "SPACE" }
+  ],
+  "assertions": [
+    { "at_frame": 16, "type": "player_z_above", "min_z": 4.0 },
+    { "at_frame": 30, "type": "player_alive" },
+    { "at_frame": 30, "type": "no_wall_collision" }
+  ]
+}

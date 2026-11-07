@@ -1,0 +1,201 @@
+{
+  "version": "gf-anim-v1",
+  "metadata": {
+    "id": "knight_hero",
+    "display_name": "Caballero Forjador",
+    "author": "Agente Arquitecto",
+    "rig_type": "hybrid",
+    "description": "Guerrero con espada corta y armadura ligera de placas",
+    "tags": ["player", "melee", "humanoid"]
+  },
+  "texture": {
+    "image_path": "knight_hero_atlas.png",
+    "width": 512,
+    "height": 512,
+    "format": "RGBA"
+  },
+  "frames": [
+    {
+      "id": "idle_0",
+      "rect": [0, 0, 32, 36],
+      "pivot": [16, 36],
+      "duration_ms": 150,
+      "sockets": {
+        "hand_right": [20, 22],
+        "head": [16, 8],
+        "cast_point": [24, 18],
+        "shadow": [16, 36]
+      },
+      "hurtboxes": [
+        [-10, -34, 20, 32]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "idle_1",
+      "rect": [32, 0, 32, 36],
+      "pivot": [16, 36],
+      "duration_ms": 150,
+      "sockets": {
+        "hand_right": [20, 23],
+        "head": [16, 9],
+        "cast_point": [24, 19],
+        "shadow": [16, 36]
+      },
+      "hurtboxes": [
+        [-10, -33, 20, 31]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "walk_0",
+      "rect": [64, 0, 32, 36],
+      "pivot": [16, 36],
+      "duration_ms": 120,
+      "sockets": {
+        "hand_right": [22, 22],
+        "head": [16, 8],
+        "cast_point": [26, 18],
+        "shadow": [16, 36]
+      },
+      "hurtboxes": [
+        [-10, -34, 20, 32]
+      ],
+      "hitboxes": [],
+      "events": [
+        { "name": "play_sfx", "payload": { "sfx_id": "footstep_stone", "volume": 0.4 } },
+        { "name": "spawn_particle", "payload": { "type": "dust_step", "offset": [0, 0] } }
+      ]
+    },
+    {
+      "id": "attack_slash_0",
+      "rect": [96, 0, 48, 38],
+      "pivot": [20, 38],
+      "duration_ms": 80,
+      "sockets": {
+        "hand_right": [12, 18],
+        "head": [20, 10],
+        "cast_point": [28, 16],
+        "shadow": [20, 38]
+      },
+      "hurtboxes": [
+        [-10, -34, 22, 32]
+      ],
+      "hitboxes": [],
+      "events": [
+        { "name": "play_sfx", "payload": { "sfx_id": "sword_swing_light" } }
+      ]
+    },
+    {
+      "id": "attack_slash_1",
+      "rect": [144, 0, 54, 40],
+      "pivot": [20, 40],
+      "duration_ms": 100,
+      "sockets": {
+        "hand_right": [36, 20],
+        "head": [20, 10],
+        "cast_point": [42, 16],
+        "shadow": [20, 40]
+      },
+      "hurtboxes": [
+        [-8, -34, 22, 32]
+      ],
+      "hitboxes": [
+        {
+          "rect": [4, -28, 36, 26],
+          "damage": 15.0,
+          "knockback_force": 140.0,
+          "hitstun_duration_s": 0.25,
+          "hit_sound": "sword_hit_flesh"
+        }
+      ],
+      "events": [
+        { "name": "spawn_particle", "payload": { "type": "slash_spark", "offset": [22, -14] } },
+        { "name": "screen_shake", "payload": { "trauma": 0.15 } }
+      ]
+    },
+    {
+      "id": "attack_slash_2",
+      "rect": [198, 0, 40, 36],
+      "pivot": [20, 36],
+      "duration_ms": 120,
+      "sockets": {
+        "hand_right": [30, 24],
+        "head": [20, 10],
+        "cast_point": [32, 20],
+        "shadow": [20, 36]
+      },
+      "hurtboxes": [
+        [-10, -34, 20, 32]
+      ],
+      "hitboxes": [],
+      "events": []
+    },
+    {
+      "id": "hurt_0",
+      "rect": [240, 0, 32, 36],
+      "pivot": [16, 36],
+      "duration_ms": 200,
+      "sockets": {
+        "hand_right": [16, 22],
+        "head": [16, 8],
+        "shadow": [16, 36]
+      },
+      "hurtboxes": [
+        [-10, -34, 20, 32]
+      ],
+      "hitboxes": [],
+      "events": [
+        { "name": "play_sfx", "payload": { "sfx_id": "player_hurt" } }
+      ]
+    },
+    {
+      "id": "die_0",
+      "rect": [272, 0, 36, 36],
+      "pivot": [18, 36],
+      "duration_ms": 600,
+      "sockets": {
+        "shadow": [18, 36]
+      },
+      "hurtboxes": [],
+      "hitboxes": [],
+      "events": [
+        { "name": "play_sfx", "payload": { "sfx_id": "player_death" } }
+      ]
+    }
+  ],
+  "clips": {
+    "idle": {
+      "frames": ["idle_0", "idle_1"],
+      "loop": true,
+      "playback_speed": 1.0,
+      "interrupt_priority": 0
+    },
+    "walk": {
+      "frames": ["walk_0", "idle_0"],
+      "loop": true,
+      "playback_speed": 1.0,
+      "interrupt_priority": 0
+    },
+    "attack": {
+      "frames": ["attack_slash_0", "attack_slash_1", "attack_slash_2"],
+      "loop": false,
+      "playback_speed": 1.0,
+      "interrupt_priority": 3
+    },
+    "hurt": {
+      "frames": ["hurt_0"],
+      "loop": false,
+      "playback_speed": 1.0,
+      "interrupt_priority": 4
+    },
+    "die": {
+      "frames": ["die_0"],
+      "loop": false,
+      "playback_speed": 1.0,
+      "interrupt_priority": 10
+    }
+  }
+}

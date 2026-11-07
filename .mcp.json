@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "gameforge-graphify": {
+      "command": "C:/Users/PC/AppData/Roaming/uv/tools/graphifyy/Scripts/python.exe",
+      "args": [
+        "-m",
+        "graphify.serve",
+        "graphify-out/graph.json"
+      ],
+      "env": {
+        "PYTHONIOENCODING": "utf-8"
+      }
+    }
+  }
+}

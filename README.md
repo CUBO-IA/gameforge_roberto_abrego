@@ -102,3 +102,12 @@ Documentación técnica detallada:
 - Manual del jugador: [`documentation/GUIA_JUGADOR.md`](documentation/GUIA_JUGADOR.md).
 - Contratos de interfaces: [`architecture/CONTRACTS.md`](architecture/CONTRACTS.md).
 - Matriz de propiedad de archivos: [`architecture/OWNERSHIP.md`](architecture/OWNERSHIP.md).
+
+Misión 002 — Sprites, Animaciones y Lógica de Personajes:
+- Pipeline de Sprites y Texturas: [`SPRITE_PIPELINE_RESEARCH.md`](SPRITE_PIPELINE_RESEARCH.md).
+- Propuesta del Sistema de Animación: [`ANIMATION_SYSTEM_PROPOSAL.md`](ANIMATION_SYSTEM_PROPOSAL.md).
+- Arquitectura del Controlador de Personajes (HFSM, BT, Hitboxes): [`CHARACTER_CONTROLLER_ARCHITECTURE.md`](CHARACTER_CONTROLLER_ARCHITECTURE.md).
+- Especificación Formal del Formato de Animación: [`ANIMATION_FORMAT_SPEC.md`](ANIMATION_FORMAT_SPEC.md).
+- Arquitectura de Efectos Visuales y Game Juice: [`VISUAL_EFFECTS_ARCHITECTURE.md`](VISUAL_EFFECTS_ARCHITECTURE.md).
+- Flujo de Trabajo y Pipeline para Agentes Autónomos: [`AGENT_ANIMATION_WORKFLOW.md`](AGENT_ANIMATION_WORKFLOW.md).
+- Auditoría Legal, Licencias y Dependencias: [`LICENSE_AND_DEPENDENCY_AUDIT.md`](LICENSE_AND_DEPENDENCY_AUDIT.md).

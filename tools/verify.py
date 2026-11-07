@@ -1,11 +1,12 @@
-"""Verificación estándar de GAMEFORGE 2D: lint + pruebas + benchmarks.
+"""Verificación estándar de GAMEFORGE 2D: lint + pruebas + escenarios + benchmarks.
 
 Uso:
-    python tools/verify.py [--skip-bench]
+    python tools/verify.py [--skip-bench] [--skip-scenarios]
 
-Criterios F0:
+Criterios:
 - ruff check (si está instalado; si no, avisa y continúa).
 - pytest completo (bloqueante: debe pasar).
+- escenarios de jugabilidad del GF-TR (bloqueante).
 - benchmark de simulación (informativo; avisa si p95 supera el umbral).
 
 Umbral actual (calibrar en F2/F3 según informe de arquitectura, §14/D10):
@@ -15,6 +16,7 @@ Umbral actual (calibrar en F2/F3 según informe de arquitectura, §14/D10):
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -68,9 +70,82 @@ def _parse_p95(output: str) -> float | None:
     return None
 
 
+def run_typecheck() -> int:
+    print("== tipado (pyright) ==")
+    script = ROOT / "tools" / "typecheck.py"
+    proc = subprocess.run(
+        [sys.executable, str(script)], cwd=ROOT, check=False, capture_output=True, text=True
+    )
+    output = (proc.stdout + proc.stderr).strip()
+    if output:
+        print(output)
+    if proc.returncode == 2:
+        print("  [AVISO] tipado no disponible; paso omitido.")
+        return 0
+    return proc.returncode
+
+
+def run_scenarios() -> int:
+    print("== escenarios de jugabilidad (GF-TR) ==")
+    scenario_dir = ROOT / "tests" / "scenarios"
+    paths = sorted(scenario_dir.glob("*.json"))
+    if not paths:
+        print("  [AVISO] no hay escenarios en tests/scenarios; paso omitido.")
+        return 0
+    command = [sys.executable, "-m", "tools.test_runner", "--json"]
+    for path in paths:
+        command.extend(["--scenario", str(path)])
+    proc = subprocess.run(command, cwd=ROOT, check=False, capture_output=True, text=True)
+    if proc.returncode != 0:
+        output = (proc.stdout + proc.stderr).strip()
+        print(output)
+        print("  [FALLO] uno o más escenarios no pasaron.")
+        return proc.returncode
+    try:
+        results = json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        print((proc.stdout + proc.stderr).strip())
+        print("  [FALLO] la salida del runner no es JSON válido.")
+        return 1
+    for result in results:
+        status = "OK" if result.get("status") == "PASSED" else "FALLO"
+        print(
+            f"  [{status}] {result.get('scenario')} "
+            f"({result.get('frames_executed')} frames, {result.get('elapsed_wall_ms'):.1f} ms)"
+        )
+    return 0
+
+
+def run_graph_verify() -> int:
+    print("== memoria operativa (graphify) ==")
+    script = ROOT / "tools" / "graph_ops.py"
+    if not script.is_file():
+        print("  [AVISO] tools/graph_ops.py no disponible; paso omitido.")
+        return 0
+    proc = subprocess.run(
+        [sys.executable, str(script), "verify", "--strict"],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    output = proc.stdout.strip()
+    if output:
+        print(output)
+    if proc.returncode != 0:
+        print("  [FALLO] el grafo presenta drift de archivos. Ejecute 'python tools/graph_ops.py update'.")
+        return proc.returncode
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--skip-bench", action="store_true", help="Omite el benchmark.")
+    parser.add_argument("--skip-graph", action="store_true", help="Omite la verificación del grafo.")
+    parser.add_argument(
+        "--skip-scenarios", action="store_true", help="Omite los escenarios del GF-TR."
+    )
+    parser.add_argument("--skip-types", action="store_true", help="Omite la puerta de tipado.")
     args = parser.parse_args(argv)
 
     failures = 0
@@ -81,11 +156,23 @@ def main(argv: list[str] | None = None) -> int:
     else:
         print("== lint (ruff) ==\n  [AVISO] ruff no está instalado; paso omitido.")
 
+    if not args.skip_types:
+        code = run_typecheck()
+        failures += code != 0
+
     code, _ = run_step("pruebas (pytest)", [sys.executable, "-m", "pytest", "-q"])
     failures += code != 0
 
+    if not args.skip_scenarios:
+        code = run_scenarios()
+        failures += code != 0
+
     if not args.skip_bench:
         code = run_bench()
+        failures += code != 0
+
+    if not args.skip_graph:
+        code = run_graph_verify()
         failures += code != 0
 
     if failures:

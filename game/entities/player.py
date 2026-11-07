@@ -45,6 +45,7 @@ class Player:
         self.jump_started = False
         self.ceiling_z: float | None = None
         self.ceiling_hit = False
+        self.anim_player: object = None
 
     @property
     def max_health(self) -> float:

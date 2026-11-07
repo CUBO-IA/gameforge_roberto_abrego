@@ -1,0 +1,71 @@
+{
+  "schema_version": "gf-asset-catalog-v1.0.0",
+  "asset_id": "lpc_skeleton_warrior",
+  "name": "LPC Skeleton Warrior Animated",
+  "kind": "character",
+  "taxonomy": {
+    "genre": "top_down_rpg",
+    "theme": "dungeon",
+    "visual_style": "lpc_compatible_64x64",
+    "tags": ["undead", "skeleton", "warrior", "humanoid", "melee", "sword", "enemy"]
+  },
+  "image": {
+    "relative_path": "assets/hub_catalog/characters/lpc_skeleton_warrior.png",
+    "width": 256,
+    "height": 64,
+    "has_alpha": true,
+    "color_mode": "RGBA"
+  },
+  "geometry": {
+    "layout_type": "uniform_grid",
+    "frame_size": [64, 64],
+    "padding": 0,
+    "spacing": 0,
+    "anchor_preset": "bottom_center",
+    "anchor_offset": [32, 58]
+  },
+  "character_data": {
+    "directions_supported": ["down", "left", "right", "up"],
+    "available_clips": [
+      {
+        "name": "walk",
+        "frame_count": 4,
+        "directions": ["down"],
+        "duration_ms": 100,
+        "is_looping": true
+      },
+      {
+        "name": "attack",
+        "frame_count": 3,
+        "directions": ["down"],
+        "duration_ms": 80,
+        "is_looping": false
+      },
+      {
+        "name": "hurt",
+        "frame_count": 2,
+        "directions": ["down"],
+        "duration_ms": 100,
+        "is_looping": false
+      }
+    ],
+    "has_paperdoll_layers": false,
+    "paperdoll_slot": "none"
+  },
+  "provenance": {
+    "author": "Stephen Challener (Redshrike), Johannes Sjölund (wulax)",
+    "original_url": "https://opengameart.org/content/liberated-pixel-cup-lpc-base-assets-sprites-map-tiles",
+    "source_repo": "OpenGameArt/LiberatedPixelCup",
+    "license_spdx": "CC-BY-SA-3.0",
+    "license_tier": "tier_2_copyleft_warning",
+    "attribution_required": true,
+    "attribution_text": "Skeleton Warrior by Stephen Challener (Redshrike) and Johannes Sjölund (wulax), OpenGameArt Liberated Pixel Cup, licensed under CC-BY-SA 3.0.",
+    "modifications_made": "Extracted and mapped to GameForge gf-anim-v1 format."
+  },
+  "engine_compatibility": {
+    "gf_anim_v1_ready": true,
+    "tilemap_ready": false,
+    "canvas_scale_compatible": true,
+    "export_target_path": "assets/sprites/enemies/skeleton_warrior/"
+  }
+}
